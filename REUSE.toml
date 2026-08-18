@@ -12,7 +12,6 @@ path = [
     ".gitmodules",
     "app/.gitignore",
     "app/src/main/keepRules/rules.keep",
-    "app/src/main/res/mipmap-**/*.webp",
     "core/data/src/main/assets/links.json",
 ]
 precedence = "aggregate"
