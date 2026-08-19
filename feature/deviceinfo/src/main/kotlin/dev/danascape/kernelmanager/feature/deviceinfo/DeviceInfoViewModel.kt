@@ -14,6 +14,7 @@ import dev.danascape.kernelmanager.core.di.appContainer
 import dev.danascape.kernelmanager.core.model.DeviceDetails
 import dev.danascape.kernelmanager.core.model.DeviceProfile
 import dev.danascape.kernelmanager.core.model.Vitals
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,17 +27,16 @@ data class DeviceInfoUiState(
     val vitals: Vitals? = null,
 )
 
+/** Owns the hardware and build readouts behind the Device HW screen. */
 class DeviceInfoViewModel(
     private val deviceRepository: DeviceRepository,
 ) : ViewModel() {
     private val _state = MutableStateFlow(DeviceInfoUiState())
     val state: StateFlow<DeviceInfoUiState> = _state.asStateFlow()
 
-    init {
-        refresh()
-    }
+    private var vitalsJob: Job? = null
 
-    fun refresh() {
+    init {
         viewModelScope.launch {
             val profile = deviceRepository.profile()
             _state.update { it.copy(profile = profile) }
@@ -45,10 +45,21 @@ class DeviceInfoViewModel(
             val details = deviceRepository.details()
             _state.update { it.copy(details = details) }
         }
-        viewModelScope.launch {
-            val vitals = deviceRepository.vitals()
-            _state.update { it.copy(vitals = vitals) }
-        }
+    }
+
+    /**
+     * Reads the live vitals, once.
+     *
+     * Only two of the tabs show them and the read costs a sampling window, so the
+     * screen asks for them when they are about to be displayed rather than on open.
+     */
+    fun ensureVitals() {
+        if (vitalsJob != null) return
+        vitalsJob =
+            viewModelScope.launch {
+                val vitals = deviceRepository.vitals()
+                _state.update { it.copy(vitals = vitals) }
+            }
     }
 
     companion object {
