@@ -3,7 +3,6 @@
 
 package dev.danascape.kernelmanager.feature.news
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,14 +12,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -30,6 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prauga.pvot.coreui.PvotEmptyContent
 import com.prauga.pvot.coreui.PvotErrorContent
+import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.components.PvotSkeleton
 import com.prauga.pvot.designsystem.motion.pvotReveal
@@ -191,17 +189,14 @@ private fun Header() {
 /** Says plainly that the list is a saved copy. */
 @Composable
 private fun OfflineNotice() {
-    Text(
-        text = stringResource(R.string.news_offline_copy),
-        style = MaterialTheme.typography.labelSmall,
-        color = MaterialTheme.colorScheme.faint,
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                .padding(horizontal = 12.dp, vertical = 10.dp),
-    )
+    PvotCard(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = stringResource(R.string.news_offline_copy),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.faint,
+            modifier = Modifier.padding(horizontal = PvotSpacing.M, vertical = PvotSpacing.S),
+        )
+    }
 }
 
 @Composable

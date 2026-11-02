@@ -3,29 +3,28 @@
 
 package dev.danascape.kernelmanager.feature.monitor
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.motion.pvotReveal
+import com.prauga.pvot.designsystem.theme.PvotSpacing
 import dev.danascape.kernelmanager.core.designsystem.component.MetricLine
 import dev.danascape.kernelmanager.core.designsystem.component.SBSparkline
 import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
@@ -115,80 +114,82 @@ private fun CoreChart(
     revealIndex: Int,
 ) {
     val cluster = clusterFor()
-    Column(
+    PvotCard(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .pvotReveal(revealIndex)
-                .clip(RoundedCornerShape(20.dp))
-                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+                .pvotReveal(revealIndex),
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+        Column(
+            modifier = Modifier.padding(PvotSpacing.L),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Text(
-                text = stringResource(R.string.monitor_core, core),
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-            Text(
-                text =
-                    buildString {
-                        append(values.lastOrNull()?.let { percent(it) } ?: "—")
-                        currentKhz?.let { append(" · ${frequency(it)}") }
-                    },
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
-        SBSparkline(values = values, domain = 0f..1f, height = 44.dp)
-        cluster?.let {
-            Text(
-                text =
-                    stringResource(R.string.monitor_cluster, it.id) +
-                        " · " + (it.hardwareMaxKhz?.let(::frequency) ?: "—"),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.faint,
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text(
+                    text = stringResource(R.string.monitor_core, core),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                Text(
+                    text =
+                        buildString {
+                            append(values.lastOrNull()?.let { percent(it) } ?: "—")
+                            currentKhz?.let { append(" · ${frequency(it)}") }
+                        },
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            SBSparkline(values = values, domain = 0f..1f, height = 44.dp)
+            cluster?.let {
+                Text(
+                    text =
+                        stringResource(R.string.monitor_cluster, it.id) +
+                            " · " + (it.hardwareMaxKhz?.let(::frequency) ?: "—"),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.faint,
+                )
+            }
         }
     }
 }
 
 @Composable
 private fun ClusterCard(cluster: CpuCluster) {
-    Column(
+    PvotCard(
         modifier =
             Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(20.dp))
-                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+                .fillMaxWidth(),
     ) {
-        Text(
-            text = stringResource(R.string.monitor_cluster, cluster.id),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.tertiary,
-        )
-        MetricLine(
-            stringResource(R.string.monitor_freq_range),
-            "${cluster.minKhz?.let(::frequency) ?: "—"} – ${cluster.hardwareMaxKhz?.let(::frequency) ?: "—"}",
-        )
-        cluster.governor?.let { MetricLine(stringResource(R.string.monitor_governor), it) }
-        if (cluster.availableGovernors.isNotEmpty()) {
-            MetricLine(
-                stringResource(R.string.monitor_governors_available),
-                cluster.availableGovernors.joinToString(", "),
+        Column(
+            modifier = Modifier.padding(PvotSpacing.L),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            Text(
+                text = stringResource(R.string.monitor_cluster, cluster.id),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.tertiary,
             )
-        }
-        if (cluster.availableKhz.isNotEmpty()) {
             MetricLine(
-                stringResource(R.string.monitor_opp_count, cluster.availableKhz.size),
-                cluster.availableKhz.joinToString(" ") { (it / 1000).toString() },
+                stringResource(R.string.monitor_freq_range),
+                "${cluster.minKhz?.let(::frequency) ?: "—"} – ${cluster.hardwareMaxKhz?.let(::frequency) ?: "—"}",
             )
+            cluster.governor?.let { MetricLine(stringResource(R.string.monitor_governor), it) }
+            if (cluster.availableGovernors.isNotEmpty()) {
+                MetricLine(
+                    stringResource(R.string.monitor_governors_available),
+                    cluster.availableGovernors.joinToString(", "),
+                )
+            }
+            if (cluster.availableKhz.isNotEmpty()) {
+                MetricLine(
+                    stringResource(R.string.monitor_opp_count, cluster.availableKhz.size),
+                    cluster.availableKhz.joinToString(" ") { (it / 1000).toString() },
+                )
+            }
         }
     }
 }

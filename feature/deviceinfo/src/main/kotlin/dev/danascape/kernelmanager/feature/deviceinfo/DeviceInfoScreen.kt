@@ -3,9 +3,6 @@
 
 package dev.danascape.kernelmanager.feature.deviceinfo
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,28 +15,28 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prauga.pvot.coreui.PvotLoadingContent
+import com.prauga.pvot.coreui.PvotSectionHeader
+import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.components.PvotScreen
-import com.prauga.pvot.designsystem.effects.pvotPressScale
 import com.prauga.pvot.designsystem.motion.pvotReveal
+import com.prauga.pvot.designsystem.theme.PvotSpacing
 import dev.danascape.kernelmanager.core.designsystem.component.ValueBlock
 import dev.danascape.kernelmanager.core.designsystem.component.ValueRow
 import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
@@ -169,26 +166,10 @@ private fun TabChip(
     selected: Boolean,
     onClick: () -> Unit,
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    Text(
-        text = label,
-        style = MaterialTheme.typography.labelSmall,
-        color = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier =
-            Modifier
-                .pvotPressScale(interactionSource)
-                .clip(RoundedCornerShape(100.dp))
-                .background(
-                    if (selected) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.surfaceContainerHigh
-                    },
-                ).clickable(
-                    interactionSource = interactionSource,
-                    indication = null,
-                    onClick = onClick,
-                ).padding(horizontal = 14.dp, vertical = 9.dp),
+    FilterChip(
+        selected = selected,
+        onClick = onClick,
+        label = { Text(label) },
     )
 }
 
@@ -197,42 +178,41 @@ private fun HeaderCard(
     profile: DeviceProfile,
     modifier: Modifier = Modifier,
 ) {
-    Column(
+    PvotCard(
         modifier =
             modifier
                 .fillMaxWidth()
-                .pvotReveal(0)
-                .clip(RoundedCornerShape(24.dp))
-                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                .padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(6.dp),
+                .pvotReveal(0),
     ) {
-        Text(
-            text = stringResource(R.string.device_info_kicker),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.tertiary,
-        )
-        Text(
-            text = profile.identity.displayName,
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-        Text(
-            text = profile.identity.codename,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+        Column(
+            modifier = Modifier.padding(PvotSpacing.L),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            Text(
+                text = stringResource(R.string.device_info_kicker),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.tertiary,
+            )
+            Text(
+                text = profile.identity.displayName,
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            Text(
+                text = profile.identity.codename,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
     }
 }
 
 /** The group heading, matching SettingsGroup's but emitted as its own list item. */
 @Composable
 internal fun GroupTitle(title: String) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.labelSmall,
-        color = MaterialTheme.colorScheme.tertiary,
-        modifier = Modifier.padding(start = 4.dp, top = GroupGap, bottom = TitleGap),
+    PvotSectionHeader(
+        title = title,
+        modifier = Modifier.padding(start = PvotSpacing.XS, top = GroupGap, bottom = TitleGap),
     )
 }
 

@@ -4,8 +4,6 @@
 package dev.danascape.kernelmanager.feature.discover
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,13 +13,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,9 +29,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.components.PvotScreen
-import com.prauga.pvot.designsystem.effects.pvotPressScale
 import com.prauga.pvot.designsystem.motion.pvotReveal
+import com.prauga.pvot.designsystem.theme.PvotShapes
+import com.prauga.pvot.designsystem.theme.PvotSpacing
 import dev.danascape.kernelmanager.core.designsystem.component.ActionRow
 import dev.danascape.kernelmanager.core.designsystem.component.SettingsGroup
 import dev.danascape.kernelmanager.core.designsystem.component.ValueRow
@@ -120,77 +118,72 @@ private fun IdentityCard(
     identity: DeviceIdentity,
     onClick: () -> Unit,
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-
-    Column(
+    PvotCard(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .pvotReveal(0)
-                .pvotPressScale(interactionSource)
-                .clip(RoundedCornerShape(24.dp))
-                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                .clickable(
-                    interactionSource = interactionSource,
-                    indication = null,
-                    onClick = onClick,
-                ).padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(6.dp),
+                .pvotReveal(0),
+        onClick = onClick,
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+        Column(
+            modifier = Modifier.padding(PvotSpacing.L),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(R.string.discover_kicker),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.tertiary,
+                )
+                Text(
+                    text = stringResource(R.string.discover_tap_detail),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.faint,
+                )
+            }
             Text(
-                text = stringResource(R.string.discover_kicker),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.tertiary,
+                text = identity.displayName,
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
-                text = stringResource(R.string.discover_tap_detail),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.faint,
+                text =
+                    stringResource(
+                        R.string.discover_identity_meta,
+                        identity.codename,
+                        identity.androidRelease,
+                        identity.sdkInt,
+                    ),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 10.dp),
+                color = MaterialTheme.colorScheme.outlineVariant,
+            )
+
+            Text(
+                text = identity.kernelVersion,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            if (identity.kernelBuild.isNotEmpty()) {
+                Text(
+                    text = identity.kernelBuild,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.faint,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+
+            StatusChip(identity, modifier = Modifier.padding(top = 10.dp))
         }
-        Text(
-            text = identity.displayName,
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-        Text(
-            text =
-                stringResource(
-                    R.string.discover_identity_meta,
-                    identity.codename,
-                    identity.androidRelease,
-                    identity.sdkInt,
-                ),
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-
-        HorizontalDivider(
-            modifier = Modifier.padding(vertical = 10.dp),
-            color = MaterialTheme.colorScheme.outlineVariant,
-        )
-
-        Text(
-            text = identity.kernelVersion,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-        if (identity.kernelBuild.isNotEmpty()) {
-            Text(
-                text = identity.kernelBuild,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.faint,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
-
-        StatusChip(identity, modifier = Modifier.padding(top = 10.dp))
     }
 }
 
@@ -203,10 +196,10 @@ private fun StatusChip(
     Row(
         modifier =
             modifier
-                .clip(RoundedCornerShape(100.dp))
+                .clip(PvotShapes.Pill)
                 .background(MaterialTheme.colorScheme.surfaceContainerHighest)
-                .padding(horizontal = 12.dp, vertical = 7.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                .padding(horizontal = PvotSpacing.M, vertical = PvotSpacing.S),
+        horizontalArrangement = Arrangement.spacedBy(PvotSpacing.S),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(

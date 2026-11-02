@@ -4,22 +4,17 @@
 package dev.danascape.kernelmanager.feature.news
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -28,18 +23,17 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import dev.danascape.kernelmanager.feature.news.R
-import com.prauga.pvot.designsystem.effects.pvotPressScale
+import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.motion.pvotReveal
+import com.prauga.pvot.designsystem.theme.PvotSpacing
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 import dev.danascape.kernelmanager.core.designsystem.theme.faint
 import dev.danascape.kernelmanager.core.model.NewsPost
+import dev.danascape.kernelmanager.feature.news.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 private val DateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
-
-private val CardRadius = 24.dp
 
 /** One post, laid out like the website's news card. */
 @Composable
@@ -51,22 +45,13 @@ fun NewsCard(
     revealIndex: Int = 0,
 ) {
     val openLabel = stringResource(R.string.news_open_article, post.title)
-    val interactionSource = remember { MutableInteractionSource() }
-    val shape = RoundedCornerShape(CardRadius)
-
-    Column(
+    PvotCard(
         modifier =
             modifier
                 .fillMaxWidth()
                 .pvotReveal(revealIndex)
-                .pvotPressScale(interactionSource)
-                .clip(shape)
-                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                .clickable(
-                    interactionSource = interactionSource,
-                    indication = null,
-                    onClick = onClick,
-                ).semantics { contentDescription = openLabel },
+                .semantics { contentDescription = openLabel },
+        onClick = onClick,
     ) {
         if (showCover && post.coverUrl != null) {
             AsyncImage(
@@ -82,8 +67,8 @@ fun NewsCard(
         }
 
         Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(PvotSpacing.L),
+            verticalArrangement = Arrangement.spacedBy(PvotSpacing.S),
         ) {
             MetaLine(post)
 
