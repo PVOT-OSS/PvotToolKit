@@ -3,9 +3,6 @@
 
 package dev.danascape.kernelmanager.core.designsystem.component
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -18,24 +15,23 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.prauga.pvot.designsystem.effects.pvotPressScale
+import com.prauga.pvot.coreui.PvotSectionHeader
+import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.motion.pvotReveal
+import com.prauga.pvot.designsystem.theme.PvotSpacing
 import dev.danascape.kernelmanager.core.designsystem.theme.faint
 
-private val OuterRadius = 24.dp
+private val OuterRadius = 16.dp
 private val InnerRadius = 6.dp
 private val RowGap = 3.dp
 private val MinRowHeight = 56.dp
 
-/** Corners for a row at [index] of [count]: rounded outside, tight inside. */
+/** Corners for a row at [index] of [count]: the card radius outside, tight inside. */
 fun groupShape(
     index: Int,
     count: Int,
@@ -45,6 +41,7 @@ fun groupShape(
     return RoundedCornerShape(topStart = top, topEnd = top, bottomStart = bottom, bottomEnd = bottom)
 }
 
+/** A titled run of rows that read as one grouped surface. */
 @Composable
 fun SettingsGroup(
     title: String,
@@ -53,16 +50,14 @@ fun SettingsGroup(
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+        verticalArrangement = Arrangement.spacedBy(PvotSpacing.S),
     ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.tertiary,
+        PvotSectionHeader(
+            title = title,
             modifier =
                 Modifier
                     .pvotReveal(0)
-                    .padding(start = 4.dp),
+                    .padding(start = PvotSpacing.XS),
         )
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -82,43 +77,28 @@ private fun GroupedRow(
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val shape = groupShape(index, count)
-
-    Row(
+    PvotCard(
         modifier =
             modifier
                 .fillMaxWidth()
-                .then(if (revealIndex != null) Modifier.pvotReveal(revealIndex) else Modifier)
-                .then(if (onClick != null) Modifier.pvotPressScale(interactionSource) else Modifier)
-                .clip(shape)
-                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                .then(
-                    if (onClick != null) {
-                        Modifier.clickable(
-                            interactionSource = interactionSource,
-                            indication = null,
-                            onClick = onClick,
-                        )
-                    } else {
-                        Modifier
-                    },
-                ).heightIn(min = MinRowHeight)
-                .padding(horizontal = 18.dp, vertical = 14.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalAlignment = Alignment.CenterVertically,
+                .then(if (revealIndex != null) Modifier.pvotReveal(revealIndex) else Modifier),
+        onClick = onClick,
+        shape = groupShape(index, count),
     ) {
-        content()
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = MinRowHeight)
+                    .padding(horizontal = PvotSpacing.L, vertical = PvotSpacing.M),
+            horizontalArrangement = Arrangement.spacedBy(PvotSpacing.M),
+            verticalAlignment = Alignment.CenterVertically,
+            content = content,
+        )
     }
 }
 
-/**
- * A label and a readout. Values sit in the mono channel.
- *
- * Pass a null [revealIndex] inside a lazy list: items there are composed as they
- * scroll into view, so revealing them means fast scrolling shows blank rows
- * fading in rather than content.
- */
+/** A label and a readout; pass a null [revealIndex] inside a lazy list so fast scrolling shows rows, not fades. */
 @Composable
 fun ValueRow(
     label: String,
@@ -169,7 +149,7 @@ fun ValueBlock(
     ) {
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(6.dp),
+            verticalArrangement = Arrangement.spacedBy(PvotSpacing.XS),
         ) {
             Text(
                 text = label,
@@ -207,7 +187,7 @@ fun ActionRow(
     ) {
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(3.dp),
+            verticalArrangement = Arrangement.spacedBy(PvotSpacing.XS),
         ) {
             Text(
                 text = label,

@@ -3,26 +3,20 @@
 
 package dev.danascape.kernelmanager.core.designsystem.component
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.dp
-import com.prauga.pvot.designsystem.effects.pvotPressScale
+import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.motion.pvotReveal
+import com.prauga.pvot.designsystem.theme.PvotSpacing
 import dev.danascape.kernelmanager.core.designsystem.theme.faint
 
 /** A stat tile: what a metric reads right now, with its recent shape. */
@@ -36,56 +30,44 @@ fun MetricCard(
     onClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit = {},
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val shape = RoundedCornerShape(24.dp)
-
-    Column(
+    PvotCard(
         modifier =
             modifier
                 .fillMaxWidth()
-                .pvotReveal(revealIndex)
-                .then(if (onClick != null) Modifier.pvotPressScale(interactionSource) else Modifier)
-                .clip(shape)
-                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                .then(
-                    if (onClick != null) {
-                        Modifier.clickable(
-                            interactionSource = interactionSource,
-                            indication = null,
-                            onClick = onClick,
-                        )
-                    } else {
-                        Modifier
-                    },
-                ).padding(18.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+                .pvotReveal(revealIndex),
+        onClick = onClick,
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+        Column(
+            modifier = Modifier.padding(PvotSpacing.L),
+            verticalArrangement = Arrangement.spacedBy(PvotSpacing.M),
         ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.tertiary,
-            )
-            caption?.let {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 Text(
-                    text = it,
+                    text = title,
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.faint,
+                    color = MaterialTheme.colorScheme.tertiary,
                 )
+                caption?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.faint,
+                    )
+                }
             }
+
+            Text(
+                text = value,
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+
+            content()
         }
-
-        Text(
-            text = value,
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-
-        content()
     }
 }
 
