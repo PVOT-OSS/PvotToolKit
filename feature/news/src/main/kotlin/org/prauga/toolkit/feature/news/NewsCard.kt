@@ -27,9 +27,9 @@ import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import com.prauga.pvot.designsystem.theme.PvotSpacing
-import org.prauga.toolkit.core.model.NewsPost
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import org.prauga.toolkit.core.model.NewsPost
 
 private val DateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
 

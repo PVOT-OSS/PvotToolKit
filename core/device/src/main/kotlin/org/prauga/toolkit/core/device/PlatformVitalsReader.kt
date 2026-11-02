@@ -11,11 +11,11 @@ import android.os.PowerManager
 import android.os.StatFs
 import android.os.SystemClock
 import androidx.core.content.getSystemService
+import java.io.File
 import org.prauga.toolkit.core.model.NetworkVitals
 import org.prauga.toolkit.core.model.SleepStats
 import org.prauga.toolkit.core.model.StorageVitals
 import org.prauga.toolkit.core.model.ThermalStatus
-import java.io.File
 
 /** The parts the framework gives up without a permission. */
 class PlatformVitalsReader(context: Context) {

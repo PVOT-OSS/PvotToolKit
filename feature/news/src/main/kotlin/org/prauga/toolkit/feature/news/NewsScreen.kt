@@ -35,10 +35,10 @@ import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import com.prauga.pvot.designsystem.theme.PvotShapes
 import com.prauga.pvot.designsystem.theme.PvotSpacing
+import java.time.LocalDate
 import org.prauga.toolkit.core.common.LoadError
 import org.prauga.toolkit.core.designsystem.component.openArticle
 import org.prauga.toolkit.core.model.NewsPost
-import java.time.LocalDate
 
 private const val SKELETON_CARDS = 4
 private val SkeletonCardHeight = 132.dp

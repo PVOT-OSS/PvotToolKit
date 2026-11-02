@@ -9,11 +9,11 @@ import android.media.MediaCodecList
 import android.os.Build
 import android.system.Os
 import android.system.OsConstants
+import java.io.File
 import org.prauga.toolkit.core.model.BuildDetails
 import org.prauga.toolkit.core.model.CodecSummary
 import org.prauga.toolkit.core.model.DeviceDetails
 import org.prauga.toolkit.core.model.MemoryDetails
-import java.io.File
 
 private const val NOTABLE_CODEC_LIMIT = 8
 private const val BYTES_PER_KILOBYTE = 1024

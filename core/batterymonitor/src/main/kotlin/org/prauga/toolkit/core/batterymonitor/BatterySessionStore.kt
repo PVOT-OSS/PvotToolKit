@@ -11,14 +11,14 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import org.prauga.toolkit.core.battery.BatterySample
-import org.prauga.toolkit.core.battery.BatterySession
 import java.io.IOException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
+import org.prauga.toolkit.core.battery.BatterySample
+import org.prauga.toolkit.core.battery.BatterySession
 
 private val Context.batteryDataStore: DataStore<Preferences> by
     preferencesDataStore(name = "battery_monitor")

@@ -3,9 +3,9 @@
 
 package org.prauga.toolkit.core.device
 
+import java.io.File
 import org.prauga.toolkit.core.model.CpuCluster
 import org.prauga.toolkit.core.model.CpuTopology
-import java.io.File
 
 private const val CPU_ROOT = "/sys/devices/system/cpu"
 private const val CPUINFO = "/proc/cpuinfo"

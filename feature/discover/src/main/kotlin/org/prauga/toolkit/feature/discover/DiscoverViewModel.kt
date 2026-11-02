@@ -9,6 +9,11 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.prauga.toolkit.core.common.DataResult
 import org.prauga.toolkit.core.data.device.DeviceRepository
 import org.prauga.toolkit.core.data.news.NewsRepository
@@ -16,11 +21,6 @@ import org.prauga.toolkit.core.di.appContainer
 import org.prauga.toolkit.core.model.DeviceProfile
 import org.prauga.toolkit.core.model.NewsPost
 import org.prauga.toolkit.core.model.Vitals
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 private const val HEADLINE_COUNT = 3
 

@@ -3,10 +3,10 @@
 
 package org.prauga.toolkit.core.device
 
-import org.prauga.toolkit.core.model.CpuIdleSample
-import org.prauga.toolkit.core.model.CpuLoad
 import java.io.File
 import java.util.concurrent.TimeUnit
+import org.prauga.toolkit.core.model.CpuIdleSample
+import org.prauga.toolkit.core.model.CpuLoad
 
 private const val CPU_ROOT = "/sys/devices/system/cpu"
 

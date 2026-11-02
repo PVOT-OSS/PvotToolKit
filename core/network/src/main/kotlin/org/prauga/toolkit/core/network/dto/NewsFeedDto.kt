@@ -3,11 +3,11 @@
 
 package org.prauga.toolkit.core.network.dto
 
-import org.prauga.toolkit.core.model.NewsPost
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.prauga.toolkit.core.model.NewsPost
 
 /** Wire shape of `/api/v1/news.json`. */
 @Serializable

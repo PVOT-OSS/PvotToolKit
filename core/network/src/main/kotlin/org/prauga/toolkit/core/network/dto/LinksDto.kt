@@ -3,9 +3,9 @@
 
 package org.prauga.toolkit.core.network.dto
 
+import kotlinx.serialization.Serializable
 import org.prauga.toolkit.core.model.LinkItem
 import org.prauga.toolkit.core.model.LinkSection
-import kotlinx.serialization.Serializable
 
 /** Wire shape of `/api/v1/links.json`, and of the bundled fallback copy. */
 @Serializable

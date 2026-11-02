@@ -9,10 +9,10 @@ import android.app.NotificationManager
 import android.content.Context
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
-import org.prauga.toolkit.core.battery.BatterySession
 import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.roundToInt
+import org.prauga.toolkit.core.battery.BatterySession
 
 internal const val CHANNEL_ID = "battery_monitor"
 

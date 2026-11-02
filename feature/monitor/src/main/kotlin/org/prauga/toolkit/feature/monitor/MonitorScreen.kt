@@ -22,9 +22,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.components.PvotScreenDefaults
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
+import org.prauga.toolkit.core.designsystem.component.Meter
 import org.prauga.toolkit.core.designsystem.component.MetricCard
 import org.prauga.toolkit.core.designsystem.component.MetricLine
-import org.prauga.toolkit.core.designsystem.component.Meter
 import org.prauga.toolkit.core.designsystem.component.Sparkline
 import org.prauga.toolkit.core.model.BatteryVitals
 import org.prauga.toolkit.core.model.CpuTopology

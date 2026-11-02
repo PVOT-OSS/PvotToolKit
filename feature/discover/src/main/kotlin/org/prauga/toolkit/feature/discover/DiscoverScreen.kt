@@ -36,6 +36,7 @@ import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import com.prauga.pvot.designsystem.theme.PvotShapes
 import com.prauga.pvot.designsystem.theme.PvotSpacing
+import java.util.Locale
 import org.prauga.toolkit.core.designsystem.component.ActionRow
 import org.prauga.toolkit.core.designsystem.component.SettingsGroup
 import org.prauga.toolkit.core.designsystem.component.ValueRow
@@ -55,7 +56,6 @@ import org.prauga.toolkit.core.model.SocInfo
 import org.prauga.toolkit.core.model.StorageVitals
 import org.prauga.toolkit.core.model.ThermalStatus
 import org.prauga.toolkit.core.model.Vitals
-import java.util.Locale
 
 private const val KHZ_PER_GHZ = 1_000_000f
 private const val BYTES_PER_GB = 1_073_741_824f

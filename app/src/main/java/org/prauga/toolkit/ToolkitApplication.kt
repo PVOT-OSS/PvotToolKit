@@ -9,14 +9,14 @@ import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import coil3.svg.SvgDecoder
-import org.prauga.toolkit.core.batterymonitor.BatteryMonitorService
-import org.prauga.toolkit.core.di.AppContainer
-import org.prauga.toolkit.core.di.AppContainerOwner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.prauga.toolkit.core.batterymonitor.BatteryMonitorService
+import org.prauga.toolkit.core.di.AppContainer
+import org.prauga.toolkit.core.di.AppContainerOwner
 
 class ToolkitApplication : Application(), AppContainerOwner, SingletonImageLoader.Factory {
     override val appContainer: AppContainer by lazy { AppContainer(this) }

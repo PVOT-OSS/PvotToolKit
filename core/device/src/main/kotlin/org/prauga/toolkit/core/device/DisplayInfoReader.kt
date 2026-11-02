@@ -7,8 +7,8 @@ import android.content.Context
 import android.hardware.display.DisplayManager
 import android.util.DisplayMetrics
 import android.view.Display
-import org.prauga.toolkit.core.model.DisplayInfo
 import kotlin.math.hypot
+import org.prauga.toolkit.core.model.DisplayInfo
 
 /** Panel geometry and refresh capability, all of it public API. */
 class DisplayInfoReader(private val context: Context) {

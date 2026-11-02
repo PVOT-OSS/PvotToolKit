@@ -3,6 +3,10 @@
 
 package org.prauga.toolkit.core.data.device
 
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import org.prauga.toolkit.core.device.CpuLoadReader
 import org.prauga.toolkit.core.device.DeviceDetailsReader
 import org.prauga.toolkit.core.device.DeviceProfileReader
@@ -11,10 +15,6 @@ import org.prauga.toolkit.core.device.SystemVitalsReader
 import org.prauga.toolkit.core.model.DeviceDetails
 import org.prauga.toolkit.core.model.DeviceProfile
 import org.prauga.toolkit.core.model.Vitals
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
 
 private const val LOAD_WINDOW_MILLIS = 500L
 

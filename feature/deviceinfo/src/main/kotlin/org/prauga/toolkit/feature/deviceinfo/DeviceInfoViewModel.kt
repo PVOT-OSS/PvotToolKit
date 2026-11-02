@@ -9,17 +9,17 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import org.prauga.toolkit.core.data.device.DeviceRepository
-import org.prauga.toolkit.core.di.appContainer
-import org.prauga.toolkit.core.model.DeviceDetails
-import org.prauga.toolkit.core.model.DeviceProfile
-import org.prauga.toolkit.core.model.Vitals
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.prauga.toolkit.core.data.device.DeviceRepository
+import org.prauga.toolkit.core.di.appContainer
+import org.prauga.toolkit.core.model.DeviceDetails
+import org.prauga.toolkit.core.model.DeviceProfile
+import org.prauga.toolkit.core.model.Vitals
 
 data class DeviceInfoUiState(
     val profile: DeviceProfile? = null,

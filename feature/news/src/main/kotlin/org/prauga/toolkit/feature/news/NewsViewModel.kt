@@ -9,15 +9,15 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import org.prauga.toolkit.core.common.DataResult
 import org.prauga.toolkit.core.common.LoadError
 import org.prauga.toolkit.core.data.news.NewsRepository
 import org.prauga.toolkit.core.di.appContainer
 import org.prauga.toolkit.core.model.NewsPost
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 
 sealed interface NewsUiState {
     data object Loading : NewsUiState

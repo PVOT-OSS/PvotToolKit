@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.navigation
 import androidx.navigation.navOptions
+import kotlinx.serialization.Serializable
 import org.prauga.toolkit.feature.builds.buildsScreen
 import org.prauga.toolkit.feature.deviceinfo.DeviceGraphRoute
 import org.prauga.toolkit.feature.deviceinfo.deviceGraph
@@ -30,7 +31,6 @@ import org.prauga.toolkit.feature.more.moreScreen
 import org.prauga.toolkit.feature.news.navigateToNews
 import org.prauga.toolkit.feature.news.newsScreen
 import org.prauga.toolkit.feature.tune.tuneScreen
-import kotlinx.serialization.Serializable
 
 /** Discover's nested graph, so the device screen keeps Discover selected. */
 @Serializable data object DiscoverGraphRoute

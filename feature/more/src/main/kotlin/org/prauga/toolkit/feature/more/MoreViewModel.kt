@@ -9,17 +9,17 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.prauga.toolkit.core.batterymonitor.BatterySessionStore
 import org.prauga.toolkit.core.data.links.LinksRepository
 import org.prauga.toolkit.core.data.settings.ThemeRepository
 import org.prauga.toolkit.core.di.appContainer
 import org.prauga.toolkit.core.model.LinkSection
 import org.prauga.toolkit.core.model.ThemePreference
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 data class MoreUiState(
     val sections: List<LinkSection> = emptyList(),

@@ -3,11 +3,11 @@
 
 package org.prauga.toolkit.core.network.dto
 
-import org.prauga.toolkit.core.network.ToolkitJson
 import java.time.LocalDate
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
+import org.prauga.toolkit.core.network.ToolkitJson
 
 /** Guards the contract with `/api/v1/news.json`. */
 class NewsFeedDtoTest {

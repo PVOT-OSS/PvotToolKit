@@ -3,12 +3,6 @@
 
 package org.prauga.toolkit.core.data.news
 
-import org.prauga.toolkit.core.common.DataResult
-import org.prauga.toolkit.core.common.LoadError
-import org.prauga.toolkit.core.model.NewsPost
-import org.prauga.toolkit.core.network.ToolkitEndpoints
-import org.prauga.toolkit.core.network.dto.NewsFeedDto
-import org.prauga.toolkit.core.network.dto.toDomain
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -20,6 +14,12 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
+import org.prauga.toolkit.core.common.DataResult
+import org.prauga.toolkit.core.common.LoadError
+import org.prauga.toolkit.core.model.NewsPost
+import org.prauga.toolkit.core.network.ToolkitEndpoints
+import org.prauga.toolkit.core.network.dto.NewsFeedDto
+import org.prauga.toolkit.core.network.dto.toDomain
 
 /** The newsroom, read from the site's static feed. */
 class NewsRepository(

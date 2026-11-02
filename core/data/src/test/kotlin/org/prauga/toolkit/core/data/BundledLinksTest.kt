@@ -3,12 +3,12 @@
 
 package org.prauga.toolkit.core.data
 
-import org.prauga.toolkit.core.network.ToolkitJson
-import org.prauga.toolkit.core.network.dto.LinksDto
-import org.prauga.toolkit.core.network.dto.toDomain
 import java.io.File
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.prauga.toolkit.core.network.ToolkitJson
+import org.prauga.toolkit.core.network.dto.LinksDto
+import org.prauga.toolkit.core.network.dto.toDomain
 
 /** The bundled links.json is what renders on first run with no network. */
 class BundledLinksTest {

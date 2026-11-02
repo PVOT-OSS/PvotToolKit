@@ -3,9 +3,9 @@
 
 package org.prauga.toolkit.core.data.settings
 
+import kotlinx.coroutines.flow.Flow
 import org.prauga.toolkit.core.datastore.SettingsStore
 import org.prauga.toolkit.core.model.ThemePreference
-import kotlinx.coroutines.flow.Flow
 
 class ThemeRepository(private val store: SettingsStore) {
     val theme: Flow<ThemePreference> = store.theme

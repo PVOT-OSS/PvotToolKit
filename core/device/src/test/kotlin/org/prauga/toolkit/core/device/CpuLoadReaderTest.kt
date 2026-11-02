@@ -3,11 +3,11 @@
 
 package org.prauga.toolkit.core.device
 
-import org.prauga.toolkit.core.model.CpuIdleSample
 import java.util.concurrent.TimeUnit
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
+import org.prauga.toolkit.core.model.CpuIdleSample
 
 class CpuLoadReaderTest {
     private fun sampleAt(seconds: Long, vararg idleMicros: Long) =

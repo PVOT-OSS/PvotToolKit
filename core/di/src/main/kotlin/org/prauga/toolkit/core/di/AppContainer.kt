@@ -4,6 +4,7 @@
 package org.prauga.toolkit.core.di
 
 import android.content.Context
+import io.ktor.client.HttpClient
 import org.prauga.toolkit.core.batterymonitor.BatterySessionStore
 import org.prauga.toolkit.core.data.device.DeviceRepository
 import org.prauga.toolkit.core.data.links.LinksRepository
@@ -14,7 +15,6 @@ import org.prauga.toolkit.core.device.DeviceDetailsReader
 import org.prauga.toolkit.core.device.DeviceProfileReader
 import org.prauga.toolkit.core.device.SystemVitalsReader
 import org.prauga.toolkit.core.network.createHttpClient
-import io.ktor.client.HttpClient
 
 /** Hand-rolled dependency container. */
 class AppContainer(context: Context) {

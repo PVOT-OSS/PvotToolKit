@@ -3,11 +3,11 @@
 
 package org.prauga.toolkit.core.network.dto
 
-import org.prauga.toolkit.core.network.ToolkitJson
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.prauga.toolkit.core.network.ToolkitJson
 
 /** Guards the contract with `/api/v1/links.json` and the bundled fallback copy. */
 class LinksDtoTest {

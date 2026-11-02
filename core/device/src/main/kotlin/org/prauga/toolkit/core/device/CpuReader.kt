@@ -3,8 +3,8 @@
 
 package org.prauga.toolkit.core.device
 
-import org.prauga.toolkit.core.model.CpuVitals
 import java.io.File
+import org.prauga.toolkit.core.model.CpuVitals
 
 private const val CPU_ROOT = "/sys/devices/system/cpu"
 private const val THERMAL_ROOT = "/sys/class/thermal"

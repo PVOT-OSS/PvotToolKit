@@ -5,10 +5,10 @@ package org.prauga.toolkit.feature.deviceinfo
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import java.util.Locale
 import org.prauga.toolkit.core.model.DeviceDetails
 import org.prauga.toolkit.core.model.DeviceProfile
 import org.prauga.toolkit.core.model.Vitals
-import java.util.Locale
 
 @Composable
 internal fun tabSections(
