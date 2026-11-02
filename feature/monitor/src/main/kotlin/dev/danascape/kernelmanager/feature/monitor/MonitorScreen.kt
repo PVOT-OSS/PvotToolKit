@@ -6,12 +6,12 @@ package dev.danascape.kernelmanager.feature.monitor
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,12 +20,12 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prauga.pvot.designsystem.components.PvotScreen
+import com.prauga.pvot.designsystem.components.PvotScreenDefaults
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import dev.danascape.kernelmanager.core.designsystem.component.MetricCard
 import dev.danascape.kernelmanager.core.designsystem.component.MetricLine
 import dev.danascape.kernelmanager.core.designsystem.component.SBMeter
 import dev.danascape.kernelmanager.core.designsystem.component.SBSparkline
-import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
 import dev.danascape.kernelmanager.core.model.BatteryVitals
 import dev.danascape.kernelmanager.core.model.CpuTopology
 import dev.danascape.kernelmanager.core.model.GpuInfo
@@ -65,9 +65,7 @@ private fun MonitorContent(
 
     PvotScreen(
         modifier = modifier.fillMaxSize(),
-        contentPadding = screenContentPadding(),
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(14.dp),
+        contentPadding = PvotScreenDefaults.contentPadding(),
     ) {
         item(key = "header") { Header() }
 
@@ -97,7 +95,10 @@ private fun MonitorContent(
 @Composable
 private fun Header() {
     Column(
-        modifier = Modifier.padding(bottom = 6.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(bottom = 6.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         Text(

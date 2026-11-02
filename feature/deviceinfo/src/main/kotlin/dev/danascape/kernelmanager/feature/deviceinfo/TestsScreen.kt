@@ -21,9 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.prauga.pvot.designsystem.components.PvotCard
+import com.prauga.pvot.designsystem.components.PvotScreenDefaults
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotSpacing
-import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
 
 private val CardHeight = 92.dp
 private val CardGap = 10.dp
@@ -33,7 +33,7 @@ fun TestsScreen(modifier: Modifier = Modifier) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = modifier.fillMaxSize(),
-        contentPadding = screenContentPadding(),
+        contentPadding = PvotScreenDefaults.contentPadding(),
         horizontalArrangement = Arrangement.spacedBy(CardGap),
         verticalArrangement = Arrangement.spacedBy(CardGap),
     ) {

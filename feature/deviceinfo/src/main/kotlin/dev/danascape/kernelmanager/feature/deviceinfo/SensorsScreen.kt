@@ -13,7 +13,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -22,10 +21,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.components.PvotScreen
+import com.prauga.pvot.designsystem.components.PvotScreenDefaults
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotSpacing
 import dev.danascape.kernelmanager.core.designsystem.component.ValueBlock
-import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
 
 private val SensorRowGap = 3.dp
 
@@ -47,8 +46,7 @@ private fun SensorsContent(
 
     PvotScreen(
         modifier = modifier.fillMaxSize(),
-        contentPadding = screenContentPadding(),
-        horizontalAlignment = Alignment.Start,
+        contentPadding = PvotScreenDefaults.contentPadding(),
         verticalArrangement = Arrangement.spacedBy(SensorRowGap),
     ) {
         item(key = "header") {

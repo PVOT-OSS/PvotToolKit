@@ -6,10 +6,10 @@ package dev.danascape.kernelmanager.feature.licenses
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -17,11 +17,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.prauga.pvot.designsystem.components.PvotScreen
+import com.prauga.pvot.designsystem.components.PvotScreenDefaults
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import dev.danascape.kernelmanager.core.designsystem.component.ActionRow
 import dev.danascape.kernelmanager.core.designsystem.component.SettingsGroup
 import dev.danascape.kernelmanager.core.designsystem.component.openArticle
-import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
 import dev.danascape.kernelmanager.feature.licenses.R
 
 @Composable
@@ -31,12 +31,13 @@ fun LicensesScreen(modifier: Modifier = Modifier) {
 
     PvotScreen(
         modifier = modifier.fillMaxSize(),
-        contentPadding = screenContentPadding(),
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(20.dp),
+        contentPadding = PvotScreenDefaults.contentPadding(),
     ) {
         item(key = "header") {
-            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+            ) {
                 Text(
                     text = stringResource(R.string.licenses_kicker),
                     style = MaterialTheme.typography.labelSmall,

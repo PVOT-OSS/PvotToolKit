@@ -31,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.components.PvotScreen
+import com.prauga.pvot.designsystem.components.PvotScreenDefaults
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import com.prauga.pvot.designsystem.theme.PvotShapes
@@ -39,7 +40,6 @@ import dev.danascape.kernelmanager.core.designsystem.component.ActionRow
 import dev.danascape.kernelmanager.core.designsystem.component.SettingsGroup
 import dev.danascape.kernelmanager.core.designsystem.component.ValueRow
 import dev.danascape.kernelmanager.core.designsystem.component.openArticle
-import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
 import dev.danascape.kernelmanager.core.model.BatteryVitals
 import dev.danascape.kernelmanager.core.model.BootState
 import dev.danascape.kernelmanager.core.model.CpuVitals
@@ -94,9 +94,7 @@ private fun DiscoverContent(
 ) {
     PvotScreen(
         modifier = modifier.fillMaxSize(),
-        contentPadding = screenContentPadding(),
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(20.dp),
+        contentPadding = PvotScreenDefaults.contentPadding(),
     ) {
         state.profile?.let { profile ->
             item(key = "identity") { IdentityCard(profile.identity, onOpenDevice) }
@@ -269,7 +267,10 @@ private fun VitalsGroup(
             text = stringResource(R.string.discover_thermal_locked),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(top = 10.dp, start = 4.dp, end = 4.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp, start = 4.dp, end = 4.dp),
         )
     }
 }

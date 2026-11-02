@@ -35,11 +35,11 @@ import com.prauga.pvot.coreui.PvotLoadingContent
 import com.prauga.pvot.coreui.PvotSectionHeader
 import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.components.PvotScreen
+import com.prauga.pvot.designsystem.components.PvotScreenDefaults
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotSpacing
 import dev.danascape.kernelmanager.core.designsystem.component.ValueBlock
 import dev.danascape.kernelmanager.core.designsystem.component.ValueRow
-import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
 import dev.danascape.kernelmanager.core.model.DeviceProfile
 
 /** Longer than this and the value gets its own line rather than starving the label. */
@@ -113,8 +113,7 @@ private fun DeviceInfoContent(
         PvotScreen(
             state = listState,
             modifier = Modifier.fillMaxSize(),
-            contentPadding = screenContentPadding(top = 0.dp),
-            horizontalAlignment = Alignment.Start,
+            contentPadding = PvotScreenDefaults.contentPadding(top = 0.dp),
             verticalArrangement = Arrangement.spacedBy(RowGap),
         ) {
             sections.forEach { section ->
@@ -212,7 +211,10 @@ private fun HeaderCard(
 internal fun GroupTitle(title: String) {
     PvotSectionHeader(
         title = title,
-        modifier = Modifier.padding(start = PvotSpacing.XS, top = GroupGap, bottom = TitleGap),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(start = PvotSpacing.XS, top = GroupGap, bottom = TitleGap),
     )
 }
 

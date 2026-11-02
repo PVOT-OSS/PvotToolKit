@@ -29,6 +29,7 @@ import com.prauga.pvot.coreui.PvotEmptyContent
 import com.prauga.pvot.coreui.PvotErrorContent
 import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.components.PvotScreen
+import com.prauga.pvot.designsystem.components.PvotScreenDefaults
 import com.prauga.pvot.designsystem.components.PvotSkeleton
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
@@ -36,7 +37,6 @@ import com.prauga.pvot.designsystem.theme.PvotShapes
 import com.prauga.pvot.designsystem.theme.PvotSpacing
 import dev.danascape.kernelmanager.core.common.LoadError
 import dev.danascape.kernelmanager.core.designsystem.component.openArticle
-import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
 import dev.danascape.kernelmanager.core.model.NewsPost
 import dev.danascape.kernelmanager.feature.news.R
 import java.time.LocalDate
@@ -106,9 +106,7 @@ private fun NewsList(
 ) {
     PvotScreen(
         modifier = modifier.fillMaxSize(),
-        contentPadding = screenContentPadding(),
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PvotScreenDefaults.contentPadding(),
     ) {
         item(key = "header") { Header() }
 
@@ -141,8 +139,7 @@ private fun LazyListScope.newsItems(
 private fun NewsSkeleton(modifier: Modifier = Modifier) {
     PvotScreen(
         modifier = modifier.fillMaxSize(),
-        contentPadding = screenContentPadding(),
-        horizontalAlignment = Alignment.Start,
+        contentPadding = PvotScreenDefaults.contentPadding(),
         verticalArrangement = Arrangement.spacedBy(PvotSpacing.M),
     ) {
         item(key = "header") { Header() }
@@ -163,6 +160,7 @@ private fun Header() {
     Column(
         modifier =
             Modifier
+                .fillMaxWidth()
                 .pvotReveal(0)
                 .padding(bottom = 4.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp),
