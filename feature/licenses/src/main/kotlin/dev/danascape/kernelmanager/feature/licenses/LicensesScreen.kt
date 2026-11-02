@@ -48,7 +48,7 @@ fun LicensesScreen(
                 Text(
                     text = stringResource(R.string.licenses_kicker),
                     style = MaterialTheme.typography.labelSmall,
-                    color = SBTheme.colors.accent,
+                    color = MaterialTheme.colorScheme.tertiary,
                 )
                 Text(
                     text = stringResource(R.string.licenses_title),
@@ -58,7 +58,7 @@ fun LicensesScreen(
                 Text(
                     text = stringResource(R.string.licenses_subtitle),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = SBTheme.colors.muted,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }

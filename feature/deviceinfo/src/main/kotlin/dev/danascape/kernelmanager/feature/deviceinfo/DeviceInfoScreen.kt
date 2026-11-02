@@ -41,7 +41,6 @@ import dev.danascape.kernelmanager.core.designsystem.component.ValueBlock
 import dev.danascape.kernelmanager.core.designsystem.component.ValueRow
 import dev.danascape.kernelmanager.core.designsystem.component.expandedBy
 import dev.danascape.kernelmanager.core.designsystem.component.topInset
-import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 import dev.danascape.kernelmanager.core.model.DeviceProfile
 
 /** Longer than this and the value gets its own line rather than starving the label. */
@@ -108,7 +107,7 @@ private fun DeviceInfoContent(
             Text(
                 text = stringResource(R.string.device_info_loading),
                 style = MaterialTheme.typography.bodyMedium,
-                color = SBTheme.colors.muted,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
             )
             return@Column
@@ -183,7 +182,7 @@ private fun TabChip(
     Text(
         text = label,
         style = MaterialTheme.typography.labelSmall,
-        color = if (selected) MaterialTheme.colorScheme.onPrimary else SBTheme.colors.muted,
+        color = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
         modifier =
             Modifier
                 .pvotPressScale(interactionSource)
@@ -220,7 +219,7 @@ private fun HeaderCard(
         Text(
             text = stringResource(R.string.device_info_kicker),
             style = MaterialTheme.typography.labelSmall,
-            color = SBTheme.colors.accent,
+            color = MaterialTheme.colorScheme.tertiary,
         )
         Text(
             text = profile.identity.displayName,
@@ -230,7 +229,7 @@ private fun HeaderCard(
         Text(
             text = profile.identity.codename,
             style = MaterialTheme.typography.labelMedium,
-            color = SBTheme.colors.muted,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
@@ -241,7 +240,7 @@ internal fun GroupTitle(title: String) {
     Text(
         text = title,
         style = MaterialTheme.typography.labelSmall,
-        color = SBTheme.colors.accent,
+        color = MaterialTheme.colorScheme.tertiary,
         modifier = Modifier.padding(start = 4.dp, top = GroupGap, bottom = TitleGap),
     )
 }

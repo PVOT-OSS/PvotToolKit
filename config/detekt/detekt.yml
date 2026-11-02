@@ -87,9 +87,9 @@ style:
 # third-party rulesets rename rules between releases.
 Compose:
   CompositionLocalAllowlist:
-    # One, deliberately: the brand tokens Material has no slot for. Anything
-    # else wanting a CompositionLocal has to argue for it here first.
-    allowedCompositionLocals: ['LocalSBExtendedColors']
+    # None: every colour is a Material role on the Pvot theme. Anything wanting
+    # a CompositionLocal has to argue for it here first.
+    allowedCompositionLocals: []
   ComposableAnnotationNaming:
     active: true
   ComposableNaming:

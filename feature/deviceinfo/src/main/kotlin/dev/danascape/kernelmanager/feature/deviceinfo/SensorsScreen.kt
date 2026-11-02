@@ -27,7 +27,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import dev.danascape.kernelmanager.core.designsystem.component.ValueBlock
 import dev.danascape.kernelmanager.core.designsystem.component.expandedBy
-import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 
 private val SensorRowGap = 3.dp
 
@@ -97,7 +96,7 @@ private fun SensorHeader(
         Text(
             text = stringResource(R.string.sensors_kicker),
             style = MaterialTheme.typography.labelSmall,
-            color = SBTheme.colors.accent,
+            color = MaterialTheme.colorScheme.tertiary,
         )
         Text(
             text = pluralStringResource(R.plurals.sensors_count, count, count),
@@ -108,7 +107,7 @@ private fun SensorHeader(
             Text(
                 text = it,
                 style = MaterialTheme.typography.labelMedium,
-                color = SBTheme.colors.muted,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }

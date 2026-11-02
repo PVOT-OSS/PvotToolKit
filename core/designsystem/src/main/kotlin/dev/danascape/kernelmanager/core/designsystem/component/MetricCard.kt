@@ -23,7 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.prauga.pvot.designsystem.effects.pvotPressScale
 import com.prauga.pvot.designsystem.motion.pvotReveal
-import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
+import dev.danascape.kernelmanager.core.designsystem.theme.faint
 
 /** A stat tile: what a metric reads right now, with its recent shape. */
 @Composable
@@ -68,13 +68,13 @@ fun MetricCard(
             Text(
                 text = title,
                 style = MaterialTheme.typography.labelSmall,
-                color = SBTheme.colors.accent,
+                color = MaterialTheme.colorScheme.tertiary,
             )
             caption?.let {
                 Text(
                     text = it,
                     style = MaterialTheme.typography.labelSmall,
-                    color = SBTheme.colors.faint,
+                    color = MaterialTheme.colorScheme.faint,
                 )
             }
         }
@@ -104,7 +104,7 @@ fun MetricLine(
         Text(
             text = label,
             style = MaterialTheme.typography.bodyMedium,
-            color = SBTheme.colors.muted,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Text(
             text = value,

@@ -30,6 +30,7 @@ import dev.danascape.kernelmanager.core.designsystem.component.MetricLine
 import dev.danascape.kernelmanager.core.designsystem.component.SBSparkline
 import dev.danascape.kernelmanager.core.designsystem.component.expandedBy
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
+import dev.danascape.kernelmanager.core.designsystem.theme.faint
 import dev.danascape.kernelmanager.core.model.CpuCluster
 
 @Composable
@@ -65,7 +66,7 @@ fun CpuDetailScreen(
                 Text(
                     text = stringResource(R.string.monitor_cpu).lowercase(),
                     style = MaterialTheme.typography.labelSmall,
-                    color = SBTheme.colors.accent,
+                    color = MaterialTheme.colorScheme.tertiary,
                 )
                 Text(
                     text = stringResource(R.string.monitor_detail_cpu),
@@ -75,7 +76,7 @@ fun CpuDetailScreen(
                 Text(
                     text = stringResource(R.string.monitor_detail_note),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = SBTheme.colors.muted,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
@@ -145,7 +146,7 @@ private fun CoreChart(
                         currentKhz?.let { append(" · ${frequency(it)}") }
                     },
                 style = MaterialTheme.typography.labelMedium,
-                color = SBTheme.colors.muted,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
         SBSparkline(values = values, domain = 0f..1f, height = 44.dp)
@@ -155,7 +156,7 @@ private fun CoreChart(
                     stringResource(R.string.monitor_cluster, it.id) +
                         " · " + (it.hardwareMaxKhz?.let(::frequency) ?: "—"),
                 style = MaterialTheme.typography.labelSmall,
-                color = SBTheme.colors.faint,
+                color = MaterialTheme.colorScheme.faint,
             )
         }
     }
@@ -175,7 +176,7 @@ private fun ClusterCard(cluster: CpuCluster) {
         Text(
             text = stringResource(R.string.monitor_cluster, cluster.id),
             style = MaterialTheme.typography.labelSmall,
-            color = SBTheme.colors.accent,
+            color = MaterialTheme.colorScheme.tertiary,
         )
         MetricLine(
             stringResource(R.string.monitor_freq_range),

@@ -3,10 +3,9 @@
 
 package dev.danascape.kernelmanager.core.designsystem.theme
 
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 private val DarkBg = Color(0xFF08080F)
@@ -17,7 +16,6 @@ private val DarkBorder = Color(0xFF22223A)
 private val DarkBorder2 = Color(0xFF30304E)
 private val DarkText = Color(0xFFECECF5)
 private val DarkMuted = Color(0xFF9A9AB5)
-private val DarkFaint = Color(0xFF6B6B85)
 private val DarkBrand = Color(0xFFC7E7FF)
 private val DarkBrand2 = Color(0xFF4D8DFF)
 private val DarkAccent = Color(0xFF35E0D4)
@@ -33,12 +31,9 @@ private val LightBorder = Color(0xFFE3E4EF)
 private val LightBorder2 = Color(0xFFD3D5E5)
 private val LightText = Color(0xFF14142A)
 private val LightMuted = Color(0xFF55566F)
-private val LightFaint = Color(0xFF8687A0)
 private val LightBrand = Color(0xFF2F6FE0)
 private val LightAccent = Color(0xFF0F766E)
 private val LightBrandText = Color(0xFFFFFFFF)
-
-private val Ink = Color(0xFF0A0A12)
 
 internal val SBDarkColorScheme =
     darkColorScheme(
@@ -115,37 +110,9 @@ internal val SBLightColorScheme =
     )
 
 /** Brand tokens that Material 3 has no slot for. */
-@Immutable
-data class SBExtendedColors(
-    val brandSecondary: Color,
-    val accent: Color,
-    val muted: Color,
-    val faint: Color,
-    val hairline: Color,
-    val hairlineStrong: Color,
-    val ink: Color,
-)
 
-internal val SBDarkExtendedColors =
-    SBExtendedColors(
-        brandSecondary = DarkBrand2,
-        accent = DarkAccent,
-        muted = DarkMuted,
-        faint = DarkFaint,
-        hairline = DarkBorder,
-        hairlineStrong = DarkBorder2,
-        ink = Ink,
-    )
+private const val FAINT_ALPHA = 0.6f
 
-internal val SBLightExtendedColors =
-    SBExtendedColors(
-        brandSecondary = DarkBrand2,
-        accent = LightAccent,
-        muted = LightMuted,
-        faint = LightFaint,
-        hairline = LightBorder,
-        hairlineStrong = LightBorder2,
-        ink = Ink,
-    )
-
-internal val LocalSBExtendedColors = staticCompositionLocalOf { SBDarkExtendedColors }
+/** The quietest text tier: metadata and captions under the secondary text. */
+val ColorScheme.faint: Color
+    get() = onSurfaceVariant.copy(alpha = FAINT_ALPHA)

@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
+import dev.danascape.kernelmanager.core.designsystem.theme.faint
 
 /** Stand-in for a destination whose content has not been built yet. */
 @Composable
@@ -36,7 +37,7 @@ fun SectionPlaceholder(
         Text(
             text = kicker,
             style = MaterialTheme.typography.labelSmall,
-            color = SBTheme.colors.faint,
+            color = MaterialTheme.colorScheme.faint,
             textAlign = TextAlign.Center,
         )
         Text(
@@ -48,7 +49,7 @@ fun SectionPlaceholder(
         Text(
             text = description,
             style = MaterialTheme.typography.bodyMedium,
-            color = SBTheme.colors.muted,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
         )
     }

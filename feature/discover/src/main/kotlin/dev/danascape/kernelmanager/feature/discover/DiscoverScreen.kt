@@ -43,6 +43,7 @@ import dev.danascape.kernelmanager.core.designsystem.component.ValueRow
 import dev.danascape.kernelmanager.core.designsystem.component.expandedBy
 import dev.danascape.kernelmanager.core.designsystem.component.openArticle
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
+import dev.danascape.kernelmanager.core.designsystem.theme.faint
 import dev.danascape.kernelmanager.core.model.BatteryVitals
 import dev.danascape.kernelmanager.core.model.CpuVitals
 import dev.danascape.kernelmanager.core.model.BootState
@@ -152,12 +153,12 @@ private fun IdentityCard(
             Text(
                 text = stringResource(R.string.discover_kicker),
                 style = MaterialTheme.typography.labelSmall,
-                color = SBTheme.colors.accent,
+                color = MaterialTheme.colorScheme.tertiary,
             )
             Text(
                 text = stringResource(R.string.discover_tap_detail),
                 style = MaterialTheme.typography.labelSmall,
-                color = SBTheme.colors.faint,
+                color = MaterialTheme.colorScheme.faint,
             )
         }
         Text(
@@ -174,12 +175,12 @@ private fun IdentityCard(
                     identity.sdkInt,
                 ),
             style = MaterialTheme.typography.labelMedium,
-            color = SBTheme.colors.muted,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
 
         HorizontalDivider(
             modifier = Modifier.padding(vertical = 10.dp),
-            color = SBTheme.colors.hairline,
+            color = MaterialTheme.colorScheme.outlineVariant,
         )
 
         Text(
@@ -191,7 +192,7 @@ private fun IdentityCard(
             Text(
                 text = identity.kernelBuild,
                 style = MaterialTheme.typography.labelSmall,
-                color = SBTheme.colors.faint,
+                color = MaterialTheme.colorScheme.faint,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -221,7 +222,7 @@ private fun StatusChip(
                 Modifier
                     .size(7.dp)
                     .clip(CircleShape)
-                    .background(if (running) SBTheme.colors.accent else SBTheme.colors.faint),
+                    .background(if (running) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.faint),
         )
         Text(
             text =
@@ -229,7 +230,7 @@ private fun StatusChip(
                     if (running) R.string.discover_kernel_running else R.string.discover_kernel_stock,
                 ),
             style = MaterialTheme.typography.labelSmall,
-            color = if (running) MaterialTheme.colorScheme.onSurface else SBTheme.colors.muted,
+            color = if (running) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
@@ -281,7 +282,7 @@ private fun VitalsGroup(
         Text(
             text = stringResource(R.string.discover_thermal_locked),
             style = MaterialTheme.typography.bodySmall,
-            color = SBTheme.colors.faint,
+            color = MaterialTheme.colorScheme.faint,
             modifier = Modifier.padding(top = 10.dp, start = 4.dp, end = 4.dp),
         )
     }

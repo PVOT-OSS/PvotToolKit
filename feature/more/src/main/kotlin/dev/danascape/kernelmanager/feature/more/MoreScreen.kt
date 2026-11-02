@@ -189,7 +189,7 @@ private fun Header() {
         Text(
             text = stringResource(R.string.more_kicker),
             style = MaterialTheme.typography.labelSmall,
-            color = SBTheme.colors.accent,
+            color = MaterialTheme.colorScheme.tertiary,
         )
         Text(
             text = stringResource(R.string.more_title),

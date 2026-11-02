@@ -32,6 +32,7 @@ import dev.danascape.kernelmanager.feature.news.R
 import com.prauga.pvot.designsystem.effects.pvotPressScale
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
+import dev.danascape.kernelmanager.core.designsystem.theme.faint
 import dev.danascape.kernelmanager.core.model.NewsPost
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -75,7 +76,7 @@ fun NewsCard(
                     Modifier
                         .fillMaxWidth()
                         .aspectRatio(16f / 9f)
-                        .background(SBTheme.colors.ink),
+                        .background(MaterialTheme.colorScheme.surfaceContainerLowest),
                 contentScale = ContentScale.Crop,
             )
         }
@@ -96,7 +97,7 @@ fun NewsCard(
                 Text(
                     text = it,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = SBTheme.colors.muted,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
 
@@ -131,7 +132,7 @@ private fun MetaLine(post: NewsPost) {
             Text(
                 text = it,
                 style = MaterialTheme.typography.labelSmall,
-                color = SBTheme.colors.accent,
+                color = MaterialTheme.colorScheme.tertiary,
             )
         }
     }
@@ -142,7 +143,7 @@ private fun MetaText(text: String) {
     Text(
         text = text,
         style = MaterialTheme.typography.labelSmall,
-        color = SBTheme.colors.faint,
+        color = MaterialTheme.colorScheme.faint,
     )
 }
 

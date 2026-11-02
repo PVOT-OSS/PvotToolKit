@@ -26,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import dev.danascape.kernelmanager.core.designsystem.component.expandedBy
-import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
+import dev.danascape.kernelmanager.core.designsystem.theme.faint
 
 private val CardHeight = 92.dp
 private val CardGap = 10.dp
@@ -70,7 +70,7 @@ private fun TestsHeader() {
         Text(
             text = stringResource(R.string.tests_kicker),
             style = MaterialTheme.typography.labelSmall,
-            color = SBTheme.colors.accent,
+            color = MaterialTheme.colorScheme.tertiary,
         )
         Text(
             text = stringResource(R.string.tests_title),
@@ -80,7 +80,7 @@ private fun TestsHeader() {
         Text(
             text = stringResource(R.string.tests_description),
             style = MaterialTheme.typography.bodyMedium,
-            color = SBTheme.colors.muted,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
@@ -105,7 +105,7 @@ private fun TestCard(label: String) {
         Text(
             text = stringResource(R.string.tests_not_run),
             style = MaterialTheme.typography.labelSmall,
-            color = SBTheme.colors.faint,
+            color = MaterialTheme.colorScheme.faint,
         )
     }
 }

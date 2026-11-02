@@ -26,6 +26,7 @@ import dev.danascape.kernelmanager.core.designsystem.component.SBMeter
 import dev.danascape.kernelmanager.core.designsystem.component.SBSparkline
 import dev.danascape.kernelmanager.core.designsystem.component.expandedBy
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
+import dev.danascape.kernelmanager.core.designsystem.theme.faint
 import dev.danascape.kernelmanager.core.model.BatteryVitals
 import dev.danascape.kernelmanager.core.model.CpuTopology
 import dev.danascape.kernelmanager.core.model.GpuInfo
@@ -110,7 +111,7 @@ private fun Header() {
         Text(
             text = stringResource(R.string.monitor_kicker),
             style = MaterialTheme.typography.labelSmall,
-            color = SBTheme.colors.accent,
+            color = MaterialTheme.colorScheme.tertiary,
         )
         Text(
             text = stringResource(R.string.monitor_title),
@@ -120,7 +121,7 @@ private fun Header() {
         Text(
             text = stringResource(R.string.monitor_description),
             style = MaterialTheme.typography.bodyMedium,
-            color = SBTheme.colors.muted,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
@@ -253,7 +254,7 @@ private fun UptimeCard(
         value = duration(sleep.elapsedMillis),
         revealIndex = revealIndex,
     ) {
-        SBMeter(fraction = sleep.deepSleepFraction, color = SBTheme.colors.accent)
+        SBMeter(fraction = sleep.deepSleepFraction, color = MaterialTheme.colorScheme.tertiary)
         MetricLine(
             stringResource(R.string.monitor_deep_sleep),
             "${duration(sleep.deepSleepMillis)} · ${percent(sleep.deepSleepFraction)}",
@@ -277,7 +278,7 @@ private fun GpuCard(
         Text(
             text = stringResource(R.string.monitor_gpu_locked),
             style = MaterialTheme.typography.bodySmall,
-            color = SBTheme.colors.faint,
+            color = MaterialTheme.colorScheme.faint,
         )
     }
 }
@@ -299,7 +300,7 @@ private fun ThermalCard(
         Text(
             text = stringResource(R.string.monitor_thermal_note),
             style = MaterialTheme.typography.bodySmall,
-            color = SBTheme.colors.faint,
+            color = MaterialTheme.colorScheme.faint,
         )
     }
 }

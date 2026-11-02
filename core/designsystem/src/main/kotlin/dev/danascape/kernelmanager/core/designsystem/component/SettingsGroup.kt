@@ -28,7 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.prauga.pvot.designsystem.effects.pvotPressScale
 import com.prauga.pvot.designsystem.motion.pvotReveal
-import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
+import dev.danascape.kernelmanager.core.designsystem.theme.faint
 
 private val OuterRadius = 24.dp
 private val InnerRadius = 6.dp
@@ -58,7 +58,7 @@ fun SettingsGroup(
         Text(
             text = title,
             style = MaterialTheme.typography.labelSmall,
-            color = SBTheme.colors.accent,
+            color = MaterialTheme.colorScheme.tertiary,
             modifier =
                 Modifier
                     .pvotReveal(0)
@@ -144,7 +144,7 @@ fun ValueRow(
         Text(
             text = value,
             style = MaterialTheme.typography.labelMedium,
-            color = SBTheme.colors.muted,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.End,
         )
     }
@@ -179,7 +179,7 @@ fun ValueBlock(
             Text(
                 text = value,
                 style = MaterialTheme.typography.labelMedium,
-                color = SBTheme.colors.muted,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }
@@ -212,13 +212,13 @@ fun ActionRow(
             Text(
                 text = label,
                 style = MaterialTheme.typography.bodyLarge,
-                color = if (enabled) MaterialTheme.colorScheme.onSurface else SBTheme.colors.faint,
+                color = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.faint,
             )
             description?.let {
                 Text(
                     text = it,
                     style = MaterialTheme.typography.bodySmall,
-                    color = SBTheme.colors.muted,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
@@ -226,7 +226,7 @@ fun ActionRow(
             Text(
                 text = it,
                 style = MaterialTheme.typography.labelMedium,
-                color = SBTheme.colors.muted,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }

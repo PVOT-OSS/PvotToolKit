@@ -36,6 +36,7 @@ import dev.danascape.kernelmanager.core.designsystem.R as DesignSystemR
 import dev.danascape.kernelmanager.feature.news.R
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
+import dev.danascape.kernelmanager.core.designsystem.theme.faint
 import dev.danascape.kernelmanager.core.common.LoadError
 import dev.danascape.kernelmanager.core.model.NewsPost
 import dev.danascape.kernelmanager.core.designsystem.component.expandedBy
@@ -82,7 +83,7 @@ private fun NewsContent(
                 Text(
                     text = stringResource(R.string.news_empty),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = SBTheme.colors.muted,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                 )
             }
@@ -162,7 +163,7 @@ private fun Header() {
         Text(
             text = stringResource(R.string.news_kicker),
             style = MaterialTheme.typography.labelSmall,
-            color = SBTheme.colors.accent,
+            color = MaterialTheme.colorScheme.tertiary,
         )
         Text(
             text = stringResource(R.string.news_title),
@@ -172,7 +173,7 @@ private fun Header() {
         Text(
             text = stringResource(R.string.news_subtitle),
             style = MaterialTheme.typography.bodyMedium,
-            color = SBTheme.colors.muted,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
@@ -183,7 +184,7 @@ private fun OfflineNotice() {
     Text(
         text = stringResource(R.string.news_offline_copy),
         style = MaterialTheme.typography.labelSmall,
-        color = SBTheme.colors.faint,
+        color = MaterialTheme.colorScheme.faint,
         modifier =
             Modifier
                 .fillMaxWidth()
@@ -230,7 +231,7 @@ private fun LoadFailure(
         Text(
             text = message,
             style = MaterialTheme.typography.bodyMedium,
-            color = SBTheme.colors.muted,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
         )
         OutlinedButton(onClick = onRetry) {
