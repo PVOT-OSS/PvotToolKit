@@ -5,9 +5,6 @@ package dev.danascape.kernelmanager
 
 import android.app.Activity
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,19 +12,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.prauga.pvot.designsystem.platform.PvotBaseActivity
 import dev.danascape.kernelmanager.core.data.settings.ThemeRepository
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 import dev.danascape.kernelmanager.core.model.ThemePreference
 import dev.danascape.kernelmanager.ui.SBApp
 
-class MainActivity : ComponentActivity() {
+class MainActivity : PvotBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
 
         val themeRepository = (application as SBApplication).appContainer.themeRepository
 
-        setContent {
+        setPvotContent {
             val darkTheme = isDarkTheme(themeRepository)
             SystemBarIcons(darkTheme)
             SBTheme(darkTheme = darkTheme) {

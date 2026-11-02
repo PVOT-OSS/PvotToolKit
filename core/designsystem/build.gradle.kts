@@ -12,6 +12,7 @@ android {
 
 dependencies {
     api(project(":design-system"))
+    api(project(":core-ui"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.browser)
 }

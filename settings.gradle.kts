@@ -51,4 +51,6 @@ include(":feature:licenses")
 includeBuild("PvotLib/build-logic") { name = "pvot-build-logic" }
 include(":design-system")
 project(":design-system").projectDir = file("PvotLib/design-system")
+include(":core-ui")
+project(":core-ui").projectDir = file("PvotLib/core-ui")
  

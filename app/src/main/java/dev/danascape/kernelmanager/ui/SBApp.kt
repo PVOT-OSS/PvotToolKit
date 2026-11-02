@@ -3,30 +3,26 @@
 
 package dev.danascape.kernelmanager.ui
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.prauga.pvot.designsystem.navigation.PvotNavBar
 import com.prauga.pvot.designsystem.navigation.PvotTabItem
-import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 import dev.danascape.kernelmanager.navigation.DeviceDestination
 import dev.danascape.kernelmanager.navigation.SBDestination
 import dev.danascape.kernelmanager.navigation.SBNavHost
@@ -35,10 +31,10 @@ import dev.danascape.kernelmanager.navigation.navigateToDevice
 import dev.danascape.kernelmanager.navigation.navigateToTopLevel
 import dev.danascape.kernelmanager.navigation.topLevelDestination
 
-/** How far the fade reaches below the status bar before it is fully transparent. */
-private val FadeDepth = 14.dp
+/** Pixels of scroll in one event before the nav bar reacts, so a jitter does not flip it. */
+private const val SCROLL_THRESHOLD = 4f
 
-/** The app shell: one nav bar over the top-level destinations. */
+/** The app shell: one floating nav bar over the top-level destinations. */
 @Composable
 fun SBApp(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
@@ -46,6 +42,24 @@ fun SBApp(modifier: Modifier = Modifier) {
 
     val device = backStackEntry?.destination.deviceDestination()
     val current = backStackEntry?.destination.topLevelDestination() ?: SBDestination.DISCOVER
+
+    var navCompact by rememberSaveable { mutableStateOf(false) }
+    val scrollConnection =
+        remember {
+            object : NestedScrollConnection {
+                override fun onPreScroll(
+                    available: Offset,
+                    source: NestedScrollSource,
+                ): Offset {
+                    if (available.y < -SCROLL_THRESHOLD) {
+                        navCompact = true
+                    } else if (available.y > SCROLL_THRESHOLD) {
+                        navCompact = false
+                    }
+                    return Offset.Zero
+                }
+            }
+        }
 
     val deviceTabs =
         remember {
@@ -78,55 +92,34 @@ fun SBApp(modifier: Modifier = Modifier) {
             if (device != null) {
                 PvotNavBar(
                     selectedTab = device.ordinal,
-                    onTabClick = { index -> navController.navigateToDevice(DeviceDestination.entries[index]) },
+                    onTabClick = { index ->
+                        navCompact = false
+                        navController.navigateToDevice(DeviceDestination.entries[index])
+                    },
                     tabs = deviceTabs,
-                    colors = SBTheme.navBarColors,
+                    compact = navCompact,
                 )
             } else {
                 PvotNavBar(
                     selectedTab = current.ordinal,
-                    onTabClick = { index -> navController.navigateToTopLevel(SBDestination.entries[index]) },
+                    onTabClick = { index ->
+                        navCompact = false
+                        navController.navigateToTopLevel(SBDestination.entries[index])
+                    },
                     tabs = tabs,
-                    colors = SBTheme.navBarColors,
+                    compact = navCompact,
                 )
             }
         },
     ) { innerPadding ->
-        Box(modifier = Modifier.fillMaxSize()) {
-            SBNavHost(
-                navController = navController,
-                contentPadding = innerPadding,
-            )
-            StatusBarFade()
-        }
+        SBNavHost(
+            navController = navController,
+            contentPadding = PaddingValues(bottom = innerPadding.calculateBottomPadding()),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .nestedScroll(scrollConnection)
+                    .padding(top = innerPadding.calculateTopPadding()),
+        )
     }
-}
-
-/**
- * Fades content out under the status bar rather than letting it cut off at a hard edge.
- *
- * The bar is transparent and the lists scroll beneath it, so without this a card
- * simply vanishes mid-row on the way up.
- */
-@Composable
-private fun BoxScope.StatusBarFade() {
-    val background = MaterialTheme.colorScheme.background
-    val inset = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-    val total = inset + FadeDepth
-    Spacer(
-        modifier =
-            Modifier
-                .align(Alignment.TopCenter)
-                .fillMaxWidth()
-                .height(total)
-                .background(
-                    Brush.verticalGradient(
-                        0f to background,
-                        // Solid across the bar itself, so anything pinned just below
-                        // it keeps its own colour rather than being tinted.
-                        inset / total to background,
-                        1f to background.copy(alpha = 0f),
-                    ),
-                ),
-    )
 }
