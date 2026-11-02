@@ -14,7 +14,7 @@ class JvmLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) =
         with(target) {
             pluginManager.apply("org.jetbrains.kotlin.jvm")
-            pluginManager.apply("sbkm.kotlin.quality")
+            pluginManager.apply("toolkit.kotlin.quality")
 
             extensions.configure<JavaPluginExtension> {
                 sourceCompatibility = JavaVersion.VERSION_21

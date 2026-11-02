@@ -3,12 +3,12 @@ SPDX-FileCopyrightText: 2026 Saalim Quadri <danascape@gmail.com>
 SPDX-License-Identifier: Apache-2.0
 -->
 
-# Privacy Policy — SB Kernel Manager
+# Privacy Policy — Toolkit
 
 _Effective 2 November 2026_
 
-SB Kernel Manager (package `org.prauga.toolkit`) is the companion app for Team
-StormBreaker's kernels, published by Saalim Quadri. This policy explains what the app does with
+Toolkit (package `org.prauga.toolkit`) is the companion app for Team
+StormBreaker's kernels, published by Saalim Quadri for PVOT-OSS. This policy explains what the app does with
 your data.
 
 **In short: the app doesn't collect, send, share or sell any personal data. It has no accounts, no
@@ -54,7 +54,7 @@ The app uses the internet only to show public content from the StormBreaker webs
 | `stormbreaker.squadri.me` | The newsroom posts and their cover images, and the community, contribution, project and legal links shown in More |
 
 These requests send nothing about you beyond what any app or browser sends to load a page: your IP
-address, the time, and the app's user agent (`SBKernelManager-Android`). The website may log them
+address, the time, and the app's user agent (`Toolkit-Android`). The website may log them
 under its own policy, at https://stormbreaker.squadri.me/privacy/. The app never signs in anywhere
 and sends no account details and nothing it read about your device.
 
@@ -85,4 +85,4 @@ the top.
 ## Contact
 
 Questions about this policy: danascape@gmail.com, or open an issue at
-https://github.com/stormbreaker-project/issues/issues.
+https://github.com/PVOT-OSS/ToolKit/issues.

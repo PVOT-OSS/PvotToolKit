@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 plugins {
-    alias(libs.plugins.sbkm.android.library)
+    alias(libs.plugins.toolkit.android.library)
     alias(libs.plugins.kotlin.serialization)
 }
 

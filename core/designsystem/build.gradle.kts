@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 plugins {
-    alias(libs.plugins.sbkm.android.library)
-    alias(libs.plugins.sbkm.android.compose)
+    alias(libs.plugins.toolkit.android.library)
+    alias(libs.plugins.toolkit.android.compose)
 }
 
 android { namespace = "org.prauga.toolkit.core.designsystem" }

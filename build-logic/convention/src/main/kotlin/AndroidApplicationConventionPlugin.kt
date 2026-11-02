@@ -11,7 +11,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) =
         with(target) {
             pluginManager.apply("com.android.application")
-            pluginManager.apply("sbkm.kotlin.quality")
+            pluginManager.apply("toolkit.kotlin.quality")
 
             extensions.configure<ApplicationExtension> {
                 compileSdk {

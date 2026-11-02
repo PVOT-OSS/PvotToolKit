@@ -26,7 +26,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "SB Kernel Manager"
+rootProject.name = "Toolkit"
 
 include(":app")
 

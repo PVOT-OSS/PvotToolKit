@@ -21,27 +21,27 @@ dependencies {
 gradlePlugin {
     plugins {
         register("androidApplication") {
-            id = "sbkm.android.application"
+            id = "toolkit.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
         register("androidLibrary") {
-            id = "sbkm.android.library"
+            id = "toolkit.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
         }
         register("androidCompose") {
-            id = "sbkm.android.compose"
+            id = "toolkit.android.compose"
             implementationClass = "AndroidComposeConventionPlugin"
         }
         register("androidFeature") {
-            id = "sbkm.android.feature"
+            id = "toolkit.android.feature"
             implementationClass = "AndroidFeatureConventionPlugin"
         }
         register("jvmLibrary") {
-            id = "sbkm.jvm.library"
+            id = "toolkit.jvm.library"
             implementationClass = "JvmLibraryConventionPlugin"
         }
         register("kotlinQuality") {
-            id = "sbkm.kotlin.quality"
+            id = "toolkit.kotlin.quality"
             implementationClass = "KotlinQualityConventionPlugin"
         }
     }

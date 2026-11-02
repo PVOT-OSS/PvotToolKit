@@ -2,9 +2,9 @@
 # SPDX-License-Identifier: Apache-2.0
 
 version = 1
-SPDX-PackageName = "SB Kernel Manager"
+SPDX-PackageName = "Toolkit"
 SPDX-PackageSupplier = "Saalim Quadri <danascape@gmail.com>"
-SPDX-PackageDownloadLocation = "https://github.com/stormbreaker-project/SB-kernel-Manager"
+SPDX-PackageDownloadLocation = "https://github.com/PVOT-OSS/ToolKit"
 
 [[annotations]]
 path = [

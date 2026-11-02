@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 plugins {
-    alias(libs.plugins.sbkm.jvm.library)
+    alias(libs.plugins.toolkit.jvm.library)
     alias(libs.plugins.kotlin.serialization)
 }
 

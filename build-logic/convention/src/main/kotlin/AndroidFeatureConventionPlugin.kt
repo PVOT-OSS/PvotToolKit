@@ -9,8 +9,8 @@ import org.gradle.kotlin.dsl.dependencies
 class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) =
         with(target) {
-            pluginManager.apply("sbkm.android.library")
-            pluginManager.apply("sbkm.android.compose")
+            pluginManager.apply("toolkit.android.library")
+            pluginManager.apply("toolkit.android.compose")
             pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
 
             dependencies {

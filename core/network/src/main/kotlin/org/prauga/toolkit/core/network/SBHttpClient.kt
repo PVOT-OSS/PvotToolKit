@@ -51,5 +51,5 @@ fun createHttpClient(cacheDir: File): HttpClient =
             requestTimeoutMillis = REQUEST_TIMEOUT_MS
         }
 
-        defaultRequest { header(HttpHeaders.UserAgent, "SBKernelManager-Android") }
+        defaultRequest { header(HttpHeaders.UserAgent, "Toolkit-Android") }
     }

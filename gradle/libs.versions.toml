@@ -69,11 +69,11 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle" }
 detekt = { id = "dev.detekt", version.ref = "detekt" }
-sbkm-android-application = { id = "sbkm.android.application" }
-sbkm-android-library = { id = "sbkm.android.library" }
-sbkm-android-compose = { id = "sbkm.android.compose" }
-sbkm-android-feature = { id = "sbkm.android.feature" }
-sbkm-jvm-library = { id = "sbkm.jvm.library" }
+toolkit-android-application = { id = "toolkit.android.application" }
+toolkit-android-library = { id = "toolkit.android.library" }
+toolkit-android-compose = { id = "toolkit.android.compose" }
+toolkit-android-feature = { id = "toolkit.android.feature" }
+toolkit-jvm-library = { id = "toolkit.jvm.library" }
 pvot-android-library = { id = "pvot.android.library" }
 pvot-android-compose = { id = "pvot.android.compose" }
 pvot-android-api = { id = "pvot.android.api" }

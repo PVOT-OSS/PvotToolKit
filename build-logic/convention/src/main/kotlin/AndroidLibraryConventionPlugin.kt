@@ -11,7 +11,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) =
         with(target) {
             pluginManager.apply("com.android.library")
-            pluginManager.apply("sbkm.kotlin.quality")
+            pluginManager.apply("toolkit.kotlin.quality")
 
             extensions.configure<LibraryExtension> {
                 compileSdk {
