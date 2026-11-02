@@ -8,17 +8,15 @@ import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,7 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.prauga.pvot.designsystem.components.PvotBottomSheet
 import com.prauga.pvot.designsystem.components.PvotScreen
+import com.prauga.pvot.designsystem.components.PvotSheetItem
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import dev.danascape.kernelmanager.core.batterymonitor.BatteryMonitorService
 import dev.danascape.kernelmanager.core.designsystem.component.ActionRow
@@ -216,37 +216,29 @@ private fun ThemeRow(
     selected: ThemePreference,
     onSelect: (ThemePreference) -> Unit,
 ) {
-    var expanded by remember { mutableStateOf(false) }
+    var open by rememberSaveable { mutableStateOf(false) }
 
-    Box {
-        ActionRow(
-            label = stringResource(R.string.more_theme),
-            index = 0,
-            count = 1,
-            trailing = stringResource(selected.labelRes()),
-            onClick = { expanded = true },
-        )
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            ThemePreference.entries.forEach { option ->
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = stringResource(option.labelRes()),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color =
-                                if (option == selected) {
-                                    MaterialTheme.colorScheme.primary
-                                } else {
-                                    MaterialTheme.colorScheme.onSurface
-                                },
-                        )
-                    },
-                    onClick = {
-                        onSelect(option)
-                        expanded = false
-                    },
-                )
-            }
+    ActionRow(
+        label = stringResource(R.string.more_theme),
+        index = 0,
+        count = 1,
+        trailing = stringResource(selected.labelRes()),
+        onClick = { open = true },
+    )
+    PvotBottomSheet(
+        visible = open,
+        onDismissRequest = { open = false },
+        title = stringResource(R.string.more_theme),
+    ) {
+        ThemePreference.entries.forEach { option ->
+            PvotSheetItem(
+                title = stringResource(option.labelRes()),
+                onClick = {
+                    onSelect(option)
+                    open = false
+                },
+                subtitle = stringResource(R.string.more_theme_selected).takeIf { option == selected },
+            )
         }
     }
 }
