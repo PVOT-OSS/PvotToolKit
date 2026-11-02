@@ -28,8 +28,8 @@ import com.prauga.pvot.designsystem.effects.rememberPvotGlassBackdrop
 import com.prauga.pvot.designsystem.navigation.PvotNavBar
 import com.prauga.pvot.designsystem.navigation.PvotTabItem
 import org.prauga.toolkit.navigation.DeviceDestination
-import org.prauga.toolkit.navigation.SBDestination
-import org.prauga.toolkit.navigation.SBNavHost
+import org.prauga.toolkit.navigation.ToolkitDestination
+import org.prauga.toolkit.navigation.ToolkitNavHost
 import org.prauga.toolkit.navigation.deviceDestination
 import org.prauga.toolkit.navigation.navigateToDevice
 import org.prauga.toolkit.navigation.navigateToTopLevel
@@ -40,12 +40,12 @@ private const val SCROLL_THRESHOLD = 4f
 
 /** The app shell: one glass nav bar floating over the screens, which are its backdrop. */
 @Composable
-fun SBApp(modifier: Modifier = Modifier) {
+fun ToolkitApp(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
 
     val device = backStackEntry?.destination.deviceDestination()
-    val current = backStackEntry?.destination.topLevelDestination() ?: SBDestination.DISCOVER
+    val current = backStackEntry?.destination.topLevelDestination() ?: ToolkitDestination.DISCOVER
 
     val backdrop = rememberPvotGlassBackdrop()
     var navCompact by rememberSaveable { mutableStateOf(false) }
@@ -73,7 +73,7 @@ fun SBApp(modifier: Modifier = Modifier) {
     }
 
     val tabs = remember {
-        SBDestination.entries.map {
+        ToolkitDestination.entries.map {
             PvotTabItem(
                 iconRes = it.iconRes,
                 labelRes = it.labelRes,
@@ -104,7 +104,7 @@ fun SBApp(modifier: Modifier = Modifier) {
                     selectedTab = current.ordinal,
                     onTabClick = { index ->
                         navCompact = false
-                        navController.navigateToTopLevel(SBDestination.entries[index])
+                        navController.navigateToTopLevel(ToolkitDestination.entries[index])
                     },
                     tabs = tabs,
                     backdrop = backdrop,
@@ -119,7 +119,7 @@ fun SBApp(modifier: Modifier = Modifier) {
                     .pvotGlassBackdrop(backdrop)
                     .background(MaterialTheme.colorScheme.background)
         ) {
-            SBNavHost(
+            ToolkitNavHost(
                 navController = navController,
                 modifier =
                     Modifier.fillMaxSize()

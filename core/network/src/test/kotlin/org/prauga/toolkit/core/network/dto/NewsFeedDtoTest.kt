@@ -3,7 +3,7 @@
 
 package org.prauga.toolkit.core.network.dto
 
-import org.prauga.toolkit.core.network.SBJson
+import org.prauga.toolkit.core.network.ToolkitJson
 import java.time.LocalDate
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -14,7 +14,7 @@ class NewsFeedDtoTest {
     @Test
     fun `decodes a post as published by the site`() {
         val feed =
-            SBJson.decodeFromString<NewsFeedDto>(
+            ToolkitJson.decodeFromString<NewsFeedDto>(
                 """
                 {
                   "schema": 1,
@@ -46,7 +46,7 @@ class NewsFeedDtoTest {
     @Test
     fun `ignores fields this version does not know about`() {
         val feed =
-            SBJson.decodeFromString<NewsFeedDto>(
+            ToolkitJson.decodeFromString<NewsFeedDto>(
                 """
                 {
                   "schema": 1,
@@ -68,7 +68,7 @@ class NewsFeedDtoTest {
     @Test
     fun `omitted optional fields decode as null`() {
         val feed =
-            SBJson.decodeFromString<NewsFeedDto>(
+            ToolkitJson.decodeFromString<NewsFeedDto>(
                 """
                 {"schema":1,"posts":[{
                   "id":"a","title":"A","date":"2026-08-11",
@@ -89,7 +89,7 @@ class NewsFeedDtoTest {
     @Test
     fun `an unparseable date costs that post, not the whole feed`() {
         val feed =
-            SBJson.decodeFromString<NewsFeedDto>(
+            ToolkitJson.decodeFromString<NewsFeedDto>(
                 """
                 {"schema":1,"posts":[
                   {"id":"bad","title":"Bad","date":"not-a-date","url":"https://example.invalid/bad/"},
@@ -104,7 +104,7 @@ class NewsFeedDtoTest {
 
     @Test
     fun `a feed with no posts is empty rather than an error`() {
-        val feed = SBJson.decodeFromString<NewsFeedDto>("""{"schema":1,"posts":[]}""")
+        val feed = ToolkitJson.decodeFromString<NewsFeedDto>("""{"schema":1,"posts":[]}""")
         assertEquals(emptyList<String>(), feed.toDomain().map { it.id })
     }
 }

@@ -16,18 +16,18 @@ import com.prauga.pvot.designsystem.platform.PvotBaseActivity
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import org.prauga.toolkit.core.data.settings.ThemeRepository
 import org.prauga.toolkit.core.model.ThemePreference
-import org.prauga.toolkit.ui.SBApp
+import org.prauga.toolkit.ui.ToolkitApp
 
 class MainActivity : PvotBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val themeRepository = (application as SBApplication).appContainer.themeRepository
+        val themeRepository = (application as ToolkitApplication).appContainer.themeRepository
 
         setPvotContent {
             val darkTheme = isDarkTheme(themeRepository)
             SystemBarIcons(darkTheme)
-            PvotAppTheme(darkTheme = darkTheme) { SBApp() }
+            PvotAppTheme(darkTheme = darkTheme) { ToolkitApp() }
         }
     }
 }

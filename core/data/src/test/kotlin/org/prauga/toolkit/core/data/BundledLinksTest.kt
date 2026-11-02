@@ -3,7 +3,7 @@
 
 package org.prauga.toolkit.core.data
 
-import org.prauga.toolkit.core.network.SBJson
+import org.prauga.toolkit.core.network.ToolkitJson
 import org.prauga.toolkit.core.network.dto.LinksDto
 import org.prauga.toolkit.core.network.dto.toDomain
 import java.io.File
@@ -18,7 +18,7 @@ class BundledLinksTest {
     fun `the shipped asset exists and parses`() {
         assertTrue("missing ${asset.absolutePath}", asset.exists())
 
-        val sections = SBJson.decodeFromString<LinksDto>(asset.readText()).toDomain()
+        val sections = ToolkitJson.decodeFromString<LinksDto>(asset.readText()).toDomain()
 
         assertTrue("no sections survived mapping", sections.isNotEmpty())
         assertTrue(

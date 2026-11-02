@@ -16,14 +16,14 @@ import kotlinx.serialization.json.Json
 import okhttp3.Cache
 
 /** Static endpoints published by the website's own deploy. */
-object SBEndpoints {
+object ToolkitEndpoints {
     const val BASE_URL: String = BuildConfig.API_BASE_URL
 
     const val NEWS: String = "$BASE_URL/api/v1/news.json"
     const val LINKS: String = "$BASE_URL/api/v1/links.json"
 }
 
-val SBJson: Json = Json {
+val ToolkitJson: Json = Json {
     ignoreUnknownKeys = true
     explicitNulls = false
 }
@@ -44,7 +44,7 @@ fun createHttpClient(cacheDir: File): HttpClient =
             }
         }
 
-        install(ContentNegotiation) { json(SBJson) }
+        install(ContentNegotiation) { json(ToolkitJson) }
 
         install(HttpTimeout) {
             connectTimeoutMillis = CONNECT_TIMEOUT_MS

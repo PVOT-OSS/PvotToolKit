@@ -5,8 +5,8 @@ package org.prauga.toolkit.core.data.links
 
 import android.content.res.AssetManager
 import org.prauga.toolkit.core.model.LinkSection
-import org.prauga.toolkit.core.network.SBEndpoints
-import org.prauga.toolkit.core.network.SBJson
+import org.prauga.toolkit.core.network.ToolkitEndpoints
+import org.prauga.toolkit.core.network.ToolkitJson
 import org.prauga.toolkit.core.network.dto.LinksDto
 import org.prauga.toolkit.core.network.dto.toDomain
 import io.ktor.client.HttpClient
@@ -29,7 +29,7 @@ class LinksRepository(
 
     private suspend fun remote(): List<LinkSection>? =
         try {
-            client.get(SBEndpoints.LINKS).body<LinksDto>().toDomain().takeIf { it.isNotEmpty() }
+            client.get(ToolkitEndpoints.LINKS).body<LinksDto>().toDomain().takeIf { it.isNotEmpty() }
         } catch (cancellation: CancellationException) {
             throw cancellation
         } catch (_: Exception) {
@@ -39,7 +39,7 @@ class LinksRepository(
     private fun bundled(): List<LinkSection> =
         try {
             assets.open(BUNDLED_LINKS_ASSET).bufferedReader().use { reader ->
-                SBJson.decodeFromString<LinksDto>(reader.readText()).toDomain()
+                ToolkitJson.decodeFromString<LinksDto>(reader.readText()).toDomain()
             }
         } catch (_: Exception) {
             emptyList()

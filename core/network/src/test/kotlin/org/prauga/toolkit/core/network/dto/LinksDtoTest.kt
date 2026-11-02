@@ -3,7 +3,7 @@
 
 package org.prauga.toolkit.core.network.dto
 
-import org.prauga.toolkit.core.network.SBJson
+import org.prauga.toolkit.core.network.ToolkitJson
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -14,7 +14,7 @@ class LinksDtoTest {
     @Test
     fun `decodes a section as published by the site`() {
         val dto =
-            SBJson.decodeFromString<LinksDto>(
+            ToolkitJson.decodeFromString<LinksDto>(
                 """
                 {"schema":1,"sections":[{"id":"community","title":"Community","items":[
                   {"id":"telegram","label":"Telegram","description":"Release updates and support",
@@ -35,7 +35,7 @@ class LinksDtoTest {
     @Test
     fun `an item announced but not published is kept and not openable`() {
         val dto =
-            SBJson.decodeFromString<LinksDto>(
+            ToolkitJson.decodeFromString<LinksDto>(
                 """
                 {"schema":1,"sections":[{"id":"project","title":"Project","items":[
                   {"id":"docs","label":"Documentation","url":null,"soon":true}
@@ -52,7 +52,7 @@ class LinksDtoTest {
     @Test
     fun `an item with neither a url nor a soon flag is dropped`() {
         val dto =
-            SBJson.decodeFromString<LinksDto>(
+            ToolkitJson.decodeFromString<LinksDto>(
                 """
                 {"schema":1,"sections":[{"id":"project","title":"Project","items":[
                   {"id":"broken","label":"Broken"},
@@ -68,7 +68,7 @@ class LinksDtoTest {
     @Test
     fun `a section left empty by filtering disappears entirely`() {
         val dto =
-            SBJson.decodeFromString<LinksDto>(
+            ToolkitJson.decodeFromString<LinksDto>(
                 """
                 {"schema":1,"sections":[
                   {"id":"empty","title":"Empty","items":[{"id":"broken","label":"Broken"}]},
@@ -84,7 +84,7 @@ class LinksDtoTest {
     @Test
     fun `ignores fields this version does not know about`() {
         val dto =
-            SBJson.decodeFromString<LinksDto>(
+            ToolkitJson.decodeFromString<LinksDto>(
                 """
                 {"schema":1,"analytics":true,"sections":[{"id":"a","title":"A","badge":"new","items":[
                   {"id":"x","label":"X","url":"https://example.invalid/","icon":"telegram"}

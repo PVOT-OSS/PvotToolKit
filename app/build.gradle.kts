@@ -38,7 +38,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.navigation.compose)
 
-    // Coil's singleton loader is configured in SBApplication.
+    // Coil's singleton loader is configured in ToolkitApplication.
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
     implementation(libs.coil.svg)

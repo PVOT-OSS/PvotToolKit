@@ -13,7 +13,7 @@ import org.prauga.toolkit.feature.builds.BuildsRoute
 import org.prauga.toolkit.feature.tune.TuneRoute
 
 /** Top-level destinations, in nav bar order. */
-enum class SBDestination(
+enum class ToolkitDestination(
     val route: Any,
     @param:DrawableRes val iconRes: Int,
     @param:StringRes val labelRes: Int,
@@ -54,9 +54,9 @@ enum class SBDestination(
 }
 
 /** The top-level destination this entry sits under. */
-fun NavDestination?.topLevelDestination(): SBDestination? {
+fun NavDestination?.topLevelDestination(): ToolkitDestination? {
     val hierarchy = this?.hierarchy ?: return null
-    return SBDestination.entries.firstOrNull { destination ->
+    return ToolkitDestination.entries.firstOrNull { destination ->
         hierarchy.any { it.hasRoute(destination.route::class) }
     }
 }

@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 
 /** A single ratio against a limit. */
 @Composable
-fun SBMeter(
+fun Meter(
     fraction: Float,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.primary,

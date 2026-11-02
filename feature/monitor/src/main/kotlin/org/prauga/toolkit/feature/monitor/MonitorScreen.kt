@@ -24,8 +24,8 @@ import com.prauga.pvot.designsystem.components.PvotScreenDefaults
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import org.prauga.toolkit.core.designsystem.component.MetricCard
 import org.prauga.toolkit.core.designsystem.component.MetricLine
-import org.prauga.toolkit.core.designsystem.component.SBMeter
-import org.prauga.toolkit.core.designsystem.component.SBSparkline
+import org.prauga.toolkit.core.designsystem.component.Meter
+import org.prauga.toolkit.core.designsystem.component.Sparkline
 import org.prauga.toolkit.core.model.BatteryVitals
 import org.prauga.toolkit.core.model.CpuTopology
 import org.prauga.toolkit.core.model.GpuInfo
@@ -127,7 +127,7 @@ private fun CpuCard(
         revealIndex = revealIndex,
         onClick = onClick,
     ) {
-        SBSparkline(values = history.totalLoad, domain = 0f..1f)
+        Sparkline(values = history.totalLoad, domain = 0f..1f)
 
         MetricLine(
             stringResource(
@@ -154,7 +154,7 @@ private fun MemoryCard(memory: MemoryVitals, history: MetricHistory, revealIndex
         caption = stringResource(R.string.monitor_of_total, bytes(memory.totalBytes)),
         revealIndex = revealIndex,
     ) {
-        SBSparkline(values = history.memoryUsed, domain = 0f..1f)
+        Sparkline(values = history.memoryUsed, domain = 0f..1f)
         MetricLine(stringResource(R.string.monitor_used), bytes(memory.usedBytes))
     }
 }
@@ -167,7 +167,7 @@ private fun BatteryCard(battery: BatteryVitals, history: MetricHistory, revealIn
         caption = battery.temperatureC?.let { stringResource(R.string.monitor_celsius, it) },
         revealIndex = revealIndex,
     ) {
-        SBSparkline(values = history.batteryDrawMilliAmps, domain = null)
+        Sparkline(values = history.batteryDrawMilliAmps, domain = null)
 
         battery.currentMicroAmps?.let {
             MetricLine(
@@ -197,7 +197,7 @@ private fun NetworkCard(vitals: Vitals, history: MetricHistory, revealIndex: Int
             ),
         revealIndex = revealIndex,
     ) {
-        SBSparkline(values = history.networkBytesPerSecond, domain = null)
+        Sparkline(values = history.networkBytesPerSecond, domain = null)
         MetricLine(stringResource(R.string.monitor_received), bytes(network.rxBytes))
         MetricLine(stringResource(R.string.monitor_sent), bytes(network.txBytes))
     }
@@ -212,7 +212,7 @@ private fun StorageCard(storage: StorageVitals, revealIndex: Int) {
         caption = stringResource(R.string.monitor_of_total, bytes(storage.totalBytes)),
         revealIndex = revealIndex,
     ) {
-        SBMeter(fraction = storage.usedFraction)
+        Meter(fraction = storage.usedFraction)
         MetricLine(stringResource(R.string.monitor_used), bytes(storage.usedBytes))
         storage.fileSystem?.let { MetricLine(stringResource(R.string.monitor_filesystem), it) }
     }
@@ -226,7 +226,7 @@ private fun UptimeCard(sleep: SleepStats, revealIndex: Int) {
         value = duration(sleep.elapsedMillis),
         revealIndex = revealIndex,
     ) {
-        SBMeter(fraction = sleep.deepSleepFraction, color = MaterialTheme.colorScheme.tertiary)
+        Meter(fraction = sleep.deepSleepFraction, color = MaterialTheme.colorScheme.tertiary)
         MetricLine(
             stringResource(R.string.monitor_deep_sleep),
             "${duration(sleep.deepSleepMillis)} · ${percent(sleep.deepSleepFraction)}",

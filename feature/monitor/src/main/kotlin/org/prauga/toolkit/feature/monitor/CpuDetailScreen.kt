@@ -27,7 +27,7 @@ import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import com.prauga.pvot.designsystem.theme.PvotSpacing
 import org.prauga.toolkit.core.designsystem.component.MetricLine
-import org.prauga.toolkit.core.designsystem.component.SBSparkline
+import org.prauga.toolkit.core.designsystem.component.Sparkline
 import org.prauga.toolkit.core.model.CpuCluster
 
 @Composable
@@ -128,7 +128,7 @@ private fun CoreChart(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            SBSparkline(values = values, domain = 0f..1f, height = 44.dp)
+            Sparkline(values = values, domain = 0f..1f, height = 44.dp)
             cluster?.let {
                 Text(
                     text =

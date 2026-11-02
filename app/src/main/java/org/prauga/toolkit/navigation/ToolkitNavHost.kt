@@ -43,7 +43,7 @@ import kotlinx.serialization.Serializable
 
 /** Composes the feature graphs. */
 @Composable
-fun SBNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
+fun ToolkitNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
     NavHost(
         navController = navController,
         startDestination = DiscoverGraphRoute,
@@ -90,7 +90,7 @@ fun NavHostController.navigateToDevice(destination: DeviceDestination) {
 }
 
 /** Switches top-level tabs. */
-fun NavHostController.navigateToTopLevel(destination: SBDestination) {
+fun NavHostController.navigateToTopLevel(destination: ToolkitDestination) {
     navigate(
         destination.route,
         navOptions {

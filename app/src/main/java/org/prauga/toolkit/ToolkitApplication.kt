@@ -18,7 +18,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class SBApplication : Application(), AppContainerOwner, SingletonImageLoader.Factory {
+class ToolkitApplication : Application(), AppContainerOwner, SingletonImageLoader.Factory {
     override val appContainer: AppContainer by lazy { AppContainer(this) }
 
     override fun onCreate() {
@@ -31,7 +31,7 @@ class SBApplication : Application(), AppContainerOwner, SingletonImageLoader.Fac
         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
             if (BatteryMonitorService.running) return@launch
             if (appContainer.batterySessionStore.enabled.first()) {
-                BatteryMonitorService.start(this@SBApplication)
+                BatteryMonitorService.start(this@ToolkitApplication)
             }
         }
     }

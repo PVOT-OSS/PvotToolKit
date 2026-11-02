@@ -25,7 +25,7 @@ private val SurfaceRing = 2.dp
 
 /** A single series over time, drawn without axes or labels. */
 @Composable
-fun SBSparkline(
+fun Sparkline(
     values: List<Float>,
     modifier: Modifier = Modifier,
     domain: ClosedFloatingPointRange<Float>? = 0f..1f,

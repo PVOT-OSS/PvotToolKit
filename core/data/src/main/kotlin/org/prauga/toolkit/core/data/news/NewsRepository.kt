@@ -6,7 +6,7 @@ package org.prauga.toolkit.core.data.news
 import org.prauga.toolkit.core.common.DataResult
 import org.prauga.toolkit.core.common.LoadError
 import org.prauga.toolkit.core.model.NewsPost
-import org.prauga.toolkit.core.network.SBEndpoints
+import org.prauga.toolkit.core.network.ToolkitEndpoints
 import org.prauga.toolkit.core.network.dto.NewsFeedDto
 import org.prauga.toolkit.core.network.dto.toDomain
 import io.ktor.client.HttpClient
@@ -33,7 +33,7 @@ class NewsRepository(
     suspend fun news(): DataResult<List<NewsPost>> =
         withContext(ioDispatcher) {
             try {
-                DataResult.Success(client.get(SBEndpoints.NEWS).body<NewsFeedDto>().toDomain())
+                DataResult.Success(client.get(ToolkitEndpoints.NEWS).body<NewsFeedDto>().toDomain())
             } catch (cancellation: CancellationException) {
                 throw cancellation
             } catch (io: IOException) {
@@ -50,7 +50,7 @@ class NewsRepository(
         try {
             val feed: NewsFeedDto =
                 client
-                    .get(SBEndpoints.NEWS) {
+                    .get(ToolkitEndpoints.NEWS) {
                         header(
                             HttpHeaders.CacheControl,
                             "only-if-cached, max-stale=${Int.MAX_VALUE}",
