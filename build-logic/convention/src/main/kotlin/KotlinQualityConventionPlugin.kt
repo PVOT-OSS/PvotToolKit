@@ -40,7 +40,7 @@ class KotlinQualityConventionPlugin : Plugin<Project> {
         }
 
         dependencies {
-            add("detektPlugins", libs.findLibrary("detekt-composeRules").get())
+            add("detektPlugins", libs.lib("detekt-composeRules"))
         }
     }
 }

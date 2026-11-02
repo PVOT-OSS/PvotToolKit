@@ -2,8 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import org.gradle.api.Project
+import org.gradle.api.artifacts.MinimalExternalModuleDependency
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.getByType
 
 internal val Project.libs: VersionCatalog
@@ -15,3 +17,7 @@ internal object SdkVersions {
     const val TARGET = 37
     const val MIN = 29
 }
+
+/** A catalog library by alias, failing with the alias named rather than an empty Optional. */
+internal fun VersionCatalog.lib(alias: String): Provider<MinimalExternalModuleDependency> =
+    findLibrary(alias).orElseThrow { IllegalArgumentException("No library '$alias' in libs.versions.toml") }

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 plugins {
-    id("sbkm.android.library")
+    alias(libs.plugins.sbkm.android.library)
 }
 
 android {

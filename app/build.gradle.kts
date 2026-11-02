@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 plugins {
-    id("sbkm.android.application")
-    id("sbkm.android.compose")
+    alias(libs.plugins.sbkm.android.application)
+    alias(libs.plugins.sbkm.android.compose)
     // :app declares MoreGraphRoute, so it needs serializers generated too.
     alias(libs.plugins.kotlin.serialization)
 }

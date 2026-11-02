@@ -17,11 +17,11 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             add("implementation", project(":core:model"))
             add("implementation", project(":core:common"))
             add("implementation", project(":core:di"))
-            add("implementation", libs.findLibrary("androidx-core-ktx").get())
-            add("implementation", libs.findLibrary("androidx-lifecycle-runtime-compose").get())
-            add("implementation", libs.findLibrary("androidx-lifecycle-viewmodel-compose").get())
-            add("implementation", libs.findLibrary("androidx-navigation-compose").get())
-            add("testImplementation", libs.findLibrary("junit").get())
+            add("implementation", libs.lib("androidx-core-ktx"))
+            add("implementation", libs.lib("androidx-lifecycle-runtime-compose"))
+            add("implementation", libs.lib("androidx-lifecycle-viewmodel-compose"))
+            add("implementation", libs.lib("androidx-navigation-compose"))
+            add("testImplementation", libs.lib("junit"))
         }
     }
 }
