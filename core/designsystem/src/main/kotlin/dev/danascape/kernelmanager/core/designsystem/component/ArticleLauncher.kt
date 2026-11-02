@@ -11,20 +11,12 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
 
 /** Opens an article on the website in a Custom Tab. */
-fun Context.openArticle(
-    url: String,
-    toolbarColor: Int,
-) {
+fun Context.openArticle(url: String, toolbarColor: Int) {
     val uri = url.toUri()
-    val colors =
-        CustomTabColorSchemeParams
-            .Builder()
-            .setToolbarColor(toolbarColor)
-            .build()
+    val colors = CustomTabColorSchemeParams.Builder().setToolbarColor(toolbarColor).build()
 
     val customTab =
-        CustomTabsIntent
-            .Builder()
+        CustomTabsIntent.Builder()
             .setDefaultColorSchemeParams(colors)
             .setShowTitle(true)
             .setUrlBarHidingEnabled(true)
@@ -35,7 +27,6 @@ fun Context.openArticle(
     } catch (_: ActivityNotFoundException) {
         try {
             startActivity(Intent(Intent.ACTION_VIEW, uri))
-        } catch (_: ActivityNotFoundException) {
-        }
+        } catch (_: ActivityNotFoundException) {}
     }
 }

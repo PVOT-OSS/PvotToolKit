@@ -11,38 +11,39 @@ import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginE
 
 /** Adds Compose to a module that already has an Android plugin applied. */
 class AndroidComposeConventionPlugin : Plugin<Project> {
-    override fun apply(target: Project) = with(target) {
-        pluginManager.apply("org.jetbrains.kotlin.plugin.compose")
+    override fun apply(target: Project) =
+        with(target) {
+            pluginManager.apply("org.jetbrains.kotlin.plugin.compose")
 
-        extensions.configure<ComposeCompilerGradlePluginExtension> {
-            stabilityConfigurationFiles.add(
-                rootProject.layout.projectDirectory.file("config/compose/stability.conf"),
-            )
+            extensions.configure<ComposeCompilerGradlePluginExtension> {
+                stabilityConfigurationFiles.add(
+                    rootProject.layout.projectDirectory.file("config/compose/stability.conf")
+                )
 
-            if (providers.gradleProperty("composeMetrics").isPresent) {
-                val dir = layout.buildDirectory.dir("compose-metrics")
-                metricsDestination.set(dir)
-                reportsDestination.set(dir)
+                if (providers.gradleProperty("composeMetrics").isPresent) {
+                    val dir = layout.buildDirectory.dir("compose-metrics")
+                    metricsDestination.set(dir)
+                    reportsDestination.set(dir)
+                }
+            }
+
+            pluginManager.withPlugin("com.android.application") {
+                extensions.configure<ApplicationExtension> { buildFeatures.compose = true }
+            }
+            pluginManager.withPlugin("com.android.library") {
+                extensions.configure<LibraryExtension> { buildFeatures.compose = true }
+            }
+
+            dependencies {
+                val bom = libs.lib("androidx-compose-bom")
+                add("implementation", platform(bom))
+                add("androidTestImplementation", platform(bom))
+                add("implementation", libs.lib("androidx-compose-ui"))
+                add("implementation", libs.lib("androidx-compose-ui-graphics"))
+                add("implementation", libs.lib("androidx-compose-ui-tooling-preview"))
+                add("implementation", libs.lib("androidx-compose-material3"))
+                add("debugImplementation", libs.lib("androidx-compose-ui-tooling"))
+                add("debugImplementation", libs.lib("androidx-compose-ui-test-manifest"))
             }
         }
-
-        pluginManager.withPlugin("com.android.application") {
-            extensions.configure<ApplicationExtension> { buildFeatures.compose = true }
-        }
-        pluginManager.withPlugin("com.android.library") {
-            extensions.configure<LibraryExtension> { buildFeatures.compose = true }
-        }
-
-        dependencies {
-            val bom = libs.lib("androidx-compose-bom")
-            add("implementation", platform(bom))
-            add("androidTestImplementation", platform(bom))
-            add("implementation", libs.lib("androidx-compose-ui"))
-            add("implementation", libs.lib("androidx-compose-ui-graphics"))
-            add("implementation", libs.lib("androidx-compose-ui-tooling-preview"))
-            add("implementation", libs.lib("androidx-compose-material3"))
-            add("debugImplementation", libs.lib("androidx-compose-ui-tooling"))
-            add("debugImplementation", libs.lib("androidx-compose-ui-test-manifest"))
-        }
-    }
 }

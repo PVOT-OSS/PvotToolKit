@@ -58,11 +58,10 @@ object BatteryTracker {
             latest = sample,
         )
 
-    /** Charge counters only go down while discharging; a rise means a top-up, not negative drain. */
-    private fun drainedMicroAmpHours(
-        previous: BatterySample,
-        sample: BatterySample,
-    ): Long {
+    /**
+     * Charge counters only go down while discharging; a rise means a top-up, not negative drain.
+     */
+    private fun drainedMicroAmpHours(previous: BatterySample, sample: BatterySample): Long {
         val before = previous.chargeMicroAmpHours ?: return 0
         val after = sample.chargeMicroAmpHours ?: return 0
         return (before - after).toLong().coerceAtLeast(0)

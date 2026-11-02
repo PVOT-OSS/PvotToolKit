@@ -5,9 +5,7 @@ package dev.danascape.kernelmanager.feature.deviceinfo
 
 import androidx.annotation.StringRes
 
-enum class DeviceInfoTab(
-    @param:StringRes val labelRes: Int,
-) {
+enum class DeviceInfoTab(@param:StringRes val labelRes: Int) {
     SYSTEM(R.string.device_info_section_system),
     SOC(R.string.device_info_section_soc),
     SCREEN(R.string.device_info_section_screen),

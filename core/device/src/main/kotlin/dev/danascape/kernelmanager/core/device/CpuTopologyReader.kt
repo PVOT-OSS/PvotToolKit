@@ -15,9 +15,8 @@ object CpuTopologyReader {
     fun read(): CpuTopology? {
         val policies =
             File("$CPU_ROOT/cpufreq")
-                .listFiles { file ->
-                    file.name.startsWith("policy")
-                }?.sortedBy { it.name.removePrefix("policy").toIntOrNull() ?: 0 }
+                .listFiles { file -> file.name.startsWith("policy") }
+                ?.sortedBy { it.name.removePrefix("policy").toIntOrNull() ?: 0 }
 
         val coreIds =
             File(CPU_ROOT)
@@ -37,8 +36,7 @@ object CpuTopologyReader {
                         .resolve("related_cpus")
                         .readTextOrNull()
                         ?.split(' ')
-                        ?.mapNotNull(String::toIntOrNull)
-                        ?: listOf(id)
+                        ?.mapNotNull(String::toIntOrNull) ?: listOf(id)
                 CpuCluster(
                     id = id,
                     cores = cores,

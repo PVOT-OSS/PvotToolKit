@@ -104,24 +104,19 @@ private fun DiscoverContent(
 
         if (state.headlines.isNotEmpty()) {
             item(key = "news") {
-                NewsGroup(state.headlines, onHeadlineClick = onHeadlineClick, onOpenNews = onOpenNews)
+                NewsGroup(
+                    state.headlines,
+                    onHeadlineClick = onHeadlineClick,
+                    onOpenNews = onOpenNews,
+                )
             }
         }
     }
 }
 
 @Composable
-private fun IdentityCard(
-    identity: DeviceIdentity,
-    onClick: () -> Unit,
-) {
-    PvotCard(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .pvotReveal(0),
-        onClick = onClick,
-    ) {
+private fun IdentityCard(identity: DeviceIdentity, onClick: () -> Unit) {
+    PvotCard(modifier = Modifier.fillMaxWidth().pvotReveal(0), onClick = onClick) {
         Column(
             modifier = Modifier.padding(PvotSpacing.L),
             verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -185,10 +180,7 @@ private fun IdentityCard(
 }
 
 @Composable
-private fun StatusChip(
-    identity: DeviceIdentity,
-    modifier: Modifier = Modifier,
-) {
+private fun StatusChip(identity: DeviceIdentity, modifier: Modifier = Modifier) {
     val running = identity.isStormBreakerKernel
     Row(
         modifier =
@@ -201,20 +193,23 @@ private fun StatusChip(
     ) {
         Box(
             modifier =
-                Modifier
-                    .size(7.dp)
+                Modifier.size(7.dp)
                     .clip(CircleShape)
                     .background(
-                        if (running) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onSurfaceVariant,
-                    ),
+                        if (running) MaterialTheme.colorScheme.tertiary
+                        else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
         )
         Text(
             text =
                 stringResource(
-                    if (running) R.string.discover_kernel_running else R.string.discover_kernel_stock,
+                    if (running) R.string.discover_kernel_running
+                    else R.string.discover_kernel_stock
                 ),
             style = MaterialTheme.typography.labelSmall,
-            color = if (running) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
+            color =
+                if (running) MaterialTheme.colorScheme.onSurface
+                else MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
@@ -235,10 +230,7 @@ private fun UpdateGroup() {
 }
 
 @Composable
-private fun VitalsGroup(
-    vitals: Vitals?,
-    onOpenMonitoring: () -> Unit,
-) {
+private fun VitalsGroup(vitals: Vitals?, onOpenMonitoring: () -> Unit) {
     SettingsGroup(title = stringResource(R.string.discover_vitals)) {
         val rows =
             buildList<@Composable (Int, Int) -> Unit> {
@@ -247,7 +239,9 @@ private fun VitalsGroup(
                 vitals?.cpu?.let { cpu ->
                     add { i, n -> CpuRow(cpu, i, n) }
                     cpu.governor?.let { governor ->
-                        add { i, n -> ValueRow(stringResource(R.string.discover_governor), governor, i, n) }
+                        add { i, n ->
+                            ValueRow(stringResource(R.string.discover_governor), governor, i, n)
+                        }
                     }
                 }
                 add { i, n ->
@@ -267,20 +261,13 @@ private fun VitalsGroup(
             text = stringResource(R.string.discover_thermal_locked),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp, start = 4.dp, end = 4.dp),
+            modifier = Modifier.fillMaxWidth().padding(top = 10.dp, start = 4.dp, end = 4.dp),
         )
     }
 }
 
 @Composable
-private fun BatteryRow(
-    battery: BatteryVitals,
-    index: Int,
-    count: Int,
-) {
+private fun BatteryRow(battery: BatteryVitals, index: Int, count: Int) {
     val value =
         if (battery.charging) {
             stringResource(R.string.discover_battery_charging, battery.percent)
@@ -288,18 +275,13 @@ private fun BatteryRow(
             stringResource(R.string.discover_percent, battery.percent)
         }
     val withTemp =
-        battery.temperatureC
-            ?.let { "$value · " + stringResource(R.string.discover_celsius, it) }
+        battery.temperatureC?.let { "$value · " + stringResource(R.string.discover_celsius, it) }
             ?: value
     ValueRow(stringResource(R.string.discover_battery), withTemp, index, count)
 }
 
 @Composable
-private fun MemoryRow(
-    memory: MemoryVitals,
-    index: Int,
-    count: Int,
-) {
+private fun MemoryRow(memory: MemoryVitals, index: Int, count: Int) {
     ValueRow(
         label = stringResource(R.string.discover_memory),
         value =
@@ -314,11 +296,7 @@ private fun MemoryRow(
 }
 
 @Composable
-private fun CpuRow(
-    cpu: CpuVitals,
-    index: Int,
-    count: Int,
-) {
+private fun CpuRow(cpu: CpuVitals, index: Int, count: Int) {
     val current = cpu.perCoreKhz.maxOrNull()
     val max = cpu.maxKhz
     val value =
@@ -368,7 +346,8 @@ private fun NewsGroup(
     }
 }
 
-private fun formatGigabytes(bytes: Long): String = String.format(Locale.getDefault(), "%.1f GB", bytes / BYTES_PER_GB)
+private fun formatGigabytes(bytes: Long): String =
+    String.format(Locale.getDefault(), "%.1f GB", bytes / BYTES_PER_GB)
 
 @Preview
 @Composable
@@ -407,14 +386,16 @@ private fun DiscoverPreview() {
                                     verifiedBootState = "orange",
                                     encryption = "file",
                                 ),
-                            soc = SocInfo("lito", "qcom", "Qualcomm", "SM7225", listOf("arm64-v8a")),
+                            soc =
+                                SocInfo("lito", "qcom", "Qualcomm", "SM7225", listOf("arm64-v8a")),
                             cpu = null,
                             gpu = null,
                             suBinaryPresent = true,
                         ),
                     vitals =
                         Vitals(
-                            cpu = CpuVitals(listOf(1_804_800, 820_000), 2_208_000, "schedutil", null),
+                            cpu =
+                                CpuVitals(listOf(1_804_800, 820_000), 2_208_000, "schedutil", null),
                             load = null,
                             memory = MemoryVitals(6_600_000_000, 12_000_000_000),
                             battery =

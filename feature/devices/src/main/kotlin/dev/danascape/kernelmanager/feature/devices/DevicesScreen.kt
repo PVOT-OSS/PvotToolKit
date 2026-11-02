@@ -10,7 +10,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import dev.danascape.kernelmanager.core.designsystem.component.SectionPlaceholder
-import dev.danascape.kernelmanager.feature.devices.R
 
 @Composable
 fun DevicesScreen(modifier: Modifier = Modifier) {

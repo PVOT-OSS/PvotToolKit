@@ -25,12 +25,17 @@ data class BatterySession(
     val screenOffAwakeMillis: Long = 0,
     val latest: BatterySample? = null,
 ) {
-    val screenOnDrainedPercent: Float get() = screenOnDrainedTenths / TENTHS_PER_PERCENT
-    val screenOffDrainedPercent: Float get() = screenOffDrainedTenths / TENTHS_PER_PERCENT
+    val screenOnDrainedPercent: Float
+        get() = screenOnDrainedTenths / TENTHS_PER_PERCENT
 
-    val activeDrainPerHour: Float? get() = ratePerHour(screenOnDrainedPercent, screenOnMillis)
+    val screenOffDrainedPercent: Float
+        get() = screenOffDrainedTenths / TENTHS_PER_PERCENT
 
-    val idleDrainPerHour: Float? get() = ratePerHour(screenOffDrainedPercent, screenOffMillis)
+    val activeDrainPerHour: Float?
+        get() = ratePerHour(screenOnDrainedPercent, screenOnMillis)
+
+    val idleDrainPerHour: Float?
+        get() = ratePerHour(screenOffDrainedPercent, screenOffMillis)
 
     val sessionMillis: Long
         get() =
@@ -38,11 +43,14 @@ data class BatterySession(
                 .coerceAtLeast(0)
 
     val screenOffDeepSleepFraction: Float
-        get() = if (screenOffMillis > 0) screenOffDeepSleepMillis.toFloat() / screenOffMillis else 0f
+        get() =
+            if (screenOffMillis > 0) screenOffDeepSleepMillis.toFloat() / screenOffMillis else 0f
 
     val watts: Float?
         get() {
-            val amps = latest?.currentMicroAmps?.let { kotlin.math.abs(it) / MICRO_PER_UNIT } ?: return null
+            val amps =
+                latest?.currentMicroAmps?.let { kotlin.math.abs(it) / MICRO_PER_UNIT }
+                    ?: return null
             val volts = latest?.voltageMilliVolts?.let { it / MILLI_PER_UNIT } ?: return null
             return amps * volts
         }
@@ -51,7 +59,8 @@ data class BatterySession(
         get() {
             val sample = latest ?: return null
             if (sample.charging) return null
-            val rate = (if (sample.screenOn) activeDrainPerHour else idleDrainPerHour) ?: return null
+            val rate =
+                (if (sample.screenOn) activeDrainPerHour else idleDrainPerHour) ?: return null
             if (rate <= 0f) return null
             return ((sample.levelPercent / rate) * MILLIS_PER_HOUR).toLong()
         }
@@ -59,10 +68,7 @@ data class BatterySession(
     private companion object {
         const val MIN_WINDOW_MILLIS = 120_000L
 
-        fun ratePerHour(
-            drainedPercent: Float,
-            windowMillis: Long,
-        ): Float? {
+        fun ratePerHour(drainedPercent: Float, windowMillis: Long): Float? {
             if (windowMillis < MIN_WINDOW_MILLIS || drainedPercent <= 0f) return null
             return drainedPercent / (windowMillis.toFloat() / MILLIS_PER_HOUR)
         }

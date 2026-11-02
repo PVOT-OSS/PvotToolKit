@@ -6,13 +6,13 @@ package dev.danascape.kernelmanager.feature.news
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import dev.danascape.kernelmanager.core.di.appContainer
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import dev.danascape.kernelmanager.core.data.news.NewsRepository
 import dev.danascape.kernelmanager.core.common.DataResult
 import dev.danascape.kernelmanager.core.common.LoadError
+import dev.danascape.kernelmanager.core.data.news.NewsRepository
+import dev.danascape.kernelmanager.core.di.appContainer
 import dev.danascape.kernelmanager.core.model.NewsPost
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,19 +26,12 @@ sealed interface NewsUiState {
     data object Empty : NewsUiState
 
     /** @param stale served from cache because the network was unreachable. */
-    data class Ready(
-        val posts: List<NewsPost>,
-        val stale: Boolean,
-    ) : NewsUiState
+    data class Ready(val posts: List<NewsPost>, val stale: Boolean) : NewsUiState
 
-    data class Failed(
-        val error: LoadError,
-    ) : NewsUiState
+    data class Failed(val error: LoadError) : NewsUiState
 }
 
-class NewsViewModel(
-    private val repository: NewsRepository,
-) : ViewModel() {
+class NewsViewModel(private val repository: NewsRepository) : ViewModel() {
     private val _state = MutableStateFlow<NewsUiState>(NewsUiState.Loading)
     val state: StateFlow<NewsUiState> = _state.asStateFlow()
 
@@ -69,12 +62,11 @@ class NewsViewModel(
     }
 
     companion object {
-        val Factory: ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val container = checkNotNull(this[APPLICATION_KEY]).appContainer()
-                    NewsViewModel(container.newsRepository)
-                }
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val container = checkNotNull(this[APPLICATION_KEY]).appContainer()
+                NewsViewModel(container.newsRepository)
             }
+        }
     }
 }

@@ -5,9 +5,8 @@ package dev.danascape.kernelmanager.core.device
 
 import android.content.Context
 import android.net.TrafficStats
-import android.os.Build
-import android.os.Environment
 import android.os.BatteryManager
+import android.os.Environment
 import android.os.PowerManager
 import android.os.StatFs
 import android.os.SystemClock
@@ -19,9 +18,7 @@ import dev.danascape.kernelmanager.core.model.ThermalStatus
 import java.io.File
 
 /** The parts the framework gives up without a permission. */
-class PlatformVitalsReader(
-    context: Context,
-) {
+class PlatformVitalsReader(context: Context) {
     private val appContext = context.applicationContext
 
     /** Milliseconds since boot, replacing the denied /proc/uptime. */
@@ -37,9 +34,9 @@ class PlatformVitalsReader(
     /** Remaining charge in microamp-hours; scales to a capacity estimate by level. */
     fun chargeCounterMicroAmpHours(): Int? {
         val manager = appContext.getSystemService<BatteryManager>() ?: return null
-        return manager
-            .getIntProperty(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER)
-            .takeIf { it != Int.MIN_VALUE && it > 0 }
+        return manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER).takeIf {
+            it != Int.MIN_VALUE && it > 0
+        }
     }
 
     fun thermalStatus(): ThermalStatus {
@@ -80,10 +77,7 @@ class PlatformVitalsReader(
     private fun dataFileSystem(): String? =
         try {
             File("/proc/mounts").useLines { lines ->
-                lines
-                    .map { it.split(' ') }
-                    .firstOrNull { it.size > 2 && it[1] == "/data" }
-                    ?.get(2)
+                lines.map { it.split(' ') }.firstOrNull { it.size > 2 && it[1] == "/data" }?.get(2)
             }
         } catch (_: Exception) {
             null

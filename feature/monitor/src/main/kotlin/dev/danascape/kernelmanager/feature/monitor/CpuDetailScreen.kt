@@ -50,10 +50,7 @@ fun CpuDetailScreen(
     ) {
         item(key = "header") {
             Column(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .pvotReveal(0),
+                modifier = Modifier.fillMaxWidth().pvotReveal(0),
                 verticalArrangement = Arrangement.spacedBy(6.dp),
             ) {
                 Text(
@@ -80,11 +77,7 @@ fun CpuDetailScreen(
                 core = core,
                 values = values,
                 clusterFor = { topology?.clusters?.firstOrNull { core in it.cores } },
-                currentKhz =
-                    state.vitals
-                        ?.cpu
-                        ?.perCoreKhz
-                        ?.getOrNull(core),
+                currentKhz = state.vitals?.cpu?.perCoreKhz?.getOrNull(core),
                 revealIndex = core + 1,
             )
         }
@@ -99,9 +92,7 @@ private fun androidx.compose.foundation.lazy.LazyListScope.itemsIndexed(
     values: List<List<Float>>,
     content: @Composable (Int, List<Float>) -> Unit,
 ) {
-    values.forEachIndexed { index, series ->
-        item(key = "core-$index") { content(index, series) }
-    }
+    values.forEachIndexed { index, series -> item(key = "core-$index") { content(index, series) } }
 }
 
 @Composable
@@ -113,12 +104,7 @@ private fun CoreChart(
     revealIndex: Int,
 ) {
     val cluster = clusterFor()
-    PvotCard(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .pvotReveal(revealIndex),
-    ) {
+    PvotCard(modifier = Modifier.fillMaxWidth().pvotReveal(revealIndex)) {
         Column(
             modifier = Modifier.padding(PvotSpacing.L),
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -147,7 +133,8 @@ private fun CoreChart(
                 Text(
                     text =
                         stringResource(R.string.monitor_cluster, it.id) +
-                            " · " + (it.hardwareMaxKhz?.let(::frequency) ?: "—"),
+                            " · " +
+                            (it.hardwareMaxKhz?.let(::frequency) ?: "—"),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -158,11 +145,7 @@ private fun CoreChart(
 
 @Composable
 private fun ClusterCard(cluster: CpuCluster) {
-    PvotCard(
-        modifier =
-            Modifier
-                .fillMaxWidth(),
-    ) {
+    PvotCard(modifier = Modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier.padding(PvotSpacing.L),
             verticalArrangement = Arrangement.spacedBy(8.dp),

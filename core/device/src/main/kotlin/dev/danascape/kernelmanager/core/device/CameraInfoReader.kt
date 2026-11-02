@@ -9,9 +9,7 @@ import android.hardware.camera2.CameraManager
 import dev.danascape.kernelmanager.core.model.CameraInfo
 
 /** Camera2 characteristics, which need no permission until a camera is opened. */
-class CameraInfoReader(
-    private val context: Context,
-) {
+class CameraInfoReader(private val context: Context) {
     fun read(): List<CameraInfo> {
         val manager = context.getSystemService(CameraManager::class.java) ?: return emptyList()
         return runCatching { manager.cameraIdList }
@@ -19,10 +17,7 @@ class CameraInfoReader(
             .mapNotNull { id -> runCatching { describe(manager, id) }.getOrNull() }
     }
 
-    private fun describe(
-        manager: CameraManager,
-        id: String,
-    ): CameraInfo {
+    private fun describe(manager: CameraManager, id: String): CameraInfo {
         val characteristics = manager.getCameraCharacteristics(id)
         val pixelArray = characteristics.get(CameraCharacteristics.SENSOR_INFO_PIXEL_ARRAY_SIZE)
         val physical = characteristics.get(CameraCharacteristics.SENSOR_INFO_PHYSICAL_SIZE)
@@ -48,8 +43,10 @@ class CameraInfoReader(
             isoMin = iso?.lower,
             isoMax = iso?.upper,
             hasFlash = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true,
-            hardwareLevel = levelName(characteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)),
-            maxDigitalZoom = characteristics.get(CameraCharacteristics.SCALER_AVAILABLE_MAX_DIGITAL_ZOOM),
+            hardwareLevel =
+                levelName(characteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)),
+            maxDigitalZoom =
+                characteristics.get(CameraCharacteristics.SCALER_AVAILABLE_MAX_DIGITAL_ZOOM),
         )
     }
 

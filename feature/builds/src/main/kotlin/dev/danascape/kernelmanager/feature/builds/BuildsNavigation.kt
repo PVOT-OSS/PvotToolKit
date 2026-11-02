@@ -9,10 +9,10 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 
-@Serializable
-data object BuildsRoute
+@Serializable data object BuildsRoute
 
-fun NavController.navigateToBuilds(navOptions: NavOptions? = null) = navigate(BuildsRoute, navOptions)
+fun NavController.navigateToBuilds(navOptions: NavOptions? = null) =
+    navigate(BuildsRoute, navOptions)
 
 fun NavGraphBuilder.buildsScreen() {
     composable<BuildsRoute> { BuildsScreen() }

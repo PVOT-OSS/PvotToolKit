@@ -29,13 +29,7 @@ fun MetricCard(
     onClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit = {},
 ) {
-    PvotCard(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .pvotReveal(revealIndex),
-        onClick = onClick,
-    ) {
+    PvotCard(modifier = modifier.fillMaxWidth().pvotReveal(revealIndex), onClick = onClick) {
         Column(
             modifier = Modifier.padding(PvotSpacing.L),
             verticalArrangement = Arrangement.spacedBy(PvotSpacing.M),
@@ -72,11 +66,7 @@ fun MetricCard(
 
 /** A label and its reading, for the secondary lines under a headline value. */
 @Composable
-fun MetricLine(
-    label: String,
-    value: String,
-    modifier: Modifier = Modifier,
-) {
+fun MetricLine(label: String, value: String, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,

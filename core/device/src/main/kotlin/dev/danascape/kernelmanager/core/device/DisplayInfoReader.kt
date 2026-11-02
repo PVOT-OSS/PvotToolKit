@@ -11,9 +11,7 @@ import dev.danascape.kernelmanager.core.model.DisplayInfo
 import kotlin.math.hypot
 
 /** Panel geometry and refresh capability, all of it public API. */
-class DisplayInfoReader(
-    private val context: Context,
-) {
+class DisplayInfoReader(private val context: Context) {
     @Suppress("DEPRECATION")
     fun read(): DisplayInfo? {
         val manager = context.getSystemService(DisplayManager::class.java) ?: return null
@@ -36,11 +34,7 @@ class DisplayInfoReader(
             xDpi = metrics.xdpi,
             yDpi = metrics.ydpi,
             refreshHz = display.refreshRate,
-            supportedRefreshHz =
-                display.supportedModes
-                    .map { it.refreshRate }
-                    .distinct()
-                    .sorted(),
+            supportedRefreshHz = display.supportedModes.map { it.refreshRate }.distinct().sorted(),
             hdrTypes = hdrTypes(display),
             diagonalInches = diagonal,
         )

@@ -39,10 +39,7 @@ class BatteryMonitorService : Service() {
 
     private val transitions =
         object : BroadcastReceiver() {
-            override fun onReceive(
-                context: Context?,
-                intent: Intent?,
-            ) {
+            override fun onReceive(context: Context?, intent: Intent?) {
                 scope.launch { sampleOnce() }
             }
         }
@@ -65,11 +62,7 @@ class BatteryMonitorService : Service() {
         )
     }
 
-    override fun onStartCommand(
-        intent: Intent?,
-        flags: Int,
-        startId: Int,
-    ): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         running = true
         startInForeground()
         if (loop?.isActive != true) {
@@ -113,14 +106,13 @@ class BatteryMonitorService : Service() {
         val built = notification.build(session, applicationInfo.icon)
         try {
             NotificationManagerCompat.from(this).notify(NOTIFICATION_ID, built)
-        } catch (_: SecurityException) {
-        }
+        } catch (_: SecurityException) {}
     }
 
     private fun canPostNotifications(): Boolean =
         Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
             checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) ==
-            PackageManager.PERMISSION_GRANTED
+                PackageManager.PERMISSION_GRANTED
 
     override fun onDestroy() {
         running = false

@@ -4,11 +4,7 @@
 package dev.danascape.kernelmanager.core.model
 
 /** A group of outbound links on the More screen. */
-data class LinkSection(
-    val id: String,
-    val title: String,
-    val items: List<LinkItem>,
-)
+data class LinkSection(val id: String, val title: String, val items: List<LinkItem>)
 
 data class LinkItem(
     val id: String,
@@ -18,5 +14,6 @@ data class LinkItem(
     val external: Boolean,
     val soon: Boolean,
 ) {
-    val openable: Boolean get() = url != null && !soon
+    val openable: Boolean
+        get() = url != null && !soon
 }

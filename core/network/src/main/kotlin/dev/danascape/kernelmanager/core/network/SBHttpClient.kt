@@ -11,9 +11,9 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.header
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
+import java.io.File
 import kotlinx.serialization.json.Json
 import okhttp3.Cache
-import java.io.File
 
 /** Static endpoints published by the website's own deploy. */
 object SBEndpoints {
@@ -23,11 +23,10 @@ object SBEndpoints {
     const val LINKS: String = "$BASE_URL/api/v1/links.json"
 }
 
-val SBJson: Json =
-    Json {
-        ignoreUnknownKeys = true
-        explicitNulls = false
-    }
+val SBJson: Json = Json {
+    ignoreUnknownKeys = true
+    explicitNulls = false
+}
 
 private const val HTTP_CACHE_BYTES = 8L * 1024 * 1024
 private const val CONNECT_TIMEOUT_MS = 15_000L
@@ -52,7 +51,5 @@ fun createHttpClient(cacheDir: File): HttpClient =
             requestTimeoutMillis = REQUEST_TIMEOUT_MS
         }
 
-        defaultRequest {
-            header(HttpHeaders.UserAgent, "SBKernelManager-Android")
-        }
+        defaultRequest { header(HttpHeaders.UserAgent, "SBKernelManager-Android") }
     }

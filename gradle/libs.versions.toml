@@ -77,4 +77,3 @@ sbkm-jvm-library = { id = "sbkm.jvm.library" }
 pvot-android-library = { id = "pvot.android.library" }
 pvot-android-compose = { id = "pvot.android.compose" }
 pvot-android-api = { id = "pvot.android.api" }
-

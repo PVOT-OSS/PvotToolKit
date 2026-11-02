@@ -31,13 +31,15 @@ private val RowGap = 3.dp
 private val MinRowHeight = 56.dp
 
 /** Corners for a row at [index] of [count]: the card radius outside, tight inside. */
-fun groupShape(
-    index: Int,
-    count: Int,
-): Shape {
+fun groupShape(index: Int, count: Int): Shape {
     val top = if (index == 0) OuterRadius else InnerRadius
     val bottom = if (index == count - 1) OuterRadius else InnerRadius
-    return RoundedCornerShape(topStart = top, topEnd = top, bottomStart = bottom, bottomEnd = bottom)
+    return RoundedCornerShape(
+        topStart = top,
+        topEnd = top,
+        bottomStart = bottom,
+        bottomEnd = bottom,
+    )
 }
 
 /** A titled run of rows that read as one grouped surface. */
@@ -53,10 +55,7 @@ fun SettingsGroup(
     ) {
         PvotSectionHeader(
             title = title,
-            modifier =
-                Modifier
-                    .pvotReveal(0)
-                    .padding(start = PvotSpacing.XS),
+            modifier = Modifier.pvotReveal(0).padding(start = PvotSpacing.XS),
         )
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -86,8 +85,7 @@ private fun GroupedRow(
     ) {
         Row(
             modifier =
-                Modifier
-                    .fillMaxWidth()
+                Modifier.fillMaxWidth()
                     .heightIn(min = MinRowHeight)
                     .padding(horizontal = PvotSpacing.L, vertical = PvotSpacing.M),
             horizontalArrangement = Arrangement.spacedBy(PvotSpacing.M),
@@ -97,7 +95,10 @@ private fun GroupedRow(
     }
 }
 
-/** A label and a readout; pass a null [revealIndex] inside a lazy list so fast scrolling shows rows, not fades. */
+/**
+ * A label and a readout; pass a null [revealIndex] inside a lazy list so fast scrolling shows rows,
+ * not fades.
+ */
 @Composable
 fun ValueRow(
     label: String,

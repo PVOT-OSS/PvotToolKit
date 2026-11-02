@@ -14,14 +14,10 @@ import kotlinx.coroutines.launch
 
 /** Brings the monitor back after the two events that silently kill it. */
 class BatteryMonitorRestartReceiver : BroadcastReceiver() {
-    override fun onReceive(
-        context: Context,
-        intent: Intent,
-    ) {
+    override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
             Intent.ACTION_BOOT_COMPLETED,
-            Intent.ACTION_MY_PACKAGE_REPLACED,
-            -> restartIfEnabled(context.applicationContext)
+            Intent.ACTION_MY_PACKAGE_REPLACED -> restartIfEnabled(context.applicationContext)
         }
     }
 
@@ -32,8 +28,7 @@ class BatteryMonitorRestartReceiver : BroadcastReceiver() {
                 if (BatterySessionStore(context).enabled.first()) {
                     BatteryMonitorService.start(context)
                 }
-            } catch (_: Exception) {
-            } finally {
+            } catch (_: Exception) {} finally {
                 pending.finish()
             }
         }

@@ -4,19 +4,17 @@
 package dev.danascape.kernelmanager.core.device
 
 import dev.danascape.kernelmanager.core.model.CpuIdleSample
+import java.util.concurrent.TimeUnit
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
-import java.util.concurrent.TimeUnit
 
 class CpuLoadReaderTest {
-    private fun sampleAt(
-        seconds: Long,
-        vararg idleMicros: Long,
-    ) = CpuIdleSample(
-        elapsedNanos = TimeUnit.SECONDS.toNanos(seconds),
-        idleMicrosPerCore = idleMicros.toList(),
-    )
+    private fun sampleAt(seconds: Long, vararg idleMicros: Long) =
+        CpuIdleSample(
+            elapsedNanos = TimeUnit.SECONDS.toNanos(seconds),
+            idleMicrosPerCore = idleMicros.toList(),
+        )
 
     @Test
     fun `a fully idle core reads as zero busy`() {
@@ -44,11 +42,7 @@ class CpuLoadReaderTest {
 
     @Test
     fun `average spans all cores`() {
-        val load =
-            CpuLoadReader.load(
-                sampleAt(0, 0, 0),
-                sampleAt(1, 1_000_000, 0),
-            )!!
+        val load = CpuLoadReader.load(sampleAt(0, 0, 0), sampleAt(1, 1_000_000, 0))!!
         assertEquals(0.5f, load.average, 0.001f)
     }
 

@@ -25,18 +25,11 @@ class LinksRepository(
     private val assets: AssetManager,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) {
-    suspend fun links(): List<LinkSection> =
-        withContext(ioDispatcher) {
-            remote() ?: bundled()
-        }
+    suspend fun links(): List<LinkSection> = withContext(ioDispatcher) { remote() ?: bundled() }
 
     private suspend fun remote(): List<LinkSection>? =
         try {
-            client
-                .get(SBEndpoints.LINKS)
-                .body<LinksDto>()
-                .toDomain()
-                .takeIf { it.isNotEmpty() }
+            client.get(SBEndpoints.LINKS).body<LinksDto>().toDomain().takeIf { it.isNotEmpty() }
         } catch (cancellation: CancellationException) {
             throw cancellation
         } catch (_: Exception) {

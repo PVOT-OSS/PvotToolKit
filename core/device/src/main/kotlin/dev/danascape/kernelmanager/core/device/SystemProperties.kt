@@ -4,17 +4,14 @@
 package dev.danascape.kernelmanager.core.device
 
 /** Android system properties. */
-class SystemProperties private constructor(
-    private val values: Map<String, String>,
-) {
+class SystemProperties private constructor(private val values: Map<String, String>) {
     operator fun get(key: String): String? = values[key]?.takeIf { it.isNotBlank() }
 
     fun firstOf(vararg keys: String): Pair<String, String>? =
-        keys.firstNotNullOfOrNull { key ->
-            get(key)?.let { key to it }
-        }
+        keys.firstNotNullOfOrNull { key -> get(key)?.let { key to it } }
 
-    val size: Int get() = values.size
+    val size: Int
+        get() = values.size
 
     companion object {
         private val LINE = Regex("""^\[(.+?)]: \[(.*)]$""")
@@ -33,11 +30,12 @@ class SystemProperties private constructor(
                                     LINE.matchEntire(line.trim())?.let { match ->
                                         match.groupValues[1] to match.groupValues[2]
                                     }
-                                }.toMap()
+                                }
+                                .toMap()
                         }
                 } catch (_: Exception) {
                     emptyMap()
-                },
+                }
             )
 
         fun of(values: Map<String, String>): SystemProperties = SystemProperties(values)

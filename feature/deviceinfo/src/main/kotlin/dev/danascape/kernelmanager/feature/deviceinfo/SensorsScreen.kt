@@ -38,10 +38,7 @@ fun SensorsScreen(
 }
 
 @Composable
-private fun SensorsContent(
-    state: SensorsUiState,
-    modifier: Modifier = Modifier,
-) {
+private fun SensorsContent(state: SensorsUiState, modifier: Modifier = Modifier) {
     val sensors = state.sensors
 
     PvotScreen(
@@ -49,13 +46,9 @@ private fun SensorsContent(
         contentPadding = PvotScreenDefaults.contentPadding(),
         verticalArrangement = Arrangement.spacedBy(SensorRowGap),
     ) {
-        item(key = "header") {
-            SensorHeader(count = sensors.size, deviceName = state.deviceName)
-        }
+        item(key = "header") { SensorHeader(count = sensors.size, deviceName = state.deviceName) }
         if (sensors.isNotEmpty()) {
-            item(key = "title") {
-                GroupTitle(stringResource(R.string.sensors_available))
-            }
+            item(key = "title") { GroupTitle(stringResource(R.string.sensors_available)) }
             itemsIndexed(items = sensors, key = { _, sensor -> sensor.name }) { index, sensor ->
                 ValueBlock(
                     label = sensor.name,
@@ -70,16 +63,8 @@ private fun SensorsContent(
 }
 
 @Composable
-private fun SensorHeader(
-    count: Int,
-    deviceName: String?,
-) {
-    PvotCard(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .pvotReveal(0),
-    ) {
+private fun SensorHeader(count: Int, deviceName: String?) {
+    PvotCard(modifier = Modifier.fillMaxWidth().pvotReveal(0)) {
         Column(
             modifier = Modifier.padding(PvotSpacing.L),
             verticalArrangement = Arrangement.spacedBy(6.dp),

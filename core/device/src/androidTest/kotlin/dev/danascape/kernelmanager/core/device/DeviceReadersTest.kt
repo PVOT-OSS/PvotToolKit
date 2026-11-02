@@ -23,10 +23,16 @@ class DeviceReadersTest {
 
         Log.i(TAG, "=== IDENTITY ===")
         Log.i(TAG, "codename=${profile.identity.codename} model=${profile.identity.displayName}")
-        Log.i(TAG, "kernel=${profile.identity.kernelRelease} sb=${profile.identity.isStormBreakerKernel}")
+        Log.i(
+            TAG,
+            "kernel=${profile.identity.kernelRelease} sb=${profile.identity.isStormBreakerKernel}",
+        )
 
         Log.i(TAG, "=== OS ===")
-        Log.i(TAG, "android=${profile.os.androidRelease} api=${profile.os.sdkInt} patch=${profile.os.securityPatch}")
+        Log.i(
+            TAG,
+            "android=${profile.os.androidRelease} api=${profile.os.sdkInt} patch=${profile.os.securityPatch}",
+        )
         Log.i(TAG, "buildId=${profile.os.buildId} tags=${profile.os.tags} type=${profile.os.type}")
         Log.i(TAG, "rom=${profile.os.rom} stockSigned=${profile.os.isStockSigned}")
 
@@ -39,11 +45,17 @@ class DeviceReadersTest {
 
         Log.i(TAG, "=== SOC ===")
         Log.i(TAG, "platform=${profile.soc.platform} hw=${profile.soc.hardware}")
-        Log.i(TAG, "soc=${profile.soc.manufacturer} ${profile.soc.model} abis=${profile.soc.supportedAbis}")
+        Log.i(
+            TAG,
+            "soc=${profile.soc.manufacturer} ${profile.soc.model} abis=${profile.soc.supportedAbis}",
+        )
 
         Log.i(TAG, "=== CPU ===")
         profile.cpu?.let { cpu ->
-            Log.i(TAG, "cores=${cpu.coreCount} clusters=${cpu.clusters.size} features=${cpu.features.size}")
+            Log.i(
+                TAG,
+                "cores=${cpu.coreCount} clusters=${cpu.clusters.size} features=${cpu.features.size}",
+            )
             cpu.clusters.forEach { cluster ->
                 Log.i(
                     TAG,
@@ -61,7 +73,9 @@ class DeviceReadersTest {
         assertTrue(profile.identity.codename.isNotBlank())
         assertTrue(profile.os.sdkInt > 0)
         profile.cpu?.clusters?.forEach { cluster ->
-            cluster.hardwareMaxKhz?.let { assertTrue("max looks wrong: $it", it in 100_000..10_000_000) }
+            cluster.hardwareMaxKhz?.let {
+                assertTrue("max looks wrong: $it", it in 100_000..10_000_000)
+            }
         }
     }
 
@@ -69,12 +83,16 @@ class DeviceReadersTest {
     fun dumpVitals() {
         val first = CpuLoadReader.sample()
         Thread.sleep(600)
-        val load = first?.let { start -> CpuLoadReader.sample()?.let { CpuLoadReader.load(start, it) } }
+        val load =
+            first?.let { start -> CpuLoadReader.sample()?.let { CpuLoadReader.load(start, it) } }
         val vitals = SystemVitalsReader(context).read(load)
 
         Log.i(TAG, "=== VITALS ===")
         Log.i(TAG, "cpu=${vitals.cpu}")
-        Log.i(TAG, "load=${vitals.load?.perCore?.map { "%.0f%%".format(it * 100) }} avg=${vitals.load?.average}")
+        Log.i(
+            TAG,
+            "load=${vitals.load?.perCore?.map { "%.0f%%".format(it * 100) }} avg=${vitals.load?.average}",
+        )
         Log.i(TAG, "memory=${vitals.memory}")
         Log.i(TAG, "battery=${vitals.battery}")
         Log.i(TAG, "storage=${vitals.storage}")
@@ -98,7 +116,10 @@ class DeviceReadersTest {
         val properties = SystemProperties.read()
         Log.i(TAG, "=== PROPERTIES === count=${properties.size}")
         Log.i(TAG, "fingerprint=${properties["ro.build.fingerprint"]}")
-        Log.i(TAG, "flash.locked=${properties["ro.boot.flash.locked"]} vbs=${properties["ro.boot.verifiedbootstate"]}")
+        Log.i(
+            TAG,
+            "flash.locked=${properties["ro.boot.flash.locked"]} vbs=${properties["ro.boot.verifiedbootstate"]}",
+        )
         assertTrue("getprop returned nothing", properties.size > 100)
     }
 }

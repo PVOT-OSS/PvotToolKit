@@ -9,9 +9,7 @@ import android.hardware.SensorManager
 import dev.danascape.kernelmanager.core.model.SensorInfo
 
 /** The sensor roster, which carries the vendor part names no sysfs node will give us. */
-class SensorInfoReader(
-    private val context: Context,
-) {
+class SensorInfoReader(private val context: Context) {
     fun read(): List<SensorInfo> {
         val manager = context.getSystemService(SensorManager::class.java) ?: return emptyList()
         return manager
@@ -26,12 +24,12 @@ class SensorInfoReader(
                     maxRange = sensor.maximumRange,
                     isWakeUp = sensor.isWakeUpSensor,
                 )
-            }.sortedBy { it.type }
+            }
+            .sortedBy { it.type }
     }
 
     private fun readableType(sensor: Sensor): String =
-        sensor.stringType
-            .substringAfterLast('.')
-            .replace('_', ' ')
-            .replaceFirstChar { it.uppercase() }
+        sensor.stringType.substringAfterLast('.').replace('_', ' ').replaceFirstChar {
+            it.uppercase()
+        }
 }

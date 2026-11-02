@@ -9,10 +9,7 @@ import kotlinx.serialization.Serializable
 
 /** Wire shape of `/api/v1/links.json`, and of the bundled fallback copy. */
 @Serializable
-data class LinksDto(
-    val schema: Int = 0,
-    val sections: List<LinkSectionDto> = emptyList(),
-)
+data class LinksDto(val schema: Int = 0, val sections: List<LinkSectionDto> = emptyList())
 
 @Serializable
 data class LinkSectionDto(
@@ -52,4 +49,5 @@ fun LinksDto.toDomain(): List<LinkSection> =
                             )
                         },
             )
-        }.filter { it.items.isNotEmpty() }
+        }
+        .filter { it.items.isNotEmpty() }

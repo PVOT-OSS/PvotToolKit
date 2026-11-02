@@ -9,10 +9,10 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 
-@Serializable
-data object DiscoverRoute
+@Serializable data object DiscoverRoute
 
-fun NavController.navigateToDiscover(navOptions: NavOptions? = null) = navigate(DiscoverRoute, navOptions)
+fun NavController.navigateToDiscover(navOptions: NavOptions? = null) =
+    navigate(DiscoverRoute, navOptions)
 
 fun NavGraphBuilder.discoverScreen(
     onOpenDevice: () -> Unit,

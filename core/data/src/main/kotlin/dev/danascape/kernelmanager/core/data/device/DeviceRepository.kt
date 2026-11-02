@@ -26,28 +26,29 @@ class DeviceRepository(
 ) {
     /** Read once and cached. */
     suspend fun profile(): DeviceProfile =
-        cachedProfile ?: withContext(ioDispatcher) {
-            profileReader.read().also { cachedProfile = it }
-        }
+        cachedProfile
+            ?: withContext(ioDispatcher) { profileReader.read().also { cachedProfile = it } }
 
-    @Volatile
-    private var cachedProfile: DeviceProfile? = null
+    @Volatile private var cachedProfile: DeviceProfile? = null
 
     /** Read once and cached, like the profile. */
     suspend fun details(): DeviceDetails =
-        cachedDetails ?: withContext(ioDispatcher) {
-            detailsReader.read(SystemProperties.read()).also { cachedDetails = it }
-        }
+        cachedDetails
+            ?: withContext(ioDispatcher) {
+                detailsReader.read(SystemProperties.read()).also { cachedDetails = it }
+            }
 
-    @Volatile
-    private var cachedDetails: DeviceDetails? = null
+    @Volatile private var cachedDetails: DeviceDetails? = null
 
     /** Suspends for the sampling window: utilisation needs two spaced samples. */
     suspend fun vitals(): Vitals =
         withContext(ioDispatcher) {
             val first = CpuLoadReader.sample()
             delay(LOAD_WINDOW_MILLIS)
-            val load = first?.let { start -> CpuLoadReader.sample()?.let { CpuLoadReader.load(start, it) } }
+            val load =
+                first?.let { start ->
+                    CpuLoadReader.sample()?.let { CpuLoadReader.load(start, it) }
+                }
             vitalsReader.read(load)
         }
 }

@@ -13,11 +13,14 @@ data class DeviceIdentity(
     val kernelRelease: String,
     val isStormBreakerKernel: Boolean,
 ) {
-    val displayName: String get() = "$manufacturer $model"
+    val displayName: String
+        get() = "$manufacturer $model"
 
     /** The `x.y.z` head of [kernelRelease]. */
-    val kernelVersion: String get() = kernelRelease.substringBefore('-')
+    val kernelVersion: String
+        get() = kernelRelease.substringBefore('-')
 
     /** Everything after the version in [kernelRelease], empty when there is none. */
-    val kernelBuild: String get() = kernelRelease.substringAfter('-', "")
+    val kernelBuild: String
+        get() = kernelRelease.substringAfter('-', "")
 }

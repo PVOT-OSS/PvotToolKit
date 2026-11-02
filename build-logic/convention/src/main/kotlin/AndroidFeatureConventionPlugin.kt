@@ -7,21 +7,22 @@ import org.gradle.kotlin.dsl.dependencies
 
 /** A UI feature: Compose plus the pieces every screen needs. */
 class AndroidFeatureConventionPlugin : Plugin<Project> {
-    override fun apply(target: Project) = with(target) {
-        pluginManager.apply("sbkm.android.library")
-        pluginManager.apply("sbkm.android.compose")
-        pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
+    override fun apply(target: Project) =
+        with(target) {
+            pluginManager.apply("sbkm.android.library")
+            pluginManager.apply("sbkm.android.compose")
+            pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
 
-        dependencies {
-            add("implementation", project(":core:designsystem"))
-            add("implementation", project(":core:model"))
-            add("implementation", project(":core:common"))
-            add("implementation", project(":core:di"))
-            add("implementation", libs.lib("androidx-core-ktx"))
-            add("implementation", libs.lib("androidx-lifecycle-runtime-compose"))
-            add("implementation", libs.lib("androidx-lifecycle-viewmodel-compose"))
-            add("implementation", libs.lib("androidx-navigation-compose"))
-            add("testImplementation", libs.lib("junit"))
+            dependencies {
+                add("implementation", project(":core:designsystem"))
+                add("implementation", project(":core:model"))
+                add("implementation", project(":core:common"))
+                add("implementation", project(":core:di"))
+                add("implementation", libs.lib("androidx-core-ktx"))
+                add("implementation", libs.lib("androidx-lifecycle-runtime-compose"))
+                add("implementation", libs.lib("androidx-lifecycle-viewmodel-compose"))
+                add("implementation", libs.lib("androidx-navigation-compose"))
+                add("testImplementation", libs.lib("junit"))
+            }
         }
-    }
 }

@@ -11,17 +11,18 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 
 /** Pure Kotlin module — no Android dependency. */
 class JvmLibraryConventionPlugin : Plugin<Project> {
-    override fun apply(target: Project) = with(target) {
-        pluginManager.apply("org.jetbrains.kotlin.jvm")
-        pluginManager.apply("sbkm.kotlin.quality")
+    override fun apply(target: Project) =
+        with(target) {
+            pluginManager.apply("org.jetbrains.kotlin.jvm")
+            pluginManager.apply("sbkm.kotlin.quality")
 
-        extensions.configure<JavaPluginExtension> {
-            sourceCompatibility = JavaVersion.VERSION_21
-            targetCompatibility = JavaVersion.VERSION_21
-        }
+            extensions.configure<JavaPluginExtension> {
+                sourceCompatibility = JavaVersion.VERSION_21
+                targetCompatibility = JavaVersion.VERSION_21
+            }
 
-        extensions.configure<KotlinJvmProjectExtension> {
-            compilerOptions { jvmTarget.set(JvmTarget.JVM_21) }
+            extensions.configure<KotlinJvmProjectExtension> {
+                compilerOptions { jvmTarget.set(JvmTarget.JVM_21) }
+            }
         }
-    }
 }

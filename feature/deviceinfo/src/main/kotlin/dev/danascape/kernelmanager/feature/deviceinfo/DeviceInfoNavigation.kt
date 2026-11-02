@@ -10,40 +10,32 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import kotlinx.serialization.Serializable
 
-@Serializable
-data object DeviceGraphRoute
+@Serializable data object DeviceGraphRoute
 
-@Serializable
-data object DeviceInfoRoute
+@Serializable data object DeviceInfoRoute
 
-@Serializable
-data object SensorsRoute
+@Serializable data object SensorsRoute
 
-@Serializable
-data object TestsRoute
+@Serializable data object TestsRoute
 
-fun NavController.navigateToDeviceInfo(navOptions: NavOptions? = null) = navigate(DeviceInfoRoute, navOptions)
+fun NavController.navigateToDeviceInfo(navOptions: NavOptions? = null) =
+    navigate(DeviceInfoRoute, navOptions)
 
-fun NavController.navigateToSensors(navOptions: NavOptions? = null) = navigate(SensorsRoute, navOptions)
+fun NavController.navigateToSensors(navOptions: NavOptions? = null) =
+    navigate(SensorsRoute, navOptions)
 
 fun NavController.navigateToTests(navOptions: NavOptions? = null) = navigate(TestsRoute, navOptions)
 
 /**
  * The device screens.
  *
- * Each owns its own view model; what they share is the repository, which caches the
- * profile and the details read, so a tab switch costs no rereading of the device.
+ * Each owns its own view model; what they share is the repository, which caches the profile and the
+ * details read, so a tab switch costs no rereading of the device.
  */
 fun NavGraphBuilder.deviceGraph() {
     navigation<DeviceGraphRoute>(startDestination = DeviceInfoRoute) {
-        composable<DeviceInfoRoute> {
-            DeviceInfoScreen()
-        }
-        composable<SensorsRoute> {
-            SensorsScreen()
-        }
-        composable<TestsRoute> {
-            TestsScreen()
-        }
+        composable<DeviceInfoRoute> { DeviceInfoScreen() }
+        composable<SensorsRoute> { SensorsScreen() }
+        composable<TestsRoute> { TestsScreen() }
     }
 }

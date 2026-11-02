@@ -4,17 +4,14 @@
 package dev.danascape.kernelmanager.core.network.dto
 
 import dev.danascape.kernelmanager.core.model.NewsPost
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /** Wire shape of `/api/v1/news.json`. */
 @Serializable
-data class NewsFeedDto(
-    val schema: Int = 0,
-    val posts: List<NewsPostDto> = emptyList(),
-)
+data class NewsFeedDto(val schema: Int = 0, val posts: List<NewsPostDto> = emptyList())
 
 @Serializable
 data class NewsPostDto(

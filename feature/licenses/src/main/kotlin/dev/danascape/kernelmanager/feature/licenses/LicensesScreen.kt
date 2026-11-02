@@ -22,7 +22,6 @@ import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import dev.danascape.kernelmanager.core.designsystem.component.ActionRow
 import dev.danascape.kernelmanager.core.designsystem.component.SettingsGroup
 import dev.danascape.kernelmanager.core.designsystem.component.openArticle
-import dev.danascape.kernelmanager.feature.licenses.R
 
 @Composable
 fun LicensesScreen(modifier: Modifier = Modifier) {
@@ -63,7 +62,12 @@ fun LicensesScreen(modifier: Modifier = Modifier) {
                         label = entry.name,
                         index = index,
                         count = THIRD_PARTY_LICENSES.size,
-                        description = stringResource(R.string.licenses_entry_detail, entry.holder, entry.license),
+                        description =
+                            stringResource(
+                                R.string.licenses_entry_detail,
+                                entry.holder,
+                                entry.license,
+                            ),
                         onClick = { context.openArticle(entry.url, toolbarColor) },
                     )
                 }

@@ -6,9 +6,9 @@ package dev.danascape.kernelmanager.core.data
 import dev.danascape.kernelmanager.core.network.SBJson
 import dev.danascape.kernelmanager.core.network.dto.LinksDto
 import dev.danascape.kernelmanager.core.network.dto.toDomain
+import java.io.File
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.File
 
 /** The bundled links.json is what renders on first run with no network. */
 class BundledLinksTest {

@@ -33,12 +33,7 @@ fun SBSparkline(
     surface: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
     height: Dp = 40.dp,
 ) {
-    Canvas(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .height(height),
-    ) {
+    Canvas(modifier = modifier.fillMaxWidth().height(height)) {
         if (values.size < 2) return@Canvas
 
         val low = domain?.start ?: values.min()
@@ -68,20 +63,13 @@ fun SBSparkline(
         drawPath(
             path = fill,
             brush =
-                Brush.verticalGradient(
-                    listOf(color.copy(alpha = 0.14f), color.copy(alpha = 0.02f)),
-                ),
+                Brush.verticalGradient(listOf(color.copy(alpha = 0.14f), color.copy(alpha = 0.02f))),
         )
 
         drawPath(
             path = line,
             color = color,
-            style =
-                Stroke(
-                    width = LineWidth.toPx(),
-                    cap = StrokeCap.Round,
-                    join = StrokeJoin.Round,
-                ),
+            style = Stroke(width = LineWidth.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round),
         )
 
         val last = points.last()

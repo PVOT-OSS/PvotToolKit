@@ -20,17 +20,18 @@ class BatteryTrackerTest {
         charging: Boolean = false,
         current: Int? = null,
         voltage: Int? = null,
-    ) = BatterySample(
-        elapsedMillis = elapsed,
-        awakeMillis = awake,
-        levelPercent = level,
-        chargeMicroAmpHours = charge,
-        currentMicroAmps = current,
-        voltageMilliVolts = voltage,
-        temperatureC = null,
-        charging = charging,
-        screenOn = screenOn,
-    )
+    ) =
+        BatterySample(
+            elapsedMillis = elapsed,
+            awakeMillis = awake,
+            levelPercent = level,
+            chargeMicroAmpHours = charge,
+            currentMicroAmps = current,
+            voltageMilliVolts = voltage,
+            temperatureC = null,
+            charging = charging,
+            screenOn = screenOn,
+        )
 
     @Test
     fun `screen-on drain is attributed to active, not idle`() {
@@ -98,7 +99,8 @@ class BatteryTrackerTest {
         session = BatteryTracker.fold(session, charging, sample(HOUR, level = 100, charging = true))
 
         val unplugged = sample(2 * HOUR, level = 100, charging = false)
-        session = BatteryTracker.fold(session, sample(HOUR, level = 100, charging = true), unplugged)
+        session =
+            BatteryTracker.fold(session, sample(HOUR, level = 100, charging = true), unplugged)
 
         assertEquals(2 * HOUR, session.startedAtElapsedMillis)
         assertEquals(0L, session.screenOnMillis)
@@ -181,6 +183,9 @@ class BatteryTrackerTest {
                 sample(HOUR, level = 40, screenOn = true),
             )
         val remaining = session.estimatedMillisRemaining!!
-        assertTrue("got ${remaining / HOUR}h", remaining in (3.5 * HOUR).toLong()..(4.5 * HOUR).toLong())
+        assertTrue(
+            "got ${remaining / HOUR}h",
+            remaining in (3.5 * HOUR).toLong()..(4.5 * HOUR).toLong(),
+        )
     }
 }

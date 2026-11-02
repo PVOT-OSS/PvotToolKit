@@ -13,12 +13,12 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dev.danascape.kernelmanager.core.battery.BatterySample
 import dev.danascape.kernelmanager.core.battery.BatterySession
+import java.io.IOException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
-import java.io.IOException
 
 private val Context.batteryDataStore: DataStore<Preferences> by
     preferencesDataStore(name = "battery_monitor")
@@ -28,9 +28,7 @@ private val PreviousSampleKey = stringPreferencesKey("previous_sample")
 private val EnabledKey = booleanPreferencesKey("enabled")
 
 /** Persists the session so it survives process death and reboot. */
-class BatterySessionStore(
-    context: Context,
-) {
+class BatterySessionStore(context: Context) {
     private val dataStore = context.applicationContext.batteryDataStore
 
     private val json = Json { ignoreUnknownKeys = true }
@@ -52,16 +50,11 @@ class BatterySessionStore(
     suspend fun session(): BatterySession? = session.first()
 
     suspend fun previousSample(): BatterySample? =
-        dataStore.data
-            .first()[PreviousSampleKey]
-            ?.let { stored ->
-                runCatching { json.decodeFromString<BatterySample>(stored) }.getOrNull()
-            }
+        dataStore.data.first()[PreviousSampleKey]?.let { stored ->
+            runCatching { json.decodeFromString<BatterySample>(stored) }.getOrNull()
+        }
 
-    suspend fun save(
-        session: BatterySession,
-        sample: BatterySample,
-    ) {
+    suspend fun save(session: BatterySession, sample: BatterySample) {
         dataStore.edit { preferences ->
             preferences[SessionKey] = json.encodeToString(session)
             preferences[PreviousSampleKey] = json.encodeToString(sample)

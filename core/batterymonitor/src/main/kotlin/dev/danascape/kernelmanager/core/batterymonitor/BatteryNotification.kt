@@ -25,30 +25,25 @@ private const val SECONDS_PER_HOUR = 3600
 private const val SECONDS_PER_MINUTE = 60
 
 /** Renders the session as an ongoing notification. */
-internal class BatteryNotification(
-    private val context: Context,
-) {
+internal class BatteryNotification(private val context: Context) {
     fun ensureChannel() {
         val manager = context.getSystemService<NotificationManager>() ?: return
         val channel =
             NotificationChannel(
-                CHANNEL_ID,
-                context.getString(R.string.battery_channel_name),
-                NotificationManager.IMPORTANCE_LOW,
-            ).apply {
-                description = context.getString(R.string.battery_channel_description)
-                setShowBadge(false)
-            }
+                    CHANNEL_ID,
+                    context.getString(R.string.battery_channel_name),
+                    NotificationManager.IMPORTANCE_LOW,
+                )
+                .apply {
+                    description = context.getString(R.string.battery_channel_description)
+                    setShowBadge(false)
+                }
         manager.createNotificationChannel(channel)
     }
 
-    fun build(
-        session: BatterySession?,
-        smallIcon: Int,
-    ): Notification {
+    fun build(session: BatterySession?, smallIcon: Int): Notification {
         val builder =
-            NotificationCompat
-                .Builder(context, CHANNEL_ID)
+            NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(smallIcon)
                 .setOngoing(true)
                 .setSilent(true)
@@ -66,25 +61,33 @@ internal class BatteryNotification(
             .setStyle(
                 NotificationCompat.InboxStyle().also { style ->
                     detailLines(session).forEach(style::addLine)
-                },
-            ).build()
+                }
+            )
+            .build()
     }
 
     /** Level · temperature · charge state · current. */
     private fun summaryLine(session: BatterySession): String {
         val sample = session.latest ?: return ""
         return buildList {
-            add(context.getString(R.string.battery_level, sample.levelPercent))
-            sample.temperatureC?.let { add(context.getString(R.string.battery_temp, it)) }
-            add(
-                context.getString(
-                    if (sample.charging) R.string.battery_charging else R.string.battery_discharging,
-                ),
-            )
-            sample.currentMicroAmps?.let {
-                add(context.getString(R.string.battery_current, abs(it) / MICROAMPS_PER_MILLIAMP))
+                add(context.getString(R.string.battery_level, sample.levelPercent))
+                sample.temperatureC?.let { add(context.getString(R.string.battery_temp, it)) }
+                add(
+                    context.getString(
+                        if (sample.charging) R.string.battery_charging
+                        else R.string.battery_discharging
+                    )
+                )
+                sample.currentMicroAmps?.let {
+                    add(
+                        context.getString(
+                            R.string.battery_current,
+                            abs(it) / MICROAMPS_PER_MILLIAMP,
+                        )
+                    )
+                }
             }
-        }.joinToString(FIELD_SEPARATOR)
+            .joinToString(FIELD_SEPARATOR)
     }
 
     private fun detailLines(session: BatterySession): List<String> {
@@ -120,10 +123,8 @@ internal class BatteryNotification(
         )
     }
 
-    private fun share(
-        part: Long,
-        whole: Long,
-    ): Int = if (whole <= 0) 0 else ((part.toFloat() / whole) * PERCENT).roundToInt()
+    private fun share(part: Long, whole: Long): Int =
+        if (whole <= 0) 0 else ((part.toFloat() / whole) * PERCENT).roundToInt()
 
     private fun rate(value: Float) = context.getString(R.string.battery_rate_value, value)
 

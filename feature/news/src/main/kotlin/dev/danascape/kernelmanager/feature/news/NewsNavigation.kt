@@ -9,8 +9,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 
-@Serializable
-data object NewsRoute
+@Serializable data object NewsRoute
 
 fun NavController.navigateToNews(navOptions: NavOptions? = null) = navigate(NewsRoute, navOptions)
 

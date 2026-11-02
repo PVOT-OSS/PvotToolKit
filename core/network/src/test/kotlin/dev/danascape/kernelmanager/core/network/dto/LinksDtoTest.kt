@@ -20,7 +20,8 @@ class LinksDtoTest {
                   {"id":"telegram","label":"Telegram","description":"Release updates and support",
                    "url":"https://t.me/x","external":true,"soon":false}
                 ]}]}
-                """.trimIndent(),
+                """
+                    .trimIndent()
             )
 
         val section = dto.toDomain().single()
@@ -39,15 +40,11 @@ class LinksDtoTest {
                 {"schema":1,"sections":[{"id":"project","title":"Project","items":[
                   {"id":"docs","label":"Documentation","url":null,"soon":true}
                 ]}]}
-                """.trimIndent(),
+                """
+                    .trimIndent()
             )
 
-        val item =
-            dto
-                .toDomain()
-                .single()
-                .items
-                .single()
+        val item = dto.toDomain().single().items.single()
         assertTrue(item.soon)
         assertFalse(item.openable)
     }
@@ -61,17 +58,11 @@ class LinksDtoTest {
                   {"id":"broken","label":"Broken"},
                   {"id":"ok","label":"OK","url":"https://example.invalid/"}
                 ]}]}
-                """.trimIndent(),
+                """
+                    .trimIndent()
             )
 
-        assertEquals(
-            listOf("ok"),
-            dto
-                .toDomain()
-                .single()
-                .items
-                .map { it.id },
-        )
+        assertEquals(listOf("ok"), dto.toDomain().single().items.map { it.id })
     }
 
     @Test
@@ -83,7 +74,8 @@ class LinksDtoTest {
                   {"id":"empty","title":"Empty","items":[{"id":"broken","label":"Broken"}]},
                   {"id":"kept","title":"Kept","items":[{"id":"ok","label":"OK","url":"https://example.invalid/"}]}
                 ]}
-                """.trimIndent(),
+                """
+                    .trimIndent()
             )
 
         assertEquals(listOf("kept"), dto.toDomain().map { it.id })
@@ -97,17 +89,10 @@ class LinksDtoTest {
                 {"schema":1,"analytics":true,"sections":[{"id":"a","title":"A","badge":"new","items":[
                   {"id":"x","label":"X","url":"https://example.invalid/","icon":"telegram"}
                 ]}]}
-                """.trimIndent(),
+                """
+                    .trimIndent()
             )
 
-        assertEquals(
-            "X",
-            dto
-                .toDomain()
-                .single()
-                .items
-                .single()
-                .label,
-        )
+        assertEquals("X", dto.toDomain().single().items.single().label)
     }
 }

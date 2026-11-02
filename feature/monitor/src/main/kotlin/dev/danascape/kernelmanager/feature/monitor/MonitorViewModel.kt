@@ -13,6 +13,7 @@ import dev.danascape.kernelmanager.core.data.device.DeviceRepository
 import dev.danascape.kernelmanager.core.di.appContainer
 import dev.danascape.kernelmanager.core.model.DeviceProfile
 import dev.danascape.kernelmanager.core.model.Vitals
+import kotlin.math.abs
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,7 +21,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlin.math.abs
 
 private const val MICROAMPS_PER_MILLIAMP = 1000f
 private const val MILLIS_PER_SECOND = 1000f
@@ -42,9 +42,7 @@ data class MonitorUiState(
     val history: MetricHistory = MetricHistory(),
 )
 
-class MonitorViewModel(
-    private val deviceRepository: DeviceRepository,
-) : ViewModel() {
+class MonitorViewModel(private val deviceRepository: DeviceRepository) : ViewModel() {
     private val _state = MutableStateFlow(MonitorUiState())
     val state: StateFlow<MonitorUiState> = _state.asStateFlow()
 
@@ -94,8 +92,9 @@ class MonitorViewModel(
                 },
             memoryUsed = memoryUsed.append(vitals.memory?.usedFraction),
             batteryDrawMilliAmps =
-                batteryDrawMilliAmps
-                    .append(vitals.battery?.currentMicroAmps?.let { abs(it) / MICROAMPS_PER_MILLIAMP }),
+                batteryDrawMilliAmps.append(
+                    vitals.battery?.currentMicroAmps?.let { abs(it) / MICROAMPS_PER_MILLIAMP }
+                ),
             networkBytesPerSecond = networkBytesPerSecond.append(networkRate(vitals)),
         )
     }
@@ -122,12 +121,11 @@ class MonitorViewModel(
     }
 
     companion object {
-        val Factory: ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val container = checkNotNull(this[APPLICATION_KEY]).appContainer()
-                    MonitorViewModel(container.deviceRepository)
-                }
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val container = checkNotNull(this[APPLICATION_KEY]).appContainer()
+                MonitorViewModel(container.deviceRepository)
             }
+        }
     }
 }

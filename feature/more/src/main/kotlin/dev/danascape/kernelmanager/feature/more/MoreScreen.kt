@@ -42,7 +42,6 @@ import dev.danascape.kernelmanager.core.designsystem.component.openArticle
 import dev.danascape.kernelmanager.core.model.LinkItem
 import dev.danascape.kernelmanager.core.model.LinkSection
 import dev.danascape.kernelmanager.core.model.ThemePreference
-import dev.danascape.kernelmanager.feature.more.R
 
 @Composable
 fun MoreScreen(
@@ -57,9 +56,7 @@ fun MoreScreen(
     val toolbarColor = MaterialTheme.colorScheme.surface.toArgb()
 
     val notificationPermission =
-        rememberLauncherForActivityResult(
-            ActivityResultContracts.RequestPermission(),
-        ) { }
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {}
 
     MoreContent(
         state = state,
@@ -100,9 +97,7 @@ private fun MoreContent(
     ) {
         item(key = "header") { Header() }
 
-        item(key = "browse") {
-            BrowseGroup(onOpenDevices = onOpenDevices, onOpenNews = onOpenNews)
-        }
+        item(key = "browse") { BrowseGroup(onOpenDevices = onOpenDevices, onOpenNews = onOpenNews) }
 
         item(key = "battery") {
             BatteryMonitorGroup(
@@ -127,10 +122,7 @@ private fun MoreContent(
 
 /** Off by default: no discharge history exists before the user opts in. */
 @Composable
-private fun BatteryMonitorGroup(
-    enabled: Boolean,
-    onToggle: (Boolean) -> Unit,
-) {
+private fun BatteryMonitorGroup(enabled: Boolean, onToggle: (Boolean) -> Unit) {
     SettingsGroup(title = stringResource(R.string.more_battery)) {
         ActionRow(
             label = stringResource(R.string.more_battery_toggle),
@@ -139,7 +131,7 @@ private fun BatteryMonitorGroup(
             description = stringResource(R.string.more_battery_description),
             trailing =
                 stringResource(
-                    if (enabled) R.string.more_battery_on else R.string.more_battery_off,
+                    if (enabled) R.string.more_battery_on else R.string.more_battery_off
                 ),
             onClick = { onToggle(!enabled) },
         )
@@ -148,10 +140,7 @@ private fun BatteryMonitorGroup(
 
 /** Destinations that lost their tab in favour of the kernel-facing ones. */
 @Composable
-private fun BrowseGroup(
-    onOpenDevices: () -> Unit,
-    onOpenNews: () -> Unit,
-) {
+private fun BrowseGroup(onOpenDevices: () -> Unit, onOpenNews: () -> Unit) {
     SettingsGroup(title = stringResource(R.string.more_browse)) {
         ActionRow(
             label = stringResource(R.string.more_browse_devices),
@@ -173,10 +162,7 @@ private fun BrowseGroup(
 @Composable
 private fun Header() {
     Column(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .pvotReveal(0),
+        modifier = Modifier.fillMaxWidth().pvotReveal(0),
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         Text(
@@ -193,10 +179,7 @@ private fun Header() {
 }
 
 @Composable
-private fun LinkGroup(
-    section: LinkSection,
-    onLinkClick: (LinkItem) -> Unit,
-) {
+private fun LinkGroup(section: LinkSection, onLinkClick: (LinkItem) -> Unit) {
     SettingsGroup(title = section.title) {
         section.items.forEachIndexed { index, item ->
             ActionRow(
@@ -213,10 +196,7 @@ private fun LinkGroup(
 }
 
 @Composable
-private fun ThemeRow(
-    selected: ThemePreference,
-    onSelect: (ThemePreference) -> Unit,
-) {
+private fun ThemeRow(selected: ThemePreference, onSelect: (ThemePreference) -> Unit) {
     var open by rememberSaveable { mutableStateOf(false) }
 
     ActionRow(
@@ -238,7 +218,8 @@ private fun ThemeRow(
                     onSelect(option)
                     open = false
                 },
-                subtitle = stringResource(R.string.more_theme_selected).takeIf { option == selected },
+                subtitle =
+                    stringResource(R.string.more_theme_selected).takeIf { option == selected },
             )
         }
     }

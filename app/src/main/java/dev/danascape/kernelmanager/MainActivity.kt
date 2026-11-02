@@ -27,9 +27,7 @@ class MainActivity : PvotBaseActivity() {
         setPvotContent {
             val darkTheme = isDarkTheme(themeRepository)
             SystemBarIcons(darkTheme)
-            PvotAppTheme(darkTheme = darkTheme) {
-                SBApp()
-            }
+            PvotAppTheme(darkTheme = darkTheme) { SBApp() }
         }
     }
 }
@@ -52,9 +50,8 @@ private fun SystemBarIcons(darkTheme: Boolean) {
 @Composable
 private fun isDarkTheme(repository: ThemeRepository): Boolean {
     val systemDark = isSystemInDarkTheme()
-    val preference by repository.theme.collectAsStateWithLifecycle(
-        initialValue = ThemePreference.SYSTEM,
-    )
+    val preference by
+        repository.theme.collectAsStateWithLifecycle(initialValue = ThemePreference.SYSTEM)
     return when (preference) {
         ThemePreference.SYSTEM -> systemDark
         ThemePreference.LIGHT -> false

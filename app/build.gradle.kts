@@ -11,17 +11,9 @@ plugins {
 android {
     namespace = "dev.danascape.kernelmanager"
 
-    defaultConfig {
-        applicationId = "dev.danascape.kernelmanager"
-    }
+    defaultConfig { applicationId = "dev.danascape.kernelmanager" }
 
-    buildTypes {
-        release {
-            optimization {
-                enable = false
-            }
-        }
-    }
+    buildTypes { release { optimization { enable = false } } }
 }
 
 dependencies {

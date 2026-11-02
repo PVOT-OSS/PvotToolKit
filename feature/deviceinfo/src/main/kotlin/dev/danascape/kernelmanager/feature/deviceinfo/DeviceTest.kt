@@ -6,9 +6,7 @@ package dev.danascape.kernelmanager.feature.deviceinfo
 import androidx.annotation.StringRes
 
 /** A hardware check the user runs by hand. None of them are wired up yet. */
-enum class DeviceTest(
-    @param:StringRes val labelRes: Int,
-) {
+enum class DeviceTest(@param:StringRes val labelRes: Int) {
     DISPLAY(R.string.test_display),
     TOUCH(R.string.test_touch),
     MULTITOUCH(R.string.test_multitouch),

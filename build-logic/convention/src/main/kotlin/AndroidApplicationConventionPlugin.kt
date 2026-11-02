@@ -8,29 +8,29 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 
 class AndroidApplicationConventionPlugin : Plugin<Project> {
-    override fun apply(target: Project) = with(target) {
-        pluginManager.apply("com.android.application")
-        pluginManager.apply("sbkm.kotlin.quality")
+    override fun apply(target: Project) =
+        with(target) {
+            pluginManager.apply("com.android.application")
+            pluginManager.apply("sbkm.kotlin.quality")
 
-        extensions.configure<ApplicationExtension> {
-            compileSdk {
-                version = release(SdkVersions.COMPILE) {
-                    minorApiLevel = SdkVersions.COMPILE_MINOR
+            extensions.configure<ApplicationExtension> {
+                compileSdk {
+                    version =
+                        release(SdkVersions.COMPILE) { minorApiLevel = SdkVersions.COMPILE_MINOR }
+                }
+                val version = SemanticVersion.parse(libs.findVersion("app").get().requiredVersion)
+
+                defaultConfig {
+                    minSdk = SdkVersions.MIN
+                    targetSdk = SdkVersions.TARGET
+                    versionName = version.name
+                    versionCode = version.code
+                    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+                }
+                compileOptions {
+                    sourceCompatibility = JavaVersion.VERSION_21
+                    targetCompatibility = JavaVersion.VERSION_21
                 }
             }
-            val version = SemanticVersion.parse(libs.findVersion("app").get().requiredVersion)
-
-            defaultConfig {
-                minSdk = SdkVersions.MIN
-                targetSdk = SdkVersions.TARGET
-                versionName = version.name
-                versionCode = version.code
-                testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-            }
-            compileOptions {
-                sourceCompatibility = JavaVersion.VERSION_21
-                targetCompatibility = JavaVersion.VERSION_21
-            }
         }
-    }
 }

@@ -4,7 +4,6 @@
 package dev.danascape.kernelmanager.core.di
 
 import android.content.Context
-import dev.danascape.kernelmanager.core.battery.BatterySession
 import dev.danascape.kernelmanager.core.batterymonitor.BatterySessionStore
 import dev.danascape.kernelmanager.core.data.device.DeviceRepository
 import dev.danascape.kernelmanager.core.data.links.LinksRepository
@@ -18,9 +17,7 @@ import dev.danascape.kernelmanager.core.network.createHttpClient
 import io.ktor.client.HttpClient
 
 /** Hand-rolled dependency container. */
-class AppContainer(
-    context: Context,
-) {
+class AppContainer(context: Context) {
     private val appContext: Context = context.applicationContext
 
     private val httpClient: HttpClient by lazy { createHttpClient(appContext.cacheDir) }
@@ -35,9 +32,7 @@ class AppContainer(
         )
     }
 
-    val linksRepository: LinksRepository by lazy {
-        LinksRepository(httpClient, appContext.assets)
-    }
+    val linksRepository: LinksRepository by lazy { LinksRepository(httpClient, appContext.assets) }
 
     val themeRepository: ThemeRepository by lazy { ThemeRepository(SettingsStore(appContext)) }
 

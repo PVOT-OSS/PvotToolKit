@@ -4,12 +4,7 @@
 package dev.danascape.kernelmanager.feature.licenses
 
 /** Third-party notices. */
-data class License(
-    val name: String,
-    val holder: String,
-    val license: String,
-    val url: String,
-)
+data class License(val name: String, val holder: String, val license: String, val url: String)
 
 val THIRD_PARTY_LICENSES: List<License> =
     listOf(
@@ -25,24 +20,9 @@ val THIRD_PARTY_LICENSES: List<License> =
             "Apache-2.0",
             "https://github.com/JetBrains/kotlin",
         ),
-        License(
-            "Ktor",
-            "JetBrains s.r.o.",
-            "Apache-2.0",
-            "https://github.com/ktorio/ktor",
-        ),
-        License(
-            "OkHttp",
-            "Square, Inc.",
-            "Apache-2.0",
-            "https://github.com/square/okhttp",
-        ),
-        License(
-            "Coil",
-            "Coil Contributors",
-            "Apache-2.0",
-            "https://github.com/coil-kt/coil",
-        ),
+        License("Ktor", "JetBrains s.r.o.", "Apache-2.0", "https://github.com/ktorio/ktor"),
+        License("OkHttp", "Square, Inc.", "Apache-2.0", "https://github.com/square/okhttp"),
+        License("Coil", "Coil Contributors", "Apache-2.0", "https://github.com/coil-kt/coil"),
         License(
             "Pvot design system",
             "Saalim Quadri",

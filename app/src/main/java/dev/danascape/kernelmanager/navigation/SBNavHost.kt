@@ -11,10 +11,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.navigation
 import androidx.navigation.navOptions
 import dev.danascape.kernelmanager.feature.builds.buildsScreen
-import dev.danascape.kernelmanager.feature.devices.devicesScreen
 import dev.danascape.kernelmanager.feature.deviceinfo.DeviceGraphRoute
 import dev.danascape.kernelmanager.feature.deviceinfo.deviceGraph
 import dev.danascape.kernelmanager.feature.deviceinfo.navigateToDeviceInfo
+import dev.danascape.kernelmanager.feature.devices.devicesScreen
 import dev.danascape.kernelmanager.feature.devices.navigateToDevices
 import dev.danascape.kernelmanager.feature.discover.DiscoverRoute
 import dev.danascape.kernelmanager.feature.discover.discoverScreen
@@ -33,23 +33,17 @@ import dev.danascape.kernelmanager.feature.tune.tuneScreen
 import kotlinx.serialization.Serializable
 
 /** Discover's nested graph, so the device screen keeps Discover selected. */
-@Serializable
-data object DiscoverGraphRoute
+@Serializable data object DiscoverGraphRoute
 
 /** More's nested graph. */
-@Serializable
-data object MoreGraphRoute
+@Serializable data object MoreGraphRoute
 
 /** Monitor's nested graph, so the CPU detail screen keeps Monitor selected. */
-@Serializable
-data object MonitorGraphRoute
+@Serializable data object MonitorGraphRoute
 
 /** Composes the feature graphs. */
 @Composable
-fun SBNavHost(
-    navController: NavHostController,
-    modifier: Modifier = Modifier,
-) {
+fun SBNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
     NavHost(
         navController = navController,
         startDestination = DiscoverGraphRoute,
@@ -65,9 +59,7 @@ fun SBNavHost(
         }
         tuneScreen()
         navigation<MonitorGraphRoute>(startDestination = MonitorRoute) {
-            monitorScreen(
-                onOpenCpuDetail = { navController.navigateToCpuDetail() },
-            )
+            monitorScreen(onOpenCpuDetail = { navController.navigateToCpuDetail() })
             cpuDetailScreen()
         }
         buildsScreen()

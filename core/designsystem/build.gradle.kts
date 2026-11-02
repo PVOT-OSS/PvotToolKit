@@ -6,9 +6,7 @@ plugins {
     alias(libs.plugins.sbkm.android.compose)
 }
 
-android {
-    namespace = "dev.danascape.kernelmanager.core.designsystem"
-}
+android { namespace = "dev.danascape.kernelmanager.core.designsystem" }
 
 dependencies {
     api(project(":design-system"))

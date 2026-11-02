@@ -18,10 +18,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class SBApplication :
-    Application(),
-    AppContainerOwner,
-    SingletonImageLoader.Factory {
+class SBApplication : Application(), AppContainerOwner, SingletonImageLoader.Factory {
     override val appContainer: AppContainer by lazy { AppContainer(this) }
 
     override fun onCreate() {
@@ -41,10 +38,10 @@ class SBApplication :
 
     /** Every news cover the site publishes is an SVG, which Coil cannot decode without this. */
     override fun newImageLoader(context: PlatformContext): ImageLoader =
-        ImageLoader
-            .Builder(context)
+        ImageLoader.Builder(context)
             .components {
                 add(SvgDecoder.Factory())
                 add(OkHttpNetworkFetcherFactory())
-            }.build()
+            }
+            .build()
 }

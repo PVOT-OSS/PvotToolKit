@@ -38,7 +38,6 @@ import com.prauga.pvot.designsystem.theme.PvotSpacing
 import dev.danascape.kernelmanager.core.common.LoadError
 import dev.danascape.kernelmanager.core.designsystem.component.openArticle
 import dev.danascape.kernelmanager.core.model.NewsPost
-import dev.danascape.kernelmanager.feature.news.R
 import java.time.LocalDate
 
 private const val SKELETON_CARDS = 4
@@ -81,9 +80,7 @@ private fun NewsContent(
         }
 
         is NewsUiState.Failed -> {
-            CenteredContent(modifier) {
-                LoadFailure(error = state.error, onRetry = onRetry)
-            }
+            CenteredContent(modifier) { LoadFailure(error = state.error, onRetry = onRetry) }
         }
 
         is NewsUiState.Ready -> {
@@ -119,10 +116,7 @@ private fun NewsList(
 }
 
 /** Only the newest post carries its cover, matching the website. */
-private fun LazyListScope.newsItems(
-    posts: List<NewsPost>,
-    onPostClick: (NewsPost) -> Unit,
-) {
+private fun LazyListScope.newsItems(posts: List<NewsPost>, onPostClick: (NewsPost) -> Unit) {
     val featuredId = posts.firstOrNull()?.id
     itemsIndexed(items = posts, key = { _, post -> post.id }) { index, post ->
         NewsCard(
@@ -145,10 +139,7 @@ private fun NewsSkeleton(modifier: Modifier = Modifier) {
         item(key = "header") { Header() }
         items(SKELETON_CARDS) {
             PvotSkeleton(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(SkeletonCardHeight),
+                modifier = Modifier.fillMaxWidth().height(SkeletonCardHeight),
                 shape = PvotShapes.Card,
             )
         }
@@ -158,11 +149,7 @@ private fun NewsSkeleton(modifier: Modifier = Modifier) {
 @Composable
 private fun Header() {
     Column(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .pvotReveal(0)
-                .padding(bottom = 4.dp),
+        modifier = Modifier.fillMaxWidth().pvotReveal(0).padding(bottom = 4.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         Text(
@@ -197,10 +184,7 @@ private fun OfflineNotice() {
 }
 
 @Composable
-private fun LoadFailure(
-    error: LoadError,
-    onRetry: () -> Unit,
-) {
+private fun LoadFailure(error: LoadError, onRetry: () -> Unit) {
     val (title, message) =
         when (error) {
             LoadError.OFFLINE -> {
@@ -223,15 +207,9 @@ private fun LoadFailure(
 }
 
 @Composable
-private fun CenteredContent(
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
-) {
+private fun CenteredContent(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     Box(
-        modifier =
-            modifier
-                .fillMaxSize()
-                .padding(),
+        modifier = modifier.fillMaxSize().padding(),
         contentAlignment = Alignment.Center,
         content = { content() },
     )
@@ -293,10 +271,6 @@ private fun NewsOfflinePreview() {
 @Composable
 private fun NewsFailedPreview() {
     PvotAppTheme {
-        NewsContent(
-            state = NewsUiState.Failed(LoadError.OFFLINE),
-            onPostClick = {},
-            onRetry = {},
-        )
+        NewsContent(state = NewsUiState.Failed(LoadError.OFFLINE), onPostClick = {}, onRetry = {})
     }
 }

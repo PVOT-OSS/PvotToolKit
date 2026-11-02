@@ -9,8 +9,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 
-@Serializable
-data object TuneRoute
+@Serializable data object TuneRoute
 
 fun NavController.navigateToTune(navOptions: NavOptions? = null) = navigate(TuneRoute, navOptions)
 

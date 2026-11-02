@@ -28,7 +28,6 @@ import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import com.prauga.pvot.designsystem.theme.PvotSpacing
 import dev.danascape.kernelmanager.core.model.NewsPost
-import dev.danascape.kernelmanager.feature.news.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -46,10 +45,9 @@ fun NewsCard(
     val openLabel = stringResource(R.string.news_open_article, post.title)
     PvotCard(
         modifier =
-            modifier
-                .fillMaxWidth()
-                .pvotReveal(revealIndex)
-                .semantics { contentDescription = openLabel },
+            modifier.fillMaxWidth().pvotReveal(revealIndex).semantics {
+                contentDescription = openLabel
+            },
         onClick = onClick,
     ) {
         if (showCover && post.coverUrl != null) {
@@ -57,8 +55,7 @@ fun NewsCard(
                 model = post.coverUrl,
                 contentDescription = null,
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
+                    Modifier.fillMaxWidth()
                         .aspectRatio(16f / 9f)
                         .background(MaterialTheme.colorScheme.surfaceContainerLowest),
                 contentScale = ContentScale.Crop,
@@ -109,7 +106,7 @@ private fun MetaLine(post: NewsPost) {
                 R.plurals.news_reading_time,
                 post.readingMinutes,
                 post.readingMinutes,
-            ),
+            )
         )
         post.tag?.let {
             MetaText(separator)

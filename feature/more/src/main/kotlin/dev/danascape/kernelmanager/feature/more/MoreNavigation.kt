@@ -9,8 +9,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 
-@Serializable
-data object MoreRoute
+@Serializable data object MoreRoute
 
 fun NavController.navigateToMore(navOptions: NavOptions? = null) = navigate(MoreRoute, navOptions)
 

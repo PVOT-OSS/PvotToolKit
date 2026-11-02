@@ -14,13 +14,11 @@ data class OsBuild(
     val type: String?,
     val rom: CustomRom?,
 ) {
-    val isStockSigned: Boolean get() = tags == "release-keys" && rom == null
+    val isStockSigned: Boolean
+        get() = tags == "release-keys" && rom == null
 }
 
-data class CustomRom(
-    val name: String,
-    val version: String,
-)
+data class CustomRom(val name: String, val version: String)
 
 /** Whether the device can take a custom kernel at all. */
 data class BootState(
@@ -28,7 +26,8 @@ data class BootState(
     val verifiedBootState: String?,
     val encryption: String?,
 ) {
-    val canFlash: Boolean? get() = bootloaderUnlocked
+    val canFlash: Boolean?
+        get() = bootloaderUnlocked
 }
 
 /** The silicon. */

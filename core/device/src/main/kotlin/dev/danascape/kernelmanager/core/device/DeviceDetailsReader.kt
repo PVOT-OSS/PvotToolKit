@@ -31,9 +31,7 @@ private val NOTABLE_MIME_TYPES =
     )
 
 /** The parts of the device screen that need a Context rather than a sysfs read. */
-class DeviceDetailsReader(
-    private val context: Context,
-) {
+class DeviceDetailsReader(private val context: Context) {
     private val display = DisplayInfoReader(context)
     private val sensors = SensorInfoReader(context)
     private val cameras = CameraInfoReader(context)
@@ -56,7 +54,9 @@ class DeviceDetailsReader(
             device = Build.DEVICE.takeIf { it.isNotBlank() },
             hardware = Build.HARDWARE.takeIf { it.isNotBlank() },
             bootloader = Build.BOOTLOADER.takeIf { it.isNotBlank() },
-            radio = properties["gsm.version.baseband"] ?: Build.getRadioVersion()?.takeIf { it.isNotBlank() },
+            radio =
+                properties["gsm.version.baseband"]
+                    ?: Build.getRadioVersion()?.takeIf { it.isNotBlank() },
             incremental = Build.VERSION.INCREMENTAL.takeIf { it.isNotBlank() },
             host = Build.HOST.takeIf { it.isNotBlank() },
             buildTimeMillis = Build.TIME,
@@ -81,29 +81,34 @@ class DeviceDetailsReader(
 
     private fun readMeminfo(): Map<String, Long> =
         runCatching {
-            File("/proc/meminfo")
-                .readLines()
-                .mapNotNull { line ->
-                    val parts = line.split(':', limit = 2)
-                    if (parts.size != 2) return@mapNotNull null
-                    val kb = parts[1].trim().removeSuffix(" kB").toLongOrNull() ?: return@mapNotNull null
-                    parts[0] to kb * BYTES_PER_KILOBYTE
-                }.toMap()
-        }.getOrDefault(emptyMap())
+                File("/proc/meminfo")
+                    .readLines()
+                    .mapNotNull { line ->
+                        val parts = line.split(':', limit = 2)
+                        if (parts.size != 2) return@mapNotNull null
+                        val kb =
+                            parts[1].trim().removeSuffix(" kB").toLongOrNull()
+                                ?: return@mapNotNull null
+                        parts[0] to kb * BYTES_PER_KILOBYTE
+                    }
+                    .toMap()
+            }
+            .getOrDefault(emptyMap())
 
     private fun readCodecs(): CodecSummary? =
         runCatching {
-            val infos = MediaCodecList(MediaCodecList.ALL_CODECS).codecInfos
-            val supported = infos.flatMap { it.supportedTypes.toList() }.map { it.lowercase() }.toSet()
-            CodecSummary(
-                decoders = infos.count { !it.isEncoder },
-                encoders = infos.count { it.isEncoder },
-                hardwareAccelerated = infos.count { it.isHardwareAccelerated },
-                notableFormats =
-                    NOTABLE_MIME_TYPES
-                        .filter { (mime, _) -> mime in supported }
-                        .map { (_, label) -> label }
-                        .take(NOTABLE_CODEC_LIMIT),
-            )
-        }.getOrNull()
+                val infos = MediaCodecList(MediaCodecList.ALL_CODECS).codecInfos
+                val supported =
+                    infos.flatMap { it.supportedTypes.toList() }.map { it.lowercase() }.toSet()
+                CodecSummary(
+                    decoders = infos.count { !it.isEncoder },
+                    encoders = infos.count { it.isEncoder },
+                    hardwareAccelerated = infos.count { it.isHardwareAccelerated },
+                    notableFormats =
+                        NOTABLE_MIME_TYPES.filter { (mime, _) -> mime in supported }
+                            .map { (_, label) -> label }
+                            .take(NOTABLE_CODEC_LIMIT),
+                )
+            }
+            .getOrNull()
 }

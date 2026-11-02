@@ -28,9 +28,7 @@ data class DeviceInfoUiState(
 )
 
 /** Owns the hardware and build readouts behind the Device HW screen. */
-class DeviceInfoViewModel(
-    private val deviceRepository: DeviceRepository,
-) : ViewModel() {
+class DeviceInfoViewModel(private val deviceRepository: DeviceRepository) : ViewModel() {
     private val _state = MutableStateFlow(DeviceInfoUiState())
     val state: StateFlow<DeviceInfoUiState> = _state.asStateFlow()
 
@@ -50,8 +48,8 @@ class DeviceInfoViewModel(
     /**
      * Reads the live vitals, once.
      *
-     * Only two of the tabs show them and the read costs a sampling window, so the
-     * screen asks for them when they are about to be displayed rather than on open.
+     * Only two of the tabs show them and the read costs a sampling window, so the screen asks for
+     * them when they are about to be displayed rather than on open.
      */
     fun ensureVitals() {
         if (vitalsJob != null) return
@@ -63,12 +61,11 @@ class DeviceInfoViewModel(
     }
 
     companion object {
-        val Factory: ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val container = checkNotNull(this[APPLICATION_KEY]).appContainer()
-                    DeviceInfoViewModel(deviceRepository = container.deviceRepository)
-                }
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val container = checkNotNull(this[APPLICATION_KEY]).appContainer()
+                DeviceInfoViewModel(deviceRepository = container.deviceRepository)
             }
+        }
     }
 }

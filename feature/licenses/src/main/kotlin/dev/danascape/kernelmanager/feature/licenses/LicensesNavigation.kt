@@ -9,10 +9,10 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 
-@Serializable
-data object LicensesRoute
+@Serializable data object LicensesRoute
 
-fun NavController.navigateToLicenses(navOptions: NavOptions? = null) = navigate(LicensesRoute, navOptions)
+fun NavController.navigateToLicenses(navOptions: NavOptions? = null) =
+    navigate(LicensesRoute, navOptions)
 
 fun NavGraphBuilder.licensesScreen() {
     composable<LicensesRoute> { LicensesScreen() }

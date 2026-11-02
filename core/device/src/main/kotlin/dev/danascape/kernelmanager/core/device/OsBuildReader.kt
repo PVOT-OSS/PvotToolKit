@@ -25,9 +25,7 @@ private val KNOWN_ROMS =
         "ro.modversion" to "Custom ROM",
     )
 
-class OsBuildReader(
-    private val properties: SystemProperties,
-) {
+class OsBuildReader(private val properties: SystemProperties) {
     fun read(): OsBuild =
         OsBuild(
             androidRelease = Build.VERSION.RELEASE.orEmpty(),

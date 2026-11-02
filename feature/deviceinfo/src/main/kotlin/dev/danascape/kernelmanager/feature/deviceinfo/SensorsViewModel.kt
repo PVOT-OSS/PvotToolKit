@@ -24,9 +24,7 @@ data class SensorsUiState(
 )
 
 /** Owns the sensor roster. Deliberately does not touch vitals: it shows none. */
-class SensorsViewModel(
-    private val deviceRepository: DeviceRepository,
-) : ViewModel() {
+class SensorsViewModel(private val deviceRepository: DeviceRepository) : ViewModel() {
     private val _state = MutableStateFlow(SensorsUiState())
     val state: StateFlow<SensorsUiState> = _state.asStateFlow()
 
@@ -42,12 +40,11 @@ class SensorsViewModel(
     }
 
     companion object {
-        val Factory: ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val container = checkNotNull(this[APPLICATION_KEY]).appContainer()
-                    SensorsViewModel(deviceRepository = container.deviceRepository)
-                }
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val container = checkNotNull(this[APPLICATION_KEY]).appContainer()
+                SensorsViewModel(deviceRepository = container.deviceRepository)
             }
+        }
     }
 }

@@ -46,10 +46,7 @@ data class DisplayInfo(
             return "${heightPx / divisor}:${widthPx / divisor}"
         }
 
-    private fun gcd(
-        a: Int,
-        b: Int,
-    ): Int = if (b == 0) a else gcd(b, a % b)
+    private fun gcd(a: Int, b: Int): Int = if (b == 0) a else gcd(b, a % b)
 }
 
 data class MemoryDetails(
@@ -86,7 +83,8 @@ data class CameraInfo(
     val hardwareLevel: String?,
     val maxDigitalZoom: Float?,
 ) {
-    val megapixels: Float get() = widthPx.toFloat() * heightPx / 1_000_000f
+    val megapixels: Float
+        get() = widthPx.toFloat() * heightPx / 1_000_000f
 
     /** Sensor pitch in micrometres, from the die size over the pixel count. */
     val pixelSizeMicrons: Float?

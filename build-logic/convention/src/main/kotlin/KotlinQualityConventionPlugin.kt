@@ -12,35 +12,32 @@ import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 /** Formatting and static analysis, applied to every module from one place. */
 class KotlinQualityConventionPlugin : Plugin<Project> {
-    override fun apply(target: Project) = with(target) {
-        pluginManager.apply("org.jlleitschuh.gradle.ktlint")
-        pluginManager.apply("dev.detekt")
+    override fun apply(target: Project) =
+        with(target) {
+            pluginManager.apply("org.jlleitschuh.gradle.ktlint")
+            pluginManager.apply("dev.detekt")
 
-        extensions.configure<KtlintExtension> {
-            version.set(libs.findVersion("ktlintEngine").get().requiredVersion)
-            filter {
-                exclude { it.file.path.contains("/build/") }
+            extensions.configure<KtlintExtension> {
+                version.set(libs.findVersion("ktlintEngine").get().requiredVersion)
+                filter { exclude { it.file.path.contains("/build/") } }
             }
-        }
 
-        extensions.configure<DetektExtension> {
-            buildUponDefaultConfig.set(true)
-            config.setFrom(rootProject.file("config/detekt/detekt.yml"))
-            val moduleBaseline = file("detekt-baseline.xml")
-            if (moduleBaseline.exists()) baseline.set(moduleBaseline)
-        }
-
-        tasks.withType<Detekt>().configureEach {
-            reports {
-                html.required.set(true)
-                checkstyle.required.set(false)
-                sarif.required.set(false)
-                markdown.required.set(false)
+            extensions.configure<DetektExtension> {
+                buildUponDefaultConfig.set(true)
+                config.setFrom(rootProject.file("config/detekt/detekt.yml"))
+                val moduleBaseline = file("detekt-baseline.xml")
+                if (moduleBaseline.exists()) baseline.set(moduleBaseline)
             }
-        }
 
-        dependencies {
-            add("detektPlugins", libs.lib("detekt-composeRules"))
+            tasks.withType<Detekt>().configureEach {
+                reports {
+                    html.required.set(true)
+                    checkstyle.required.set(false)
+                    sarif.required.set(false)
+                    markdown.required.set(false)
+                }
+            }
+
+            dependencies { add("detektPlugins", libs.lib("detekt-composeRules")) }
         }
-    }
 }

@@ -21,7 +21,8 @@ internal fun tabSections(
             DeviceInfoTab.SYSTEM -> listOf(systemSection(profile, state.details))
             DeviceInfoTab.SOC -> listOf(socSection(profile), gpuSection(profile))
             DeviceInfoTab.SCREEN -> listOf(screenSection(state.details))
-            DeviceInfoTab.MEMORY -> listOf(memorySection(state.details), storageSection(state.vitals))
+            DeviceInfoTab.MEMORY ->
+                listOf(memorySection(state.details), storageSection(state.vitals))
             DeviceInfoTab.BATTERY -> listOf(batterySection(state.vitals))
             DeviceInfoTab.CAMERAS -> cameraSections(state.details)
             DeviceInfoTab.CODECS -> listOf(codecSection(state.details))
@@ -31,10 +32,7 @@ internal fun tabSections(
 }
 
 @Composable
-private fun systemSection(
-    profile: DeviceProfile,
-    details: DeviceDetails?,
-): InfoSection {
+private fun systemSection(profile: DeviceProfile, details: DeviceDetails?): InfoSection {
     val os = profile.os
     val build = details?.build
     return InfoSection(
@@ -54,12 +52,14 @@ private fun systemSection(
                 stringResource(R.string.device_info_build_type) to os.type,
                 stringResource(R.string.device_info_tags) to os.tags,
                 stringResource(R.string.device_info_security_patch) to os.securityPatch,
-                stringResource(R.string.device_info_build_date) to build?.buildTimeMillis?.asBuildDate(),
+                stringResource(R.string.device_info_build_date) to
+                    build?.buildTimeMillis?.asBuildDate(),
                 stringResource(R.string.device_info_build_host) to build?.host,
                 stringResource(R.string.device_info_java_vm) to build?.javaVm,
                 stringResource(R.string.device_info_bootloader) to build?.bootloader,
                 stringResource(R.string.device_info_baseband) to build?.radio,
-                stringResource(R.string.device_info_rom) to os.rom?.let { "${it.name} ${it.version}" },
+                stringResource(R.string.device_info_rom) to
+                    os.rom?.let { "${it.name} ${it.version}" },
                 stringResource(R.string.device_info_kernel) to profile.identity.kernelRelease,
                 stringResource(R.string.device_info_kernel_full) to build?.kernelFull,
                 stringResource(R.string.device_info_fingerprint) to os.fingerprint,
@@ -91,9 +91,11 @@ private fun socSection(profile: DeviceProfile): InfoSection {
                 stringResource(R.string.device_info_hardware) to soc.hardware,
                 stringResource(R.string.device_info_cores) to cpu?.coreCount?.toString(),
                 stringResource(R.string.device_info_clusters) to clusters,
-                stringResource(R.string.device_info_governor) to cpu?.clusters?.firstNotNullOfOrNull { it.governor },
+                stringResource(R.string.device_info_governor) to
+                    cpu?.clusters?.firstNotNullOfOrNull { it.governor },
                 stringResource(R.string.device_info_abis) to soc.supportedAbis.joinToString(" "),
-                stringResource(R.string.device_info_instructions) to cpu?.features?.joinToString(" "),
+                stringResource(R.string.device_info_instructions) to
+                    cpu?.features?.joinToString(" "),
             ),
     )
 }
@@ -120,7 +122,9 @@ private fun screenSection(details: DeviceDetails?): InfoSection {
         rows =
             buildRows(
                 stringResource(R.string.device_info_resolution) to
-                    display?.let { stringResource(R.string.device_info_pixels, it.widthPx, it.heightPx) },
+                    display?.let {
+                        stringResource(R.string.device_info_pixels, it.widthPx, it.heightPx)
+                    },
                 stringResource(R.string.device_info_aspect) to display?.aspectRatio,
                 stringResource(R.string.device_info_density) to
                     display?.let { stringResource(R.string.device_info_dpi_value, it.densityDpi) },
@@ -133,9 +137,13 @@ private fun screenSection(details: DeviceDetails?): InfoSection {
                         )
                     },
                 stringResource(R.string.device_info_diagonal) to
-                    display?.diagonalInches?.let { stringResource(R.string.device_info_inches, it.decimals(1)) },
+                    display?.diagonalInches?.let {
+                        stringResource(R.string.device_info_inches, it.decimals(1))
+                    },
                 stringResource(R.string.device_info_refresh) to
-                    display?.let { stringResource(R.string.device_info_hertz, it.refreshHz.decimals(0)) },
+                    display?.let {
+                        stringResource(R.string.device_info_hertz, it.refreshHz.decimals(0))
+                    },
                 stringResource(R.string.device_info_refresh_modes) to
                     display?.supportedRefreshHz?.joinDistinct(places = 0, suffix = " Hz"),
                 stringResource(R.string.device_info_hdr) to display?.hdrTypes?.joinToString(", "),
@@ -151,10 +159,14 @@ private fun memorySection(details: DeviceDetails?): InfoSection {
         rows =
             buildRows(
                 stringResource(R.string.device_info_ram_total) to memory?.totalBytes?.asByteSize(),
-                stringResource(R.string.device_info_ram_available) to memory?.availableBytes?.asByteSize(),
-                stringResource(R.string.device_info_ram_threshold) to memory?.thresholdBytes?.asByteSize(),
-                stringResource(R.string.device_info_swap) to memory?.swapTotalBytes?.takeIf { it > 0 }?.asByteSize(),
-                stringResource(R.string.device_info_page_size) to memory?.pageSizeBytes?.asByteSize(),
+                stringResource(R.string.device_info_ram_available) to
+                    memory?.availableBytes?.asByteSize(),
+                stringResource(R.string.device_info_ram_threshold) to
+                    memory?.thresholdBytes?.asByteSize(),
+                stringResource(R.string.device_info_swap) to
+                    memory?.swapTotalBytes?.takeIf { it > 0 }?.asByteSize(),
+                stringResource(R.string.device_info_page_size) to
+                    memory?.pageSizeBytes?.asByteSize(),
             ),
     )
 }
@@ -166,8 +178,10 @@ private fun storageSection(vitals: Vitals?): InfoSection {
         title = stringResource(R.string.device_info_section_storage),
         rows =
             buildRows(
-                stringResource(R.string.device_info_storage_used) to storage?.usedBytes?.asByteSize(),
-                stringResource(R.string.device_info_storage_total) to storage?.totalBytes?.asByteSize(),
+                stringResource(R.string.device_info_storage_used) to
+                    storage?.usedBytes?.asByteSize(),
+                stringResource(R.string.device_info_storage_total) to
+                    storage?.totalBytes?.asByteSize(),
                 stringResource(R.string.device_info_filesystem) to storage?.fileSystem,
             ),
     )
@@ -187,13 +201,17 @@ private fun batterySection(vitals: Vitals?): InfoSection {
                 stringResource(R.string.device_info_temperature) to
                     battery?.temperatureC?.let { stringResource(R.string.device_info_celsius, it) },
                 stringResource(R.string.device_info_current) to
-                    battery?.currentMicroAmps?.let { stringResource(R.string.device_info_milliamps, it / 1000) },
+                    battery?.currentMicroAmps?.let {
+                        stringResource(R.string.device_info_milliamps, it / 1000)
+                    },
                 stringResource(R.string.device_info_voltage) to
                     battery?.voltageMillivolts?.let {
                         stringResource(R.string.device_info_volts, (it / 1000f).decimals(3))
                     },
                 stringResource(R.string.device_info_design_capacity) to
-                    battery?.designCapacityMah?.let { stringResource(R.string.device_info_milliamp_hours, it) },
+                    battery?.designCapacityMah?.let {
+                        stringResource(R.string.device_info_milliamp_hours, it)
+                    },
                 stringResource(R.string.device_info_charge_remaining) to
                     battery?.chargeCounterMicroAmpHours?.let {
                         stringResource(R.string.device_info_milliamp_hours, it / 1000)
@@ -224,7 +242,9 @@ private fun cameraSections(details: DeviceDetails?): List<InfoSection> =
                             ?.sorted()
                             ?.joinToString(", ") { "f/${it.decimals(1)}" },
                     stringResource(R.string.device_info_cam_focal) to
-                        camera.focalLengths.takeIf { it.isNotEmpty() }?.joinDistinct(places = 2, suffix = " mm"),
+                        camera.focalLengths
+                            .takeIf { it.isNotEmpty() }
+                            ?.joinDistinct(places = 2, suffix = " mm"),
                     stringResource(R.string.device_info_cam_sensor_size) to
                         camera.sensorWidthMm?.let { width ->
                             camera.sensorHeightMm?.let { height ->
@@ -237,13 +257,20 @@ private fun cameraSections(details: DeviceDetails?): List<InfoSection> =
                         },
                     stringResource(R.string.device_info_cam_iso) to
                         camera.isoMin?.let { min ->
-                            camera.isoMax?.let { max -> stringResource(R.string.device_info_iso_range, min, max) }
+                            camera.isoMax?.let { max ->
+                                stringResource(R.string.device_info_iso_range, min, max)
+                            }
                         },
                     stringResource(R.string.device_info_cam_zoom) to
-                        camera.maxDigitalZoom?.let { stringResource(R.string.device_info_zoom, it.decimals(1)) },
+                        camera.maxDigitalZoom?.let {
+                            stringResource(R.string.device_info_zoom, it.decimals(1))
+                        },
                     stringResource(R.string.device_info_cam_level) to camera.hardwareLevel,
                     stringResource(R.string.device_info_cam_flash) to
-                        stringResource(if (camera.hasFlash) R.string.device_info_yes else R.string.device_info_no),
+                        stringResource(
+                            if (camera.hasFlash) R.string.device_info_yes
+                            else R.string.device_info_no
+                        ),
                 ),
         )
     }
@@ -257,8 +284,10 @@ private fun codecSection(details: DeviceDetails?): InfoSection {
             buildRows(
                 stringResource(R.string.device_info_decoders) to codecs?.decoders?.toString(),
                 stringResource(R.string.device_info_encoders) to codecs?.encoders?.toString(),
-                stringResource(R.string.device_info_hw_accelerated) to codecs?.hardwareAccelerated?.toString(),
-                stringResource(R.string.device_info_formats) to codecs?.notableFormats?.joinToString(", "),
+                stringResource(R.string.device_info_hw_accelerated) to
+                    codecs?.hardwareAccelerated?.toString(),
+                stringResource(R.string.device_info_formats) to
+                    codecs?.notableFormats?.joinToString(", "),
             ),
     )
 }
@@ -272,13 +301,16 @@ private fun bootSection(profile: DeviceProfile): InfoSection {
             buildRows(
                 stringResource(R.string.device_info_bootloader_state) to
                     boot.bootloaderUnlocked?.let {
-                        stringResource(if (it) R.string.device_info_unlocked else R.string.device_info_locked)
+                        stringResource(
+                            if (it) R.string.device_info_unlocked else R.string.device_info_locked
+                        )
                     },
                 stringResource(R.string.device_info_verified_boot) to boot.verifiedBootState,
                 stringResource(R.string.device_info_encryption) to boot.encryption,
                 stringResource(R.string.device_info_su) to
                     stringResource(
-                        if (profile.suBinaryPresent) R.string.device_info_present else R.string.device_info_absent,
+                        if (profile.suBinaryPresent) R.string.device_info_present
+                        else R.string.device_info_absent
                     ),
             ),
     )

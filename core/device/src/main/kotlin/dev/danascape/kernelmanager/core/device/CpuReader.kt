@@ -18,9 +18,7 @@ object CpuReader {
         if (cores.isEmpty()) return null
 
         val frequencies =
-            cores.mapNotNull { core ->
-                core.resolve("cpufreq/scaling_cur_freq").readIntOrNull()
-            }
+            cores.mapNotNull { core -> core.resolve("cpufreq/scaling_cur_freq").readIntOrNull() }
         if (frequencies.isEmpty()) return null
 
         return CpuVitals(
@@ -52,7 +50,8 @@ object CpuReader {
                     .readTextOrNull()
                     ?.takeIf { it.contains("cpu", ignoreCase = true) }
                     ?.let { zone.resolve("temp").readIntOrNull() }
-            }?.div(MILLI_DEGREES_PER_DEGREE)
+            }
+            ?.div(MILLI_DEGREES_PER_DEGREE)
     }
 }
 

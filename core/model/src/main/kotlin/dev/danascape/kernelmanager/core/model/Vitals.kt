@@ -23,11 +23,9 @@ data class CpuVitals(
     val temperatureC: Float?,
 )
 
-data class MemoryVitals(
-    val usedBytes: Long,
-    val totalBytes: Long,
-) {
-    val usedFraction: Float get() = if (totalBytes > 0) usedBytes.toFloat() / totalBytes else 0f
+data class MemoryVitals(val usedBytes: Long, val totalBytes: Long) {
+    val usedFraction: Float
+        get() = if (totalBytes > 0) usedBytes.toFloat() / totalBytes else 0f
 }
 
 data class BatteryVitals(

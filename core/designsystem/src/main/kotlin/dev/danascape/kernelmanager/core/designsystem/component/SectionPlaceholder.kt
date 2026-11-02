@@ -20,16 +20,9 @@ import com.prauga.pvot.designsystem.theme.PvotSpacing
 
 /** Stand-in for a destination whose content has not been built yet. */
 @Composable
-fun SectionPlaceholder(
-    title: String,
-    description: String,
-    modifier: Modifier = Modifier,
-) {
+fun SectionPlaceholder(title: String, description: String, modifier: Modifier = Modifier) {
     Column(
-        modifier =
-            modifier
-                .fillMaxSize()
-                .padding(horizontal = PvotSpacing.L),
+        modifier = modifier.fillMaxSize().padding(horizontal = PvotSpacing.L),
         verticalArrangement = Arrangement.spacedBy(PvotSpacing.S, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -47,9 +40,6 @@ fun SectionPlaceholder(
 @Composable
 private fun SectionPlaceholderPreview() {
     PvotAppTheme {
-        SectionPlaceholder(
-            title = "Title",
-            description = "One line saying what will live here.",
-        )
+        SectionPlaceholder(title = "Title", description = "One line saying what will live here.")
     }
 }

@@ -46,10 +46,7 @@ import dev.danascape.kernelmanager.core.model.DeviceProfile
 private const val INLINE_VALUE_LIMIT = 28
 
 /** A titled block of readouts, resolved once so the list can emit its rows lazily. */
-internal data class InfoSection(
-    val title: String,
-    val rows: List<Pair<String, String>>,
-)
+internal data class InfoSection(val title: String, val rows: List<Pair<String, String>>)
 
 /** The only tabs whose rows come from a live read. */
 private val TABS_NEEDING_VITALS = setOf(DeviceInfoTab.MEMORY, DeviceInfoTab.BATTERY)
@@ -64,11 +61,7 @@ fun DeviceInfoScreen(
     viewModel: DeviceInfoViewModel = viewModel(factory = DeviceInfoViewModel.Factory),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    DeviceInfoContent(
-        state = state,
-        onNeedVitals = viewModel::ensureVitals,
-        modifier = modifier,
-    )
+    DeviceInfoContent(state = state, onNeedVitals = viewModel::ensureVitals, modifier = modifier)
 }
 
 @Composable
@@ -83,9 +76,7 @@ private fun DeviceInfoContent(
     val profile = state.profile
 
     val needVitals by rememberUpdatedState(onNeedVitals)
-    LaunchedEffect(tab) {
-        if (tab in TABS_NEEDING_VITALS) needVitals()
-    }
+    LaunchedEffect(tab) { if (tab in TABS_NEEDING_VITALS) needVitals() }
 
     // A restored tab can sit off the end of the strip, and its rows start at the top.
     LaunchedEffect(tab) {
@@ -93,11 +84,7 @@ private fun DeviceInfoContent(
         listState.scrollToItem(0)
     }
 
-    Column(
-        modifier =
-            modifier
-                .fillMaxSize(),
-    ) {
+    Column(modifier = modifier.fillMaxSize()) {
         if (profile == null) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 PvotLoadingContent()
@@ -117,9 +104,7 @@ private fun DeviceInfoContent(
             verticalArrangement = Arrangement.spacedBy(RowGap),
         ) {
             sections.forEach { section ->
-                item(key = "${section.title}#title") {
-                    GroupTitle(section.title)
-                }
+                item(key = "${section.title}#title") { GroupTitle(section.title) }
                 itemsIndexed(
                     items = section.rows,
                     key = { _, row -> "${section.title}#${row.first}" },
@@ -160,29 +145,13 @@ private fun TabStrip(
 }
 
 @Composable
-private fun TabChip(
-    label: String,
-    selected: Boolean,
-    onClick: () -> Unit,
-) {
-    FilterChip(
-        selected = selected,
-        onClick = onClick,
-        label = { Text(label) },
-    )
+private fun TabChip(label: String, selected: Boolean, onClick: () -> Unit) {
+    FilterChip(selected = selected, onClick = onClick, label = { Text(label) })
 }
 
 @Composable
-private fun HeaderCard(
-    profile: DeviceProfile,
-    modifier: Modifier = Modifier,
-) {
-    PvotCard(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .pvotReveal(0),
-    ) {
+private fun HeaderCard(profile: DeviceProfile, modifier: Modifier = Modifier) {
+    PvotCard(modifier = modifier.fillMaxWidth().pvotReveal(0)) {
         Column(
             modifier = Modifier.padding(PvotSpacing.L),
             verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -212,20 +181,14 @@ internal fun GroupTitle(title: String) {
     PvotSectionHeader(
         title = title,
         modifier =
-            Modifier
-                .fillMaxWidth()
+            Modifier.fillMaxWidth()
                 .padding(start = PvotSpacing.XS, top = GroupGap, bottom = TitleGap),
     )
 }
 
 /** One readout, stacked when the value is too long to sit beside its label. */
 @Composable
-internal fun InfoRow(
-    label: String,
-    value: String,
-    index: Int,
-    count: Int,
-) {
+internal fun InfoRow(label: String, value: String, index: Int, count: Int) {
     if (value.length > INLINE_VALUE_LIMIT || '\n' in value) {
         ValueBlock(label = label, value = value, index = index, count = count, revealIndex = null)
     } else {
@@ -235,6 +198,4 @@ internal fun InfoRow(
 
 /** Drops rows whose value is null or blank, so nothing renders as an empty readout. */
 internal fun buildRows(vararg rows: Pair<String, String?>): List<Pair<String, String>> =
-    rows.mapNotNull { (label, value) ->
-        value?.takeIf { it.isNotBlank() }?.let { label to it }
-    }
+    rows.mapNotNull { (label, value) -> value?.takeIf { it.isNotBlank() }?.let { label to it } }

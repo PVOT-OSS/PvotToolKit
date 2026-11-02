@@ -9,21 +9,19 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 
-@Serializable
-data object MonitorRoute
+@Serializable data object MonitorRoute
 
 /** Detail pushed from the CPU card. */
-@Serializable
-data object CpuDetailRoute
+@Serializable data object CpuDetailRoute
 
-fun NavController.navigateToMonitor(navOptions: NavOptions? = null) = navigate(MonitorRoute, navOptions)
+fun NavController.navigateToMonitor(navOptions: NavOptions? = null) =
+    navigate(MonitorRoute, navOptions)
 
-fun NavController.navigateToCpuDetail(navOptions: NavOptions? = null) = navigate(CpuDetailRoute, navOptions)
+fun NavController.navigateToCpuDetail(navOptions: NavOptions? = null) =
+    navigate(CpuDetailRoute, navOptions)
 
 fun NavGraphBuilder.monitorScreen(onOpenCpuDetail: () -> Unit) {
-    composable<MonitorRoute> {
-        MonitorScreen(onOpenCpuDetail = onOpenCpuDetail)
-    }
+    composable<MonitorRoute> { MonitorScreen(onOpenCpuDetail = onOpenCpuDetail) }
 }
 
 fun NavGraphBuilder.cpuDetailScreen() {

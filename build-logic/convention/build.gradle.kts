@@ -1,22 +1,14 @@
 // SPDX-FileCopyrightText: 2026 Saalim Quadri <danascape@gmail.com>
 // SPDX-License-Identifier: Apache-2.0
 
-plugins {
-    `kotlin-dsl`
-}
+plugins { `kotlin-dsl` }
 
 group = "dev.danascape.kernelmanager.buildlogic"
 
 // Matches the toolchain the daemon runs on (gradle-daemon-jvm.properties).
-java {
-    toolchain { languageVersion.set(JavaLanguageVersion.of(21)) }
-}
+java { toolchain { languageVersion.set(JavaLanguageVersion.of(21)) } }
 
-kotlin {
-    compilerOptions {
-        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
-    }
-}
+kotlin { compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21) } }
 
 dependencies {
     compileOnly(libs.android.gradlePlugin)

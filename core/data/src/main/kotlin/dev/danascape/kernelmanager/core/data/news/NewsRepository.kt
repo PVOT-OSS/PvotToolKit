@@ -14,12 +14,12 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.http.HttpHeaders
+import java.io.IOException
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
-import java.io.IOException
 
 /** The newsroom, read from the site's static feed. */
 class NewsRepository(
@@ -51,8 +51,12 @@ class NewsRepository(
             val feed: NewsFeedDto =
                 client
                     .get(SBEndpoints.NEWS) {
-                        header(HttpHeaders.CacheControl, "only-if-cached, max-stale=${Int.MAX_VALUE}")
-                    }.body()
+                        header(
+                            HttpHeaders.CacheControl,
+                            "only-if-cached, max-stale=${Int.MAX_VALUE}",
+                        )
+                    }
+                    .body()
             DataResult.Success(feed.toDomain(), stale = true)
         } catch (cancellation: CancellationException) {
             throw cancellation

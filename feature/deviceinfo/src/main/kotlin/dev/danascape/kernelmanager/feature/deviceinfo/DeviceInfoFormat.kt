@@ -13,7 +13,8 @@ private val BYTE_UNITS = listOf("B", "KB", "MB", "GB", "TB")
 private const val KHZ_PER_GHZ = 1_000_000f
 private const val GIGABYTE_UNIT_INDEX = 3
 private const val DECIMAL_THRESHOLD = 100
-private val BUILD_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").withZone(ZoneId.systemDefault())
+private val BUILD_DATE =
+    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").withZone(ZoneId.systemDefault())
 
 internal fun Float.decimals(places: Int): String = String.format(Locale.US, "%.${places}f", this)
 
@@ -33,10 +34,5 @@ internal fun Long.asByteSize(): String {
 internal fun Long.asBuildDate(): String = BUILD_DATE.format(Instant.ofEpochMilli(this))
 
 /** Joins a float list for display, dropping the noise of repeated identical entries. */
-internal fun List<Float>.joinDistinct(
-    places: Int,
-    suffix: String = "",
-): String =
-    distinct()
-        .sorted()
-        .joinToString(", ") { "${it.decimals(places)}$suffix" }
+internal fun List<Float>.joinDistinct(places: Int, suffix: String = ""): String =
+    distinct().sorted().joinToString(", ") { "${it.decimals(places)}$suffix" }

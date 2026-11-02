@@ -8,24 +8,24 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 
 class AndroidLibraryConventionPlugin : Plugin<Project> {
-    override fun apply(target: Project) = with(target) {
-        pluginManager.apply("com.android.library")
-        pluginManager.apply("sbkm.kotlin.quality")
+    override fun apply(target: Project) =
+        with(target) {
+            pluginManager.apply("com.android.library")
+            pluginManager.apply("sbkm.kotlin.quality")
 
-        extensions.configure<LibraryExtension> {
-            compileSdk {
-                version = release(SdkVersions.COMPILE) {
-                    minorApiLevel = SdkVersions.COMPILE_MINOR
+            extensions.configure<LibraryExtension> {
+                compileSdk {
+                    version =
+                        release(SdkVersions.COMPILE) { minorApiLevel = SdkVersions.COMPILE_MINOR }
+                }
+                defaultConfig {
+                    minSdk = SdkVersions.MIN
+                    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+                }
+                compileOptions {
+                    sourceCompatibility = JavaVersion.VERSION_21
+                    targetCompatibility = JavaVersion.VERSION_21
                 }
             }
-            defaultConfig {
-                minSdk = SdkVersions.MIN
-                testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-            }
-            compileOptions {
-                sourceCompatibility = JavaVersion.VERSION_21
-                targetCompatibility = JavaVersion.VERSION_21
-            }
         }
-    }
 }

@@ -6,15 +6,15 @@ package dev.danascape.kernelmanager.feature.more
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import dev.danascape.kernelmanager.core.di.appContainer
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import dev.danascape.kernelmanager.core.batterymonitor.BatterySessionStore
 import dev.danascape.kernelmanager.core.data.links.LinksRepository
-import dev.danascape.kernelmanager.core.model.ThemePreference
 import dev.danascape.kernelmanager.core.data.settings.ThemeRepository
+import dev.danascape.kernelmanager.core.di.appContainer
 import dev.danascape.kernelmanager.core.model.LinkSection
+import dev.danascape.kernelmanager.core.model.ThemePreference
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -41,9 +41,7 @@ class MoreViewModel(
             _state.update { it.copy(sections = sections) }
         }
         viewModelScope.launch {
-            themeRepository.theme.collect { theme ->
-                _state.update { it.copy(theme = theme) }
-            }
+            themeRepository.theme.collect { theme -> _state.update { it.copy(theme = theme) } }
         }
         viewModelScope.launch {
             batteryStore.enabled.collect { enabled ->
@@ -62,16 +60,15 @@ class MoreViewModel(
     }
 
     companion object {
-        val Factory: ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    val container = checkNotNull(this[APPLICATION_KEY]).appContainer()
-                    MoreViewModel(
-                        linksRepository = container.linksRepository,
-                        themeRepository = container.themeRepository,
-                        batteryStore = container.batterySessionStore,
-                    )
-                }
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val container = checkNotNull(this[APPLICATION_KEY]).appContainer()
+                MoreViewModel(
+                    linksRepository = container.linksRepository,
+                    themeRepository = container.themeRepository,
+                    batteryStore = container.batterySessionStore,
+                )
             }
+        }
     }
 }

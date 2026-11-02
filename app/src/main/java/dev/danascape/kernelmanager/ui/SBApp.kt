@@ -43,46 +43,40 @@ fun SBApp(modifier: Modifier = Modifier) {
     val current = backStackEntry?.destination.topLevelDestination() ?: SBDestination.DISCOVER
 
     var navCompact by rememberSaveable { mutableStateOf(false) }
-    val scrollConnection =
-        remember {
-            object : NestedScrollConnection {
-                override fun onPreScroll(
-                    available: Offset,
-                    source: NestedScrollSource,
-                ): Offset {
-                    if (available.y < -SCROLL_THRESHOLD) {
-                        navCompact = true
-                    } else if (available.y > SCROLL_THRESHOLD) {
-                        navCompact = false
-                    }
-                    return Offset.Zero
+    val scrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                if (available.y < -SCROLL_THRESHOLD) {
+                    navCompact = true
+                } else if (available.y > SCROLL_THRESHOLD) {
+                    navCompact = false
                 }
+                return Offset.Zero
             }
         }
+    }
 
-    val deviceTabs =
-        remember {
-            DeviceDestination.entries.map {
-                PvotTabItem(
-                    iconRes = it.iconRes,
-                    labelRes = it.labelRes,
-                    contentDescriptionRes = it.contentDescriptionRes,
-                )
-            }
+    val deviceTabs = remember {
+        DeviceDestination.entries.map {
+            PvotTabItem(
+                iconRes = it.iconRes,
+                labelRes = it.labelRes,
+                contentDescriptionRes = it.contentDescriptionRes,
+            )
         }
+    }
 
-    val tabs =
-        remember {
-            SBDestination.entries.map {
-                PvotTabItem(
-                    iconRes = it.iconRes,
-                    labelRes = it.labelRes,
-                    contentDescriptionRes = it.contentDescriptionRes,
-                    expandedIconRes = it.expandedIconRes,
-                    expandedLabelRes = it.expandedLabelRes,
-                )
-            }
+    val tabs = remember {
+        SBDestination.entries.map {
+            PvotTabItem(
+                iconRes = it.iconRes,
+                labelRes = it.labelRes,
+                contentDescriptionRes = it.contentDescriptionRes,
+                expandedIconRes = it.expandedIconRes,
+                expandedLabelRes = it.expandedLabelRes,
+            )
         }
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -114,8 +108,7 @@ fun SBApp(modifier: Modifier = Modifier) {
         SBNavHost(
             navController = navController,
             modifier =
-                Modifier
-                    .fillMaxSize()
+                Modifier.fillMaxSize()
                     .nestedScroll(scrollConnection)
                     .padding(top = innerPadding.calculateTopPadding()),
         )

@@ -47,11 +47,7 @@ fun MonitorScreen(
         onPauseOrDispose { viewModel.stopSampling() }
     }
 
-    MonitorContent(
-        state = state,
-        onOpenCpuDetail = onOpenCpuDetail,
-        modifier = modifier,
-    )
+    MonitorContent(state = state, onOpenCpuDetail = onOpenCpuDetail, modifier = modifier)
 }
 
 @Composable
@@ -80,9 +76,7 @@ private fun MonitorContent(
         vitals?.battery?.let { battery ->
             item(key = "battery") { BatteryCard(battery, history, revealIndex = 3) }
         }
-        vitals?.let {
-            item(key = "network") { NetworkCard(it, history, revealIndex = 4) }
-        }
+        vitals?.let { item(key = "network") { NetworkCard(it, history, revealIndex = 4) } }
         vitals?.storage?.let { storage ->
             item(key = "storage") { StorageCard(storage, revealIndex = 5) }
         }
@@ -95,10 +89,7 @@ private fun MonitorContent(
 @Composable
 private fun Header() {
     Column(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(bottom = 6.dp),
+        modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         Text(
@@ -129,7 +120,9 @@ private fun CpuCard(
 ) {
     MetricCard(
         title = stringResource(R.string.monitor_cpu),
-        value = vitals?.load?.average?.let { percent(it) } ?: stringResource(R.string.monitor_collecting),
+        value =
+            vitals?.load?.average?.let { percent(it) }
+                ?: stringResource(R.string.monitor_collecting),
         caption = stringResource(R.string.monitor_tap_detail),
         revealIndex = revealIndex,
         onClick = onClick,
@@ -137,7 +130,11 @@ private fun CpuCard(
         SBSparkline(values = history.totalLoad, domain = 0f..1f)
 
         MetricLine(
-            stringResource(R.string.monitor_cores_summary, topology.coreCount, topology.clusters.size),
+            stringResource(
+                R.string.monitor_cores_summary,
+                topology.coreCount,
+                topology.clusters.size,
+            ),
             vitals?.cpu?.governor.orEmpty(),
         )
         topology.clusters.forEach { cluster ->
@@ -150,11 +147,7 @@ private fun CpuCard(
 }
 
 @Composable
-private fun MemoryCard(
-    memory: MemoryVitals,
-    history: MetricHistory,
-    revealIndex: Int,
-) {
+private fun MemoryCard(memory: MemoryVitals, history: MetricHistory, revealIndex: Int) {
     MetricCard(
         title = stringResource(R.string.monitor_memory),
         value = percent(memory.usedFraction),
@@ -167,11 +160,7 @@ private fun MemoryCard(
 }
 
 @Composable
-private fun BatteryCard(
-    battery: BatteryVitals,
-    history: MetricHistory,
-    revealIndex: Int,
-) {
+private fun BatteryCard(battery: BatteryVitals, history: MetricHistory, revealIndex: Int) {
     MetricCard(
         title = stringResource(R.string.monitor_battery),
         value = stringResource(R.string.monitor_percent, battery.percent),
@@ -197,11 +186,7 @@ private fun BatteryCard(
 }
 
 @Composable
-private fun NetworkCard(
-    vitals: Vitals,
-    history: MetricHistory,
-    revealIndex: Int,
-) {
+private fun NetworkCard(vitals: Vitals, history: MetricHistory, revealIndex: Int) {
     val network = vitals.network ?: return
     MetricCard(
         title = stringResource(R.string.monitor_network),
@@ -220,10 +205,7 @@ private fun NetworkCard(
 
 /** Static, so a meter rather than a line implying movement. */
 @Composable
-private fun StorageCard(
-    storage: StorageVitals,
-    revealIndex: Int,
-) {
+private fun StorageCard(storage: StorageVitals, revealIndex: Int) {
     MetricCard(
         title = stringResource(R.string.monitor_storage),
         value = percent(storage.usedFraction),
@@ -238,10 +220,7 @@ private fun StorageCard(
 
 /** A ratio, not a series. */
 @Composable
-private fun UptimeCard(
-    sleep: SleepStats,
-    revealIndex: Int,
-) {
+private fun UptimeCard(sleep: SleepStats, revealIndex: Int) {
     MetricCard(
         title = stringResource(R.string.monitor_uptime),
         value = duration(sleep.elapsedMillis),
@@ -258,10 +237,7 @@ private fun UptimeCard(
 
 /** Identification only — there is no series to draw. */
 @Composable
-private fun GpuCard(
-    gpu: GpuInfo,
-    revealIndex: Int,
-) {
+private fun GpuCard(gpu: GpuInfo, revealIndex: Int) {
     MetricCard(
         title = stringResource(R.string.monitor_gpu),
         value = gpu.renderer ?: "—",
@@ -278,16 +254,10 @@ private fun GpuCard(
 
 /** A discrete state, so a chip rather than a chart. */
 @Composable
-private fun ThermalCard(
-    vitals: Vitals,
-    revealIndex: Int,
-) {
+private fun ThermalCard(vitals: Vitals, revealIndex: Int) {
     MetricCard(
         title = stringResource(R.string.monitor_thermal),
-        value =
-            vitals.thermal.name
-                .lowercase()
-                .replaceFirstChar(Char::uppercase),
+        value = vitals.thermal.name.lowercase().replaceFirstChar(Char::uppercase),
         revealIndex = revealIndex,
     ) {
         Text(
@@ -301,10 +271,5 @@ private fun ThermalCard(
 @Preview
 @Composable
 private fun MonitorPreview() {
-    PvotAppTheme {
-        MonitorContent(
-            state = MonitorUiState(),
-            onOpenCpuDetail = {},
-        )
-    }
+    PvotAppTheme { MonitorContent(state = MonitorUiState(), onOpenCpuDetail = {}) }
 }

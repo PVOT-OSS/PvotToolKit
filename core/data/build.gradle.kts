@@ -6,9 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-android {
-    namespace = "dev.danascape.kernelmanager.core.data"
-}
+android { namespace = "dev.danascape.kernelmanager.core.data" }
 
 dependencies {
     api(project(":core:common"))

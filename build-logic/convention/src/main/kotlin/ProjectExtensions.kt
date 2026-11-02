@@ -20,4 +20,6 @@ internal object SdkVersions {
 
 /** A catalog library by alias, failing with the alias named rather than an empty Optional. */
 internal fun VersionCatalog.lib(alias: String): Provider<MinimalExternalModuleDependency> =
-    findLibrary(alias).orElseThrow { IllegalArgumentException("No library '$alias' in libs.versions.toml") }
+    findLibrary(alias).orElseThrow {
+        IllegalArgumentException("No library '$alias' in libs.versions.toml")
+    }

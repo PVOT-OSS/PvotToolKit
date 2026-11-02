@@ -6,9 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-android {
-    namespace = "dev.danascape.kernelmanager.core.batterymonitor"
-}
+android { namespace = "dev.danascape.kernelmanager.core.batterymonitor" }
 
 dependencies {
     api(project(":core:battery"))

@@ -37,9 +37,7 @@ fun TestsScreen(modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.spacedBy(CardGap),
         verticalArrangement = Arrangement.spacedBy(CardGap),
     ) {
-        item(span = { GridItemSpan(maxLineSpan) }) {
-            TestsHeader()
-        }
+        item(span = { GridItemSpan(maxLineSpan) }) { TestsHeader() }
         items(items = DeviceTest.entries, key = { it.name }) { test ->
             TestCard(label = stringResource(test.labelRes))
         }
@@ -49,11 +47,7 @@ fun TestsScreen(modifier: Modifier = Modifier) {
 @Composable
 private fun TestsHeader() {
     Column(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .pvotReveal(0)
-                .padding(bottom = 4.dp),
+        modifier = Modifier.fillMaxWidth().pvotReveal(0).padding(bottom = 4.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         Text(
@@ -76,12 +70,7 @@ private fun TestsHeader() {
 
 @Composable
 private fun TestCard(label: String) {
-    PvotCard(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .height(CardHeight),
-    ) {
+    PvotCard(modifier = Modifier.fillMaxWidth().height(CardHeight)) {
         Column(
             modifier = Modifier.padding(PvotSpacing.L),
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),

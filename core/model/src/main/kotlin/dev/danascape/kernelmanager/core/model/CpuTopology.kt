@@ -9,7 +9,8 @@ data class CpuTopology(
     val coreCount: Int,
     val features: List<String>,
 ) {
-    val isHeterogeneous: Boolean get() = clusters.size > 1
+    val isHeterogeneous: Boolean
+        get() = clusters.size > 1
 }
 
 /** One cpufreq policy — a set of cores that scale together. */
@@ -27,14 +28,10 @@ data class CpuCluster(
 )
 
 /** Utilisation, derived from idle residency rather than the denied /proc/stat. */
-data class CpuLoad(
-    val perCore: List<Float>,
-) {
-    val average: Float get() = if (perCore.isEmpty()) 0f else perCore.average().toFloat()
+data class CpuLoad(val perCore: List<Float>) {
+    val average: Float
+        get() = if (perCore.isEmpty()) 0f else perCore.average().toFloat()
 }
 
 /** A point-in-time snapshot used to derive [CpuLoad] from two samples. */
-data class CpuIdleSample(
-    val elapsedNanos: Long,
-    val idleMicrosPerCore: List<Long>,
-)
+data class CpuIdleSample(val elapsedNanos: Long, val idleMicrosPerCore: List<Long>)

@@ -17,9 +17,7 @@ import dev.danascape.kernelmanager.core.model.Vitals
 private const val TENTHS_PER_DEGREE = 10f
 
 /** Samples live state. */
-class SystemVitalsReader(
-    context: Context,
-) {
+class SystemVitalsReader(context: Context) {
     private val appContext = context.applicationContext
     private val platform = PlatformVitalsReader(appContext)
 
@@ -51,10 +49,8 @@ class SystemVitalsReader(
     /** The battery broadcast is sticky, so a null receiver returns it immediately. */
     private fun readBattery(): BatteryVitals? {
         val intent =
-            appContext.registerReceiver(
-                null,
-                IntentFilter(Intent.ACTION_BATTERY_CHANGED),
-            ) ?: return null
+            appContext.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+                ?: return null
 
         val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
         val scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
@@ -73,7 +69,8 @@ class SystemVitalsReader(
             chargeCounterMicroAmpHours = platform.chargeCounterMicroAmpHours(),
             health = intent.getIntExtra(BatteryManager.EXTRA_HEALTH, -1).toHealthName(),
             technology = intent.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY),
-            voltageMillivolts = intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1).takeIf { it > 0 },
+            voltageMillivolts =
+                intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1).takeIf { it > 0 },
             cycleCount = readCycleCount(intent),
             designCapacityMah = BatteryCapacity.designMah(appContext),
         )
@@ -90,9 +87,9 @@ class SystemVitalsReader(
     /** /sys/class/power_supply is denied, so this is the only route to draw. */
     private fun readCurrentMicroAmps(): Int? {
         val manager = appContext.getSystemService<BatteryManager>() ?: return null
-        return manager
-            .getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW)
-            .takeIf { it != Int.MIN_VALUE && it != 0 }
+        return manager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW).takeIf {
+            it != Int.MIN_VALUE && it != 0
+        }
     }
 
     private fun Int.toHealthName(): String? =

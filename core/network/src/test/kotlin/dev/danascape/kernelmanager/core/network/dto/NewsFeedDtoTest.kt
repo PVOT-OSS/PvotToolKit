@@ -4,10 +4,10 @@
 package dev.danascape.kernelmanager.core.network.dto
 
 import dev.danascape.kernelmanager.core.network.SBJson
+import java.time.LocalDate
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
-import java.time.LocalDate
 
 /** Guards the contract with `/api/v1/news.json`. */
 class NewsFeedDtoTest {
@@ -30,7 +30,8 @@ class NewsFeedDtoTest {
                     "reading_minutes": 3
                   }]
                 }
-                """.trimIndent(),
+                """
+                    .trimIndent()
             )
 
         val post = feed.toDomain().single()
@@ -57,7 +58,8 @@ class NewsFeedDtoTest {
                     "translations": { "hi": "..." }
                   }]
                 }
-                """.trimIndent(),
+                """
+                    .trimIndent()
             )
 
         assertEquals("A", feed.toDomain().single().title)
@@ -72,7 +74,8 @@ class NewsFeedDtoTest {
                   "id":"a","title":"A","date":"2026-08-11",
                   "url":"https://example.invalid/a/"
                 }]}
-                """.trimIndent(),
+                """
+                    .trimIndent()
             )
 
         val post = feed.toDomain().single()
@@ -92,7 +95,8 @@ class NewsFeedDtoTest {
                   {"id":"bad","title":"Bad","date":"not-a-date","url":"https://example.invalid/bad/"},
                   {"id":"good","title":"Good","date":"2026-08-12","url":"https://example.invalid/good/"}
                 ]}
-                """.trimIndent(),
+                """
+                    .trimIndent()
             )
 
         assertEquals(listOf("good"), feed.toDomain().map { it.id })
