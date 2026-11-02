@@ -4,15 +4,33 @@
 package dev.danascape.kernelmanager.core.designsystem.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.prauga.pvot.designsystem.components.navigation.PvotNavBarColors
-import com.prauga.pvot.designsystem.components.navigation.PvotNavBarSizes
+import com.prauga.pvot.designsystem.navigation.LocalPvotNavBarSizes
+import com.prauga.pvot.designsystem.navigation.PvotNavBarColors
+import com.prauga.pvot.designsystem.navigation.PvotNavBarSizes
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
+
+/** The nav bar geometry every screen shares. */
+private val SBNavBarSizes =
+    PvotNavBarSizes(
+        barHeight = 68.dp,
+        collapsedItemSize = 46.dp,
+        cornerRadius = 100.dp,
+        itemCornerRadius = 26.dp,
+        collapsedIconSize = 20.dp,
+        expandedIconSize = 20.dp,
+        labelFontSize = 12.sp,
+        maxExpandedWidth = 150.dp,
+        horizontalPadding = 10.dp,
+        contentPaddingHorizontal = 8.dp,
+        itemSpacing = 3.dp,
+    )
 
 /** The app's theme: StormBreaker's brand palette and type carried on the Pvot design system. */
 @Composable
@@ -23,35 +41,15 @@ fun SBTheme(
     val colorScheme = if (darkTheme) SBDarkColorScheme else SBLightColorScheme
     val extendedColors = if (darkTheme) SBDarkExtendedColors else SBLightExtendedColors
 
-    CompositionLocalProvider(LocalSBExtendedColors provides extendedColors) {
+    CompositionLocalProvider(
+        LocalSBExtendedColors provides extendedColors,
+        LocalPvotNavBarSizes provides SBNavBarSizes,
+    ) {
         PvotAppTheme(
             darkTheme = darkTheme,
             dynamicColor = false,
             colorScheme = colorScheme,
             typography = SBTypography,
-            navBarColors =
-                PvotNavBarColors(
-                    gradient = SolidColor(colorScheme.primary),
-                    collapsedChipColor = Color.Transparent,
-                    containerColor = colorScheme.surface,
-                    iconSelectedColor = colorScheme.onPrimary,
-                    iconUnselectedColor = extendedColors.muted,
-                    rippleColor = colorScheme.onSurface.copy(alpha = 0.2f),
-                ),
-            navBarSizes =
-                PvotNavBarSizes(
-                    barHeight = 68.dp,
-                    collapsedItemSize = 46.dp,
-                    cornerRadius = 100.dp,
-                    itemCornerRadius = 26.dp,
-                    collapsedIconSize = 20.dp,
-                    expandedIconSize = 20.dp,
-                    labelFontSize = 12.sp,
-                    maxExpandedWidth = 150.dp,
-                    horizontalPadding = 10.dp,
-                    contentPaddingHorizontal = 8.dp,
-                    itemSpacing = 3.dp,
-                ),
             content = content,
         )
     }
@@ -61,4 +59,17 @@ fun SBTheme(
 object SBTheme {
     val colors: SBExtendedColors
         @Composable get() = LocalSBExtendedColors.current
+
+    val navBarColors: PvotNavBarColors
+        @Composable get() {
+            val scheme = MaterialTheme.colorScheme
+            return PvotNavBarColors(
+                gradient = SolidColor(scheme.primary),
+                collapsedChipColor = Color.Transparent,
+                containerColor = scheme.surface,
+                iconSelectedColor = scheme.onPrimary,
+                iconUnselectedColor = colors.muted,
+                rippleColor = scheme.onSurface.copy(alpha = 0.2f),
+            )
+        }
 }

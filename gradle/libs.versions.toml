@@ -58,6 +58,7 @@ detekt-gradlePlugin = { group = "dev.detekt", name = "detekt-gradle-plugin", ver
 detekt-composeRules = { group = "io.nlopez.compose.rules", name = "detekt", version.ref = "detektCompose" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 compose-gradlePlugin = { group = "org.jetbrains.kotlin", name = "compose-compiler-gradle-plugin", version.ref = "kotlin" }
+kotlin-metadata-jvm = { group = "org.jetbrains.kotlin", name = "kotlin-metadata-jvm", version.ref = "kotlin" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -73,4 +74,7 @@ sbkm-android-library = { id = "sbkm.android.library" }
 sbkm-android-compose = { id = "sbkm.android.compose" }
 sbkm-android-feature = { id = "sbkm.android.feature" }
 sbkm-jvm-library = { id = "sbkm.jvm.library" }
+pvot-android-library = { id = "pvot.android.library" }
+pvot-android-compose = { id = "pvot.android.compose" }
+pvot-android-api = { id = "pvot.android.api" }
 

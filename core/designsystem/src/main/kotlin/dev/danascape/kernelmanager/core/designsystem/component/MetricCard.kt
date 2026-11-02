@@ -21,8 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.prauga.pvot.designsystem.modifier.pvotPressScale
-import com.prauga.pvot.designsystem.modifier.pvotReveal
+import com.prauga.pvot.designsystem.effects.pvotPressScale
+import com.prauga.pvot.designsystem.motion.pvotReveal
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 
 /** A stat tile: what a metric reads right now, with its recent shape. */

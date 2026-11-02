@@ -24,8 +24,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.prauga.pvot.designsystem.components.navigation.PvotNavBar
-import com.prauga.pvot.designsystem.components.navigation.PvotTabItem
+import com.prauga.pvot.designsystem.navigation.PvotNavBar
+import com.prauga.pvot.designsystem.navigation.PvotTabItem
+import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 import dev.danascape.kernelmanager.navigation.DeviceDestination
 import dev.danascape.kernelmanager.navigation.SBDestination
 import dev.danascape.kernelmanager.navigation.SBNavHost
@@ -79,12 +80,14 @@ fun SBApp(modifier: Modifier = Modifier) {
                     selectedTab = device.ordinal,
                     onTabClick = { index -> navController.navigateToDevice(DeviceDestination.entries[index]) },
                     tabs = deviceTabs,
+                    colors = SBTheme.navBarColors,
                 )
             } else {
                 PvotNavBar(
                     selectedTab = current.ordinal,
                     onTabClick = { index -> navController.navigateToTopLevel(SBDestination.entries[index]) },
                     tabs = tabs,
+                    colors = SBTheme.navBarColors,
                 )
             }
         },

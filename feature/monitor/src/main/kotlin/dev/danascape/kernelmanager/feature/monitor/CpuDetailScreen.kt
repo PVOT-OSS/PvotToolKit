@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.prauga.pvot.designsystem.modifier.pvotReveal
+import com.prauga.pvot.designsystem.motion.pvotReveal
 import dev.danascape.kernelmanager.core.designsystem.component.MetricLine
 import dev.danascape.kernelmanager.core.designsystem.component.SBSparkline
 import dev.danascape.kernelmanager.core.designsystem.component.expandedBy

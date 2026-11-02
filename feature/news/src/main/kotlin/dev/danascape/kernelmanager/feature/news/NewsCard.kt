@@ -29,8 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import dev.danascape.kernelmanager.feature.news.R
-import com.prauga.pvot.designsystem.modifier.pvotPressScale
-import com.prauga.pvot.designsystem.modifier.pvotReveal
+import com.prauga.pvot.designsystem.effects.pvotPressScale
+import com.prauga.pvot.designsystem.motion.pvotReveal
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 import dev.danascape.kernelmanager.core.model.NewsPost
 import java.time.LocalDate

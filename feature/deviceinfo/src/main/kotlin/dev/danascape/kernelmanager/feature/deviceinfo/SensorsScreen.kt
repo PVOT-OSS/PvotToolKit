@@ -24,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.prauga.pvot.designsystem.modifier.pvotReveal
+import com.prauga.pvot.designsystem.motion.pvotReveal
 import dev.danascape.kernelmanager.core.designsystem.component.ValueBlock
 import dev.danascape.kernelmanager.core.designsystem.component.expandedBy
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme

@@ -34,7 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.danascape.kernelmanager.core.designsystem.R as DesignSystemR
 import dev.danascape.kernelmanager.feature.news.R
-import com.prauga.pvot.designsystem.modifier.pvotReveal
+import com.prauga.pvot.designsystem.motion.pvotReveal
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 import dev.danascape.kernelmanager.core.common.LoadError
 import dev.danascape.kernelmanager.core.model.NewsPost

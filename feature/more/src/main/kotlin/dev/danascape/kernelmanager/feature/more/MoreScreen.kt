@@ -36,7 +36,7 @@ import dev.danascape.kernelmanager.feature.more.R
 import dev.danascape.kernelmanager.core.batterymonitor.BatteryMonitorService
 import dev.danascape.kernelmanager.core.designsystem.component.ActionRow
 import dev.danascape.kernelmanager.core.designsystem.component.SettingsGroup
-import com.prauga.pvot.designsystem.modifier.pvotReveal
+import com.prauga.pvot.designsystem.motion.pvotReveal
 import dev.danascape.kernelmanager.core.designsystem.component.ValueRow
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 import dev.danascape.kernelmanager.core.model.LinkItem
