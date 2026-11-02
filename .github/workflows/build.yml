@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: 2026 Saalim Quadri <danascape@gmail.com>
+# SPDX-License-Identifier: Apache-2.0
+
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android:
+    uses: PVOT-OSS/workflows/.github/workflows/android-build.yml@main
+    with:
+      java-version: "21"
+      gradle-tasks: "build --continue"
+      upload-artifacts: true

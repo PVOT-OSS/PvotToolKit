@@ -1,23 +1,13 @@
 # SPDX-FileCopyrightText: 2026 Saalim Quadri <danascape@gmail.com>
 # SPDX-License-Identifier: Apache-2.0
 
-name: REUSE Compliance
+name: REUSE
 
 on:
   push:
+    branches: [main]
   pull_request:
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   reuse:
-    name: REUSE Lint
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: REUSE Compliance Check
-        uses: fsfe/reuse-action@v4
+    uses: PVOT-OSS/workflows/.github/workflows/reuse.yml@main
