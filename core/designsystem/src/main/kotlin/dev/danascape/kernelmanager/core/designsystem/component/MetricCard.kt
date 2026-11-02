@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotSpacing
-import dev.danascape.kernelmanager.core.designsystem.theme.faint
 
 /** A stat tile: what a metric reads right now, with its recent shape. */
 @Composable
@@ -55,7 +54,7 @@ fun MetricCard(
                     Text(
                         text = it,
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.faint,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }

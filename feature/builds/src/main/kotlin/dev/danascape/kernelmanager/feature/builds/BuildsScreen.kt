@@ -7,10 +7,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import dev.danascape.kernelmanager.feature.builds.R
 import androidx.compose.ui.tooling.preview.Preview
+import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import dev.danascape.kernelmanager.core.designsystem.component.SectionPlaceholder
-import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
+import dev.danascape.kernelmanager.feature.builds.R
 
 @Composable
 fun BuildsScreen(modifier: Modifier = Modifier) {
@@ -24,5 +24,5 @@ fun BuildsScreen(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun BuildsScreenPreview() {
-    SBTheme { BuildsScreen() }
+    PvotAppTheme { BuildsScreen() }
 }

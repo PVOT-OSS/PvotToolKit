@@ -32,13 +32,13 @@ import com.prauga.pvot.designsystem.components.PvotBottomSheet
 import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.components.PvotSheetItem
 import com.prauga.pvot.designsystem.motion.pvotReveal
+import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import dev.danascape.kernelmanager.core.batterymonitor.BatteryMonitorService
 import dev.danascape.kernelmanager.core.designsystem.component.ActionRow
 import dev.danascape.kernelmanager.core.designsystem.component.SettingsGroup
 import dev.danascape.kernelmanager.core.designsystem.component.ValueRow
 import dev.danascape.kernelmanager.core.designsystem.component.openArticle
 import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
-import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 import dev.danascape.kernelmanager.core.model.LinkItem
 import dev.danascape.kernelmanager.core.model.LinkSection
 import dev.danascape.kernelmanager.core.model.ThemePreference
@@ -284,7 +284,7 @@ private fun ThemePreference.labelRes(): Int =
 @Preview
 @Composable
 private fun MorePreview() {
-    SBTheme {
+    PvotAppTheme {
         MoreContent(
             state = MoreUiState(),
             onLinkClick = {},

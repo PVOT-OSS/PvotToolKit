@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import dev.danascape.kernelmanager.core.designsystem.component.SectionPlaceholder
-import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 
 @Composable
 fun TuneScreen(modifier: Modifier = Modifier) {
@@ -23,5 +23,5 @@ fun TuneScreen(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun TuneScreenPreview() {
-    SBTheme { TuneScreen() }
+    PvotAppTheme { TuneScreen() }
 }

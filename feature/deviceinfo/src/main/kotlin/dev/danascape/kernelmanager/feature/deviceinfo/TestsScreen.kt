@@ -24,7 +24,6 @@ import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotSpacing
 import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
-import dev.danascape.kernelmanager.core.designsystem.theme.faint
 
 private val CardHeight = 92.dp
 private val CardGap = 10.dp
@@ -95,7 +94,7 @@ private fun TestCard(label: String) {
             Text(
                 text = stringResource(R.string.tests_not_run),
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.faint,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }

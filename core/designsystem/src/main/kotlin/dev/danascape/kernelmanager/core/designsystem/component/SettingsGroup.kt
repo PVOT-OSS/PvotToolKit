@@ -24,7 +24,6 @@ import com.prauga.pvot.coreui.PvotSectionHeader
 import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotSpacing
-import dev.danascape.kernelmanager.core.designsystem.theme.faint
 
 private val OuterRadius = 16.dp
 private val InnerRadius = 6.dp
@@ -192,7 +191,12 @@ fun ActionRow(
             Text(
                 text = label,
                 style = MaterialTheme.typography.bodyLarge,
-                color = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.faint,
+                color =
+                    if (enabled) {
+                        MaterialTheme.colorScheme.onSurface
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    },
             )
             description?.let {
                 Text(

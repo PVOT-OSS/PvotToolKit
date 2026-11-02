@@ -20,13 +20,12 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prauga.pvot.designsystem.components.PvotScreen
+import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import dev.danascape.kernelmanager.core.designsystem.component.MetricCard
 import dev.danascape.kernelmanager.core.designsystem.component.MetricLine
 import dev.danascape.kernelmanager.core.designsystem.component.SBMeter
 import dev.danascape.kernelmanager.core.designsystem.component.SBSparkline
 import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
-import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
-import dev.danascape.kernelmanager.core.designsystem.theme.faint
 import dev.danascape.kernelmanager.core.model.BatteryVitals
 import dev.danascape.kernelmanager.core.model.CpuTopology
 import dev.danascape.kernelmanager.core.model.GpuInfo
@@ -271,7 +270,7 @@ private fun GpuCard(
         Text(
             text = stringResource(R.string.monitor_gpu_locked),
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.faint,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
@@ -293,7 +292,7 @@ private fun ThermalCard(
         Text(
             text = stringResource(R.string.monitor_thermal_note),
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.faint,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
@@ -301,7 +300,7 @@ private fun ThermalCard(
 @Preview
 @Composable
 private fun MonitorPreview() {
-    SBTheme {
+    PvotAppTheme {
         MonitorContent(
             state = MonitorUiState(),
             onOpenCpuDetail = {},

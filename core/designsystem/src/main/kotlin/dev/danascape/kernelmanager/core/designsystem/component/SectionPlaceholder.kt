@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.prauga.pvot.coreui.PvotEmptyContent
+import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import com.prauga.pvot.designsystem.theme.PvotSpacing
-import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 
 /** Stand-in for a destination whose content has not been built yet. */
 @Composable
@@ -46,7 +46,7 @@ fun SectionPlaceholder(
 @Preview
 @Composable
 private fun SectionPlaceholderPreview() {
-    SBTheme {
+    PvotAppTheme {
         SectionPlaceholder(
             title = "Title",
             description = "One line saying what will live here.",

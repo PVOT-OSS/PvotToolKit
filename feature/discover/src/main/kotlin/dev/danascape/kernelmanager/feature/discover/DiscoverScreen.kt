@@ -32,6 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.motion.pvotReveal
+import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import com.prauga.pvot.designsystem.theme.PvotShapes
 import com.prauga.pvot.designsystem.theme.PvotSpacing
 import dev.danascape.kernelmanager.core.designsystem.component.ActionRow
@@ -39,8 +40,6 @@ import dev.danascape.kernelmanager.core.designsystem.component.SettingsGroup
 import dev.danascape.kernelmanager.core.designsystem.component.ValueRow
 import dev.danascape.kernelmanager.core.designsystem.component.openArticle
 import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
-import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
-import dev.danascape.kernelmanager.core.designsystem.theme.faint
 import dev.danascape.kernelmanager.core.model.BatteryVitals
 import dev.danascape.kernelmanager.core.model.BootState
 import dev.danascape.kernelmanager.core.model.CpuVitals
@@ -142,7 +141,7 @@ private fun IdentityCard(
                 Text(
                     text = stringResource(R.string.discover_tap_detail),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.faint,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
             Text(
@@ -176,7 +175,7 @@ private fun IdentityCard(
                 Text(
                     text = identity.kernelBuild,
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.faint,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -207,7 +206,9 @@ private fun StatusChip(
                 Modifier
                     .size(7.dp)
                     .clip(CircleShape)
-                    .background(if (running) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.faint),
+                    .background(
+                        if (running) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    ),
         )
         Text(
             text =
@@ -267,7 +268,7 @@ private fun VitalsGroup(
         Text(
             text = stringResource(R.string.discover_thermal_locked),
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.faint,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(top = 10.dp, start = 4.dp, end = 4.dp),
         )
     }
@@ -381,7 +382,7 @@ private fun DiscoverPreview() {
             kernelRelease = "4.19.322-StormBreaker",
             isStormBreakerKernel = true,
         )
-    SBTheme {
+    PvotAppTheme {
         DiscoverContent(
             state =
                 DiscoverUiState(

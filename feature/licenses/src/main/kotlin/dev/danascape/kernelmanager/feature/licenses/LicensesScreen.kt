@@ -17,11 +17,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.prauga.pvot.designsystem.components.PvotScreen
+import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import dev.danascape.kernelmanager.core.designsystem.component.ActionRow
 import dev.danascape.kernelmanager.core.designsystem.component.SettingsGroup
 import dev.danascape.kernelmanager.core.designsystem.component.openArticle
 import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
-import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 import dev.danascape.kernelmanager.feature.licenses.R
 
 @Composable
@@ -74,5 +74,5 @@ fun LicensesScreen(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun LicensesPreview() {
-    SBTheme { LicensesScreen() }
+    PvotAppTheme { LicensesScreen() }
 }

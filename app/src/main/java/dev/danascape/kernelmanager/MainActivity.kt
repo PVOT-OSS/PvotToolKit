@@ -13,8 +13,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.prauga.pvot.designsystem.platform.PvotBaseActivity
+import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import dev.danascape.kernelmanager.core.data.settings.ThemeRepository
-import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 import dev.danascape.kernelmanager.core.model.ThemePreference
 import dev.danascape.kernelmanager.ui.SBApp
 
@@ -27,7 +27,7 @@ class MainActivity : PvotBaseActivity() {
         setPvotContent {
             val darkTheme = isDarkTheme(themeRepository)
             SystemBarIcons(darkTheme)
-            SBTheme(darkTheme = darkTheme) {
+            PvotAppTheme(darkTheme = darkTheme) {
                 SBApp()
             }
         }

@@ -31,13 +31,12 @@ import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.components.PvotSkeleton
 import com.prauga.pvot.designsystem.motion.pvotReveal
+import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import com.prauga.pvot.designsystem.theme.PvotShapes
 import com.prauga.pvot.designsystem.theme.PvotSpacing
 import dev.danascape.kernelmanager.core.common.LoadError
 import dev.danascape.kernelmanager.core.designsystem.component.openArticle
 import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
-import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
-import dev.danascape.kernelmanager.core.designsystem.theme.faint
 import dev.danascape.kernelmanager.core.model.NewsPost
 import dev.danascape.kernelmanager.feature.news.R
 import java.time.LocalDate
@@ -193,7 +192,7 @@ private fun OfflineNotice() {
         Text(
             text = stringResource(R.string.news_offline_copy),
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.faint,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(horizontal = PvotSpacing.M, vertical = PvotSpacing.S),
         )
     }
@@ -271,7 +270,7 @@ private val PreviewPosts =
 @Preview
 @Composable
 private fun NewsReadyPreview() {
-    SBTheme {
+    PvotAppTheme {
         NewsContent(
             state = NewsUiState.Ready(PreviewPosts, stale = false),
             onPostClick = {},
@@ -283,7 +282,7 @@ private fun NewsReadyPreview() {
 @Preview
 @Composable
 private fun NewsOfflinePreview() {
-    SBTheme {
+    PvotAppTheme {
         NewsContent(
             state = NewsUiState.Ready(PreviewPosts, stale = true),
             onPostClick = {},
@@ -295,7 +294,7 @@ private fun NewsOfflinePreview() {
 @Preview
 @Composable
 private fun NewsFailedPreview() {
-    SBTheme {
+    PvotAppTheme {
         NewsContent(
             state = NewsUiState.Failed(LoadError.OFFLINE),
             onPostClick = {},

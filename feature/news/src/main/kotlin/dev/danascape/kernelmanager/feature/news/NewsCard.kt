@@ -25,9 +25,8 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.motion.pvotReveal
+import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import com.prauga.pvot.designsystem.theme.PvotSpacing
-import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
-import dev.danascape.kernelmanager.core.designsystem.theme.faint
 import dev.danascape.kernelmanager.core.model.NewsPost
 import dev.danascape.kernelmanager.feature.news.R
 import java.time.LocalDate
@@ -128,14 +127,14 @@ private fun MetaText(text: String) {
     Text(
         text = text,
         style = MaterialTheme.typography.labelSmall,
-        color = MaterialTheme.colorScheme.faint,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
 }
 
 @Preview
 @Composable
 private fun NewsCardPreview() {
-    SBTheme {
+    PvotAppTheme {
         NewsCard(
             post =
                 NewsPost(

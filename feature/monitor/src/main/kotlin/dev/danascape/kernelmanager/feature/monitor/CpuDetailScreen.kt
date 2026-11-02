@@ -24,12 +24,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.motion.pvotReveal
+import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import com.prauga.pvot.designsystem.theme.PvotSpacing
 import dev.danascape.kernelmanager.core.designsystem.component.MetricLine
 import dev.danascape.kernelmanager.core.designsystem.component.SBSparkline
 import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
-import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
-import dev.danascape.kernelmanager.core.designsystem.theme.faint
 import dev.danascape.kernelmanager.core.model.CpuCluster
 
 @Composable
@@ -150,7 +149,7 @@ private fun CoreChart(
                         stringResource(R.string.monitor_cluster, it.id) +
                             " · " + (it.hardwareMaxKhz?.let(::frequency) ?: "—"),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.faint,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
@@ -197,5 +196,5 @@ private fun ClusterCard(cluster: CpuCluster) {
 @Preview
 @Composable
 private fun CpuDetailPreview() {
-    SBTheme { CpuDetailScreen() }
+    PvotAppTheme { CpuDetailScreen() }
 }
