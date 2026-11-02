@@ -6,17 +6,16 @@ package dev.danascape.kernelmanager.feature.deviceinfo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.pluralStringResource
@@ -24,38 +23,33 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import dev.danascape.kernelmanager.core.designsystem.component.ValueBlock
-import dev.danascape.kernelmanager.core.designsystem.component.expandedBy
+import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
 
 private val SensorRowGap = 3.dp
 
 @Composable
 fun SensorsScreen(
-    contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: SensorsViewModel = viewModel(factory = SensorsViewModel.Factory),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    SensorsContent(state = state, contentPadding = contentPadding, modifier = modifier)
+    SensorsContent(state = state, modifier = modifier)
 }
 
 @Composable
 private fun SensorsContent(
     state: SensorsUiState,
-    contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
     val sensors = state.sensors
 
-    LazyColumn(
+    PvotScreen(
         modifier = modifier.fillMaxSize(),
-        contentPadding =
-            contentPadding.expandedBy(
-                horizontal = 16.dp,
-                top = 24.dp,
-                bottom = 24.dp,
-            ),
+        contentPadding = screenContentPadding(),
+        horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(SensorRowGap),
     ) {
         item(key = "header") {

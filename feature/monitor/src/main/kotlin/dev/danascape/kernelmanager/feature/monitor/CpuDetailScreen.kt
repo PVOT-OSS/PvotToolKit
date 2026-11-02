@@ -6,17 +6,16 @@ package dev.danascape.kernelmanager.feature.monitor
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -25,17 +24,17 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import dev.danascape.kernelmanager.core.designsystem.component.MetricLine
 import dev.danascape.kernelmanager.core.designsystem.component.SBSparkline
-import dev.danascape.kernelmanager.core.designsystem.component.expandedBy
+import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 import dev.danascape.kernelmanager.core.designsystem.theme.faint
 import dev.danascape.kernelmanager.core.model.CpuCluster
 
 @Composable
 fun CpuDetailScreen(
-    contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: MonitorViewModel = viewModel(factory = MonitorViewModel.Factory),
 ) {
@@ -48,14 +47,10 @@ fun CpuDetailScreen(
 
     val topology = state.profile?.cpu
 
-    LazyColumn(
+    PvotScreen(
         modifier = modifier.fillMaxSize(),
-        contentPadding =
-            contentPadding.expandedBy(
-                horizontal = 16.dp,
-                top = 24.dp,
-                bottom = 24.dp,
-            ),
+        contentPadding = screenContentPadding(),
+        horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         item(key = "header") {
@@ -201,5 +196,5 @@ private fun ClusterCard(cluster: CpuCluster) {
 @Preview
 @Composable
 private fun CpuDetailPreview() {
-    SBTheme { CpuDetailScreen(PaddingValues()) }
+    SBTheme { CpuDetailScreen() }
 }

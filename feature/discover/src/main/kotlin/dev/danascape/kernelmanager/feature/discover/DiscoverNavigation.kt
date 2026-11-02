@@ -3,7 +3,6 @@
 
 package dev.danascape.kernelmanager.feature.discover
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -16,14 +15,12 @@ data object DiscoverRoute
 fun NavController.navigateToDiscover(navOptions: NavOptions? = null) = navigate(DiscoverRoute, navOptions)
 
 fun NavGraphBuilder.discoverScreen(
-    contentPadding: PaddingValues,
     onOpenDevice: () -> Unit,
     onOpenMonitoring: () -> Unit,
     onOpenNews: () -> Unit,
 ) {
     composable<DiscoverRoute> {
         DiscoverScreen(
-            contentPadding = contentPadding,
             onOpenDevice = onOpenDevice,
             onOpenMonitoring = onOpenMonitoring,
             onOpenNews = onOpenNews,

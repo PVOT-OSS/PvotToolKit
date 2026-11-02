@@ -3,7 +3,6 @@
 
 package dev.danascape.kernelmanager.feature.more
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -17,14 +16,12 @@ fun NavController.navigateToMore(navOptions: NavOptions? = null) = navigate(More
 
 /** Cross-feature destinations arrive as callbacks, supplied by :app. */
 fun NavGraphBuilder.moreScreen(
-    contentPadding: PaddingValues,
     onOpenDevices: () -> Unit,
     onOpenNews: () -> Unit,
     onOpenLicenses: () -> Unit,
 ) {
     composable<MoreRoute> {
         MoreScreen(
-            contentPadding = contentPadding,
             onOpenDevices = onOpenDevices,
             onOpenNews = onOpenNews,
             onOpenLicenses = onOpenLicenses,

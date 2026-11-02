@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -29,18 +28,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.effects.pvotPressScale
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import dev.danascape.kernelmanager.core.designsystem.component.ValueBlock
 import dev.danascape.kernelmanager.core.designsystem.component.ValueRow
-import dev.danascape.kernelmanager.core.designsystem.component.expandedBy
-import dev.danascape.kernelmanager.core.designsystem.component.topInset
+import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
 import dev.danascape.kernelmanager.core.model.DeviceProfile
 
 /** Longer than this and the value gets its own line rather than starving the label. */
@@ -61,14 +61,12 @@ private val GroupGap = 17.dp
 
 @Composable
 fun DeviceInfoScreen(
-    contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: DeviceInfoViewModel = viewModel(factory = DeviceInfoViewModel.Factory),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     DeviceInfoContent(
         state = state,
-        contentPadding = contentPadding,
         onNeedVitals = viewModel::ensureVitals,
         modifier = modifier,
     )
@@ -77,7 +75,6 @@ fun DeviceInfoScreen(
 @Composable
 private fun DeviceInfoContent(
     state: DeviceInfoUiState,
-    contentPadding: PaddingValues,
     onNeedVitals: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -100,8 +97,7 @@ private fun DeviceInfoContent(
     Column(
         modifier =
             modifier
-                .fillMaxSize()
-                .padding(top = contentPadding.topInset()),
+                .fillMaxSize(),
     ) {
         if (profile == null) {
             Text(
@@ -118,15 +114,11 @@ private fun DeviceInfoContent(
 
         val sections = tabSections(tab = tab, state = state, profile = profile)
 
-        LazyColumn(
+        PvotScreen(
             state = listState,
             modifier = Modifier.fillMaxSize(),
-            contentPadding =
-                contentPadding.expandedBy(
-                    horizontal = 16.dp,
-                    bottom = 24.dp,
-                    includeTopInset = false,
-                ),
+            contentPadding = screenContentPadding(top = 0.dp),
+            horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(RowGap),
         ) {
             sections.forEach { section ->

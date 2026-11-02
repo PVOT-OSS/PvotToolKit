@@ -3,7 +3,6 @@
 
 package dev.danascape.kernelmanager.feature.builds
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,20 +13,17 @@ import dev.danascape.kernelmanager.core.designsystem.component.SectionPlaceholde
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 
 @Composable
-fun BuildsScreen(
-    contentPadding: PaddingValues,
-    modifier: Modifier = Modifier,
-) {
+fun BuildsScreen(modifier: Modifier = Modifier) {
     SectionPlaceholder(
         kicker = stringResource(R.string.builds_kicker),
         title = stringResource(R.string.builds_title),
         description = stringResource(R.string.builds_description),
-        modifier = modifier.padding(contentPadding),
+        modifier = modifier.padding(),
     )
 }
 
 @Preview
 @Composable
 private fun BuildsScreenPreview() {
-    SBTheme { BuildsScreen(PaddingValues()) }
+    SBTheme { BuildsScreen() }
 }

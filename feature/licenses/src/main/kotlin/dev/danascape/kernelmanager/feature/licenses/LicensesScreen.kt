@@ -5,42 +5,34 @@ package dev.danascape.kernelmanager.feature.licenses
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.danascape.kernelmanager.feature.licenses.R
+import com.prauga.pvot.designsystem.components.PvotScreen
 import dev.danascape.kernelmanager.core.designsystem.component.ActionRow
 import dev.danascape.kernelmanager.core.designsystem.component.SettingsGroup
-import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
-import dev.danascape.kernelmanager.core.designsystem.component.expandedBy
 import dev.danascape.kernelmanager.core.designsystem.component.openArticle
+import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
+import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
+import dev.danascape.kernelmanager.feature.licenses.R
 
 @Composable
-fun LicensesScreen(
-    contentPadding: PaddingValues,
-    modifier: Modifier = Modifier,
-) {
+fun LicensesScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val toolbarColor = MaterialTheme.colorScheme.surface.toArgb()
 
-    LazyColumn(
+    PvotScreen(
         modifier = modifier.fillMaxSize(),
-        contentPadding =
-            contentPadding.expandedBy(
-                horizontal = 16.dp,
-                top = 24.dp,
-                bottom = 24.dp,
-            ),
+        contentPadding = screenContentPadding(),
+        horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         item(key = "header") {
@@ -82,5 +74,5 @@ fun LicensesScreen(
 @Preview
 @Composable
 private fun LicensesPreview() {
-    SBTheme { LicensesScreen(PaddingValues()) }
+    SBTheme { LicensesScreen() }
 }

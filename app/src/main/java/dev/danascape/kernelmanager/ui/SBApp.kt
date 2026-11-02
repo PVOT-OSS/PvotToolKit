@@ -3,7 +3,6 @@
 
 package dev.danascape.kernelmanager.ui
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -114,7 +113,6 @@ fun SBApp(modifier: Modifier = Modifier) {
     ) { innerPadding ->
         SBNavHost(
             navController = navController,
-            contentPadding = PaddingValues(bottom = innerPadding.calculateBottomPadding()),
             modifier =
                 Modifier
                     .fillMaxSize()

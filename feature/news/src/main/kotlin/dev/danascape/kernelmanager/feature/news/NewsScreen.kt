@@ -7,11 +7,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,20 +30,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.danascape.kernelmanager.core.designsystem.R as DesignSystemR
-import dev.danascape.kernelmanager.feature.news.R
+import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.motion.pvotReveal
+import dev.danascape.kernelmanager.core.common.LoadError
+import dev.danascape.kernelmanager.core.designsystem.R as DesignSystemR
+import dev.danascape.kernelmanager.core.designsystem.component.openArticle
+import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 import dev.danascape.kernelmanager.core.designsystem.theme.faint
-import dev.danascape.kernelmanager.core.common.LoadError
 import dev.danascape.kernelmanager.core.model.NewsPost
-import dev.danascape.kernelmanager.core.designsystem.component.expandedBy
-import dev.danascape.kernelmanager.core.designsystem.component.openArticle
+import dev.danascape.kernelmanager.feature.news.R
 import java.time.LocalDate
 
 @Composable
 fun NewsScreen(
-    contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: NewsViewModel = viewModel(factory = NewsViewModel.Factory),
 ) {
@@ -55,7 +53,6 @@ fun NewsScreen(
 
     NewsContent(
         state = state,
-        contentPadding = contentPadding,
         onPostClick = { post -> context.openArticle(post.url, toolbarColor) },
         onRetry = viewModel::refresh,
         modifier = modifier,
@@ -66,20 +63,19 @@ fun NewsScreen(
 @Composable
 private fun NewsContent(
     state: NewsUiState,
-    contentPadding: PaddingValues,
     onPostClick: (NewsPost) -> Unit,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (state) {
         NewsUiState.Loading -> {
-            CenteredContent(contentPadding, modifier) {
+            CenteredContent(modifier) {
                 CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
         }
 
         NewsUiState.Empty -> {
-            CenteredContent(contentPadding, modifier) {
+            CenteredContent(modifier) {
                 Text(
                     text = stringResource(R.string.news_empty),
                     style = MaterialTheme.typography.bodyMedium,
@@ -90,7 +86,7 @@ private fun NewsContent(
         }
 
         is NewsUiState.Failed -> {
-            CenteredContent(contentPadding, modifier) {
+            CenteredContent(modifier) {
                 LoadFailure(error = state.error, onRetry = onRetry)
             }
         }
@@ -99,7 +95,6 @@ private fun NewsContent(
             NewsList(
                 posts = state.posts,
                 stale = state.stale,
-                contentPadding = contentPadding,
                 onPostClick = onPostClick,
                 modifier = modifier,
             )
@@ -111,18 +106,13 @@ private fun NewsContent(
 private fun NewsList(
     posts: List<NewsPost>,
     stale: Boolean,
-    contentPadding: PaddingValues,
     onPostClick: (NewsPost) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(
+    PvotScreen(
         modifier = modifier.fillMaxSize(),
-        contentPadding =
-            contentPadding.expandedBy(
-                horizontal = 16.dp,
-                top = 24.dp,
-                bottom = 24.dp,
-            ),
+        contentPadding = screenContentPadding(),
+        horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         item(key = "header") { Header() }
@@ -245,7 +235,6 @@ private fun LoadFailure(
 
 @Composable
 private fun CenteredContent(
-    contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
@@ -253,7 +242,7 @@ private fun CenteredContent(
         modifier =
             modifier
                 .fillMaxSize()
-                .padding(contentPadding),
+                .padding(),
         contentAlignment = Alignment.Center,
         content = { content() },
     )
@@ -293,7 +282,6 @@ private fun NewsReadyPreview() {
     SBTheme {
         NewsContent(
             state = NewsUiState.Ready(PreviewPosts, stale = false),
-            contentPadding = PaddingValues(),
             onPostClick = {},
             onRetry = {},
         )
@@ -306,7 +294,6 @@ private fun NewsOfflinePreview() {
     SBTheme {
         NewsContent(
             state = NewsUiState.Ready(PreviewPosts, stale = true),
-            contentPadding = PaddingValues(),
             onPostClick = {},
             onRetry = {},
         )
@@ -319,7 +306,6 @@ private fun NewsFailedPreview() {
     SBTheme {
         NewsContent(
             state = NewsUiState.Failed(LoadError.OFFLINE),
-            contentPadding = PaddingValues(),
             onPostClick = {},
             onRetry = {},
         )

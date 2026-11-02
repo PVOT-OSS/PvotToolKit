@@ -3,7 +3,6 @@
 
 package dev.danascape.kernelmanager.feature.monitor
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -21,15 +20,12 @@ fun NavController.navigateToMonitor(navOptions: NavOptions? = null) = navigate(M
 
 fun NavController.navigateToCpuDetail(navOptions: NavOptions? = null) = navigate(CpuDetailRoute, navOptions)
 
-fun NavGraphBuilder.monitorScreen(
-    contentPadding: PaddingValues,
-    onOpenCpuDetail: () -> Unit,
-) {
+fun NavGraphBuilder.monitorScreen(onOpenCpuDetail: () -> Unit) {
     composable<MonitorRoute> {
-        MonitorScreen(contentPadding = contentPadding, onOpenCpuDetail = onOpenCpuDetail)
+        MonitorScreen(onOpenCpuDetail = onOpenCpuDetail)
     }
 }
 
-fun NavGraphBuilder.cpuDetailScreen(contentPadding: PaddingValues) {
-    composable<CpuDetailRoute> { CpuDetailScreen(contentPadding = contentPadding) }
+fun NavGraphBuilder.cpuDetailScreen() {
+    composable<CpuDetailRoute> { CpuDetailScreen() }
 }

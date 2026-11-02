@@ -3,7 +3,6 @@
 
 package dev.danascape.kernelmanager.feature.devices
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -15,6 +14,6 @@ data object DevicesRoute
 
 fun NavController.navigateToDevices(navOptions: NavOptions? = null) = navigate(DevicesRoute, navOptions)
 
-fun NavGraphBuilder.devicesScreen(contentPadding: PaddingValues) {
-    composable<DevicesRoute> { DevicesScreen(contentPadding = contentPadding) }
+fun NavGraphBuilder.devicesScreen() {
+    composable<DevicesRoute> { DevicesScreen() }
 }

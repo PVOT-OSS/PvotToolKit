@@ -3,7 +3,6 @@
 
 package dev.danascape.kernelmanager.feature.news
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -15,6 +14,6 @@ data object NewsRoute
 
 fun NavController.navigateToNews(navOptions: NavOptions? = null) = navigate(NewsRoute, navOptions)
 
-fun NavGraphBuilder.newsScreen(contentPadding: PaddingValues) {
-    composable<NewsRoute> { NewsScreen(contentPadding = contentPadding) }
+fun NavGraphBuilder.newsScreen() {
+    composable<NewsRoute> { NewsScreen() }
 }

@@ -9,13 +9,11 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
@@ -35,29 +33,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.effects.pvotPressScale
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import dev.danascape.kernelmanager.core.designsystem.component.ActionRow
 import dev.danascape.kernelmanager.core.designsystem.component.SettingsGroup
 import dev.danascape.kernelmanager.core.designsystem.component.ValueRow
-import dev.danascape.kernelmanager.core.designsystem.component.expandedBy
 import dev.danascape.kernelmanager.core.designsystem.component.openArticle
+import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 import dev.danascape.kernelmanager.core.designsystem.theme.faint
 import dev.danascape.kernelmanager.core.model.BatteryVitals
-import dev.danascape.kernelmanager.core.model.CpuVitals
 import dev.danascape.kernelmanager.core.model.BootState
+import dev.danascape.kernelmanager.core.model.CpuVitals
 import dev.danascape.kernelmanager.core.model.CustomRom
 import dev.danascape.kernelmanager.core.model.DeviceIdentity
 import dev.danascape.kernelmanager.core.model.DeviceProfile
+import dev.danascape.kernelmanager.core.model.MemoryVitals
 import dev.danascape.kernelmanager.core.model.NetworkVitals
+import dev.danascape.kernelmanager.core.model.NewsPost
 import dev.danascape.kernelmanager.core.model.OsBuild
 import dev.danascape.kernelmanager.core.model.SleepStats
 import dev.danascape.kernelmanager.core.model.SocInfo
 import dev.danascape.kernelmanager.core.model.StorageVitals
 import dev.danascape.kernelmanager.core.model.ThermalStatus
-import dev.danascape.kernelmanager.core.model.MemoryVitals
-import dev.danascape.kernelmanager.core.model.NewsPost
 import dev.danascape.kernelmanager.core.model.Vitals
 import java.util.Locale
 
@@ -66,7 +65,6 @@ private const val BYTES_PER_GB = 1_073_741_824f
 
 @Composable
 fun DiscoverScreen(
-    contentPadding: PaddingValues,
     onOpenDevice: () -> Unit,
     onOpenMonitoring: () -> Unit,
     onOpenNews: () -> Unit,
@@ -80,7 +78,6 @@ fun DiscoverScreen(
     DiscoverContent(
         state = state,
         onOpenDevice = onOpenDevice,
-        contentPadding = contentPadding,
         onOpenMonitoring = onOpenMonitoring,
         onOpenNews = onOpenNews,
         onHeadlineClick = { post -> context.openArticle(post.url, toolbarColor) },
@@ -92,21 +89,16 @@ fun DiscoverScreen(
 @Composable
 private fun DiscoverContent(
     state: DiscoverUiState,
-    contentPadding: PaddingValues,
     onOpenDevice: () -> Unit,
     onOpenMonitoring: () -> Unit,
     onOpenNews: () -> Unit,
     onHeadlineClick: (NewsPost) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(
+    PvotScreen(
         modifier = modifier.fillMaxSize(),
-        contentPadding =
-            contentPadding.expandedBy(
-                horizontal = 16.dp,
-                top = 24.dp,
-                bottom = 24.dp,
-            ),
+        contentPadding = screenContentPadding(),
+        horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         state.profile?.let { profile ->
@@ -450,7 +442,6 @@ private fun DiscoverPreview() {
                             sleep = SleepStats(9_000_000, 3_400_000),
                         ),
                 ),
-            contentPadding = PaddingValues(),
             onOpenDevice = {},
             onOpenMonitoring = {},
             onOpenNews = {},

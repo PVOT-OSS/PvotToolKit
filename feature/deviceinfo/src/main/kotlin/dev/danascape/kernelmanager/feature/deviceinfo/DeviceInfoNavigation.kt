@@ -3,7 +3,6 @@
 
 package dev.danascape.kernelmanager.feature.deviceinfo
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -35,16 +34,16 @@ fun NavController.navigateToTests(navOptions: NavOptions? = null) = navigate(Tes
  * Each owns its own view model; what they share is the repository, which caches the
  * profile and the details read, so a tab switch costs no rereading of the device.
  */
-fun NavGraphBuilder.deviceGraph(contentPadding: PaddingValues) {
+fun NavGraphBuilder.deviceGraph() {
     navigation<DeviceGraphRoute>(startDestination = DeviceInfoRoute) {
         composable<DeviceInfoRoute> {
-            DeviceInfoScreen(contentPadding = contentPadding)
+            DeviceInfoScreen()
         }
         composable<SensorsRoute> {
-            SensorsScreen(contentPadding = contentPadding)
+            SensorsScreen()
         }
         composable<TestsRoute> {
-            TestsScreen(contentPadding = contentPadding)
+            TestsScreen()
         }
     }
 }

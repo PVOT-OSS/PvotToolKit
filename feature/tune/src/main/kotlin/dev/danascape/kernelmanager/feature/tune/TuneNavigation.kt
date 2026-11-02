@@ -3,7 +3,6 @@
 
 package dev.danascape.kernelmanager.feature.tune
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -15,6 +14,6 @@ data object TuneRoute
 
 fun NavController.navigateToTune(navOptions: NavOptions? = null) = navigate(TuneRoute, navOptions)
 
-fun NavGraphBuilder.tuneScreen(contentPadding: PaddingValues) {
-    composable<TuneRoute> { TuneScreen(contentPadding = contentPadding) }
+fun NavGraphBuilder.tuneScreen() {
+    composable<TuneRoute> { TuneScreen() }
 }

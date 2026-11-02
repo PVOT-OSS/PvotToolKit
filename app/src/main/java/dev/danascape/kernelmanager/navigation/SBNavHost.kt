@@ -3,7 +3,6 @@
 
 package dev.danascape.kernelmanager.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -49,7 +48,6 @@ data object MonitorGraphRoute
 @Composable
 fun SBNavHost(
     navController: NavHostController,
-    contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
     NavHost(
@@ -59,33 +57,30 @@ fun SBNavHost(
     ) {
         navigation<DiscoverGraphRoute>(startDestination = DiscoverRoute) {
             discoverScreen(
-                contentPadding = contentPadding,
                 onOpenDevice = { navController.navigateToDeviceInfo() },
                 onOpenMonitoring = { navController.navigateToMonitor() },
                 onOpenNews = { navController.navigateToNews() },
             )
-            deviceGraph(contentPadding = contentPadding)
+            deviceGraph()
         }
-        tuneScreen(contentPadding)
+        tuneScreen()
         navigation<MonitorGraphRoute>(startDestination = MonitorRoute) {
             monitorScreen(
-                contentPadding = contentPadding,
                 onOpenCpuDetail = { navController.navigateToCpuDetail() },
             )
-            cpuDetailScreen(contentPadding)
+            cpuDetailScreen()
         }
-        buildsScreen(contentPadding)
+        buildsScreen()
 
         navigation<MoreGraphRoute>(startDestination = MoreRoute) {
             moreScreen(
-                contentPadding = contentPadding,
                 onOpenDevices = { navController.navigateToDevices() },
                 onOpenNews = { navController.navigateToNews() },
                 onOpenLicenses = { navController.navigateToLicenses() },
             )
-            newsScreen(contentPadding)
-            devicesScreen(contentPadding)
-            licensesScreen(contentPadding)
+            newsScreen()
+            devicesScreen()
+            licensesScreen()
         }
     }
 }

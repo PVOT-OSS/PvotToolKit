@@ -10,10 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
@@ -23,31 +20,32 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.pm.PackageInfoCompat
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.pm.PackageInfoCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.danascape.kernelmanager.feature.more.R
+import com.prauga.pvot.designsystem.components.PvotScreen
+import com.prauga.pvot.designsystem.motion.pvotReveal
 import dev.danascape.kernelmanager.core.batterymonitor.BatteryMonitorService
 import dev.danascape.kernelmanager.core.designsystem.component.ActionRow
 import dev.danascape.kernelmanager.core.designsystem.component.SettingsGroup
-import com.prauga.pvot.designsystem.motion.pvotReveal
 import dev.danascape.kernelmanager.core.designsystem.component.ValueRow
+import dev.danascape.kernelmanager.core.designsystem.component.openArticle
+import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 import dev.danascape.kernelmanager.core.model.LinkItem
-import dev.danascape.kernelmanager.core.model.ThemePreference
 import dev.danascape.kernelmanager.core.model.LinkSection
-import dev.danascape.kernelmanager.core.designsystem.component.expandedBy
-import dev.danascape.kernelmanager.core.designsystem.component.openArticle
+import dev.danascape.kernelmanager.core.model.ThemePreference
+import dev.danascape.kernelmanager.feature.more.R
 
 @Composable
 fun MoreScreen(
-    contentPadding: PaddingValues,
     onOpenDevices: () -> Unit,
     onOpenNews: () -> Unit,
     onOpenLicenses: () -> Unit,
@@ -65,7 +63,6 @@ fun MoreScreen(
 
     MoreContent(
         state = state,
-        contentPadding = contentPadding,
         onLinkClick = { item -> item.url?.let { context.openArticle(it, toolbarColor) } },
         onThemeChange = viewModel::setTheme,
         onToggleBatteryMonitor = { enabled ->
@@ -89,7 +86,6 @@ fun MoreScreen(
 @Composable
 private fun MoreContent(
     state: MoreUiState,
-    contentPadding: PaddingValues,
     onLinkClick: (LinkItem) -> Unit,
     onThemeChange: (ThemePreference) -> Unit,
     onToggleBatteryMonitor: (Boolean) -> Unit,
@@ -98,14 +94,10 @@ private fun MoreContent(
     onOpenLicenses: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(
+    PvotScreen(
         modifier = modifier.fillMaxSize(),
-        contentPadding =
-            contentPadding.expandedBy(
-                horizontal = 16.dp,
-                top = 24.dp,
-                bottom = 24.dp,
-            ),
+        contentPadding = screenContentPadding(),
+        horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         item(key = "header") { Header() }
@@ -303,7 +295,6 @@ private fun MorePreview() {
     SBTheme {
         MoreContent(
             state = MoreUiState(),
-            contentPadding = PaddingValues(),
             onLinkClick = {},
             onThemeChange = {},
             onToggleBatteryMonitor = {},

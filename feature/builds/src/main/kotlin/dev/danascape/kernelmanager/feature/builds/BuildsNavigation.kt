@@ -3,7 +3,6 @@
 
 package dev.danascape.kernelmanager.feature.builds
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -15,6 +14,6 @@ data object BuildsRoute
 
 fun NavController.navigateToBuilds(navOptions: NavOptions? = null) = navigate(BuildsRoute, navOptions)
 
-fun NavGraphBuilder.buildsScreen(contentPadding: PaddingValues) {
-    composable<BuildsRoute> { BuildsScreen(contentPadding = contentPadding) }
+fun NavGraphBuilder.buildsScreen() {
+    composable<BuildsRoute> { BuildsScreen() }
 }
