@@ -3,7 +3,7 @@
 
 plugins { alias(libs.plugins.sbkm.android.feature) }
 
-android { namespace = "dev.danascape.kernelmanager.feature.more" }
+android { namespace = "org.prauga.toolkit.feature.more" }
 
 dependencies {
     implementation(libs.androidx.activity.compose)

@@ -3,7 +3,7 @@
 
 plugins { alias(libs.plugins.sbkm.android.library) }
 
-android { namespace = "dev.danascape.kernelmanager.core.device" }
+android { namespace = "org.prauga.toolkit.core.device" }
 
 dependencies {
     api(project(":core:model"))

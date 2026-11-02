@@ -3,4 +3,4 @@
 
 plugins { alias(libs.plugins.sbkm.android.feature) }
 
-android { namespace = "dev.danascape.kernelmanager.feature.licenses" }
+android { namespace = "org.prauga.toolkit.feature.licenses" }

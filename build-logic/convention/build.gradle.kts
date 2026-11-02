@@ -3,7 +3,7 @@
 
 plugins { `kotlin-dsl` }
 
-group = "dev.danascape.kernelmanager.buildlogic"
+group = "org.prauga.toolkit.buildlogic"
 
 // Matches the toolchain the daemon runs on (gradle-daemon-jvm.properties).
 java { toolchain { languageVersion.set(JavaLanguageVersion.of(21)) } }

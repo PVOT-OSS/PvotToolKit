@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-android { namespace = "dev.danascape.kernelmanager.core.data" }
+android { namespace = "org.prauga.toolkit.core.data" }
 
 dependencies {
     api(project(":core:common"))

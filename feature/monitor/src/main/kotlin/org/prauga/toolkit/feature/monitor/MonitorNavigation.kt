@@ -1,0 +1,29 @@
+// SPDX-FileCopyrightText: 2026 Saalim Quadri <danascape@gmail.com>
+// SPDX-License-Identifier: Apache-2.0
+
+package org.prauga.toolkit.feature.monitor
+
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
+import androidx.navigation.compose.composable
+import kotlinx.serialization.Serializable
+
+@Serializable data object MonitorRoute
+
+/** Detail pushed from the CPU card. */
+@Serializable data object CpuDetailRoute
+
+fun NavController.navigateToMonitor(navOptions: NavOptions? = null) =
+    navigate(MonitorRoute, navOptions)
+
+fun NavController.navigateToCpuDetail(navOptions: NavOptions? = null) =
+    navigate(CpuDetailRoute, navOptions)
+
+fun NavGraphBuilder.monitorScreen(onOpenCpuDetail: () -> Unit) {
+    composable<MonitorRoute> { MonitorScreen(onOpenCpuDetail = onOpenCpuDetail) }
+}
+
+fun NavGraphBuilder.cpuDetailScreen() {
+    composable<CpuDetailRoute> { CpuDetailScreen() }
+}

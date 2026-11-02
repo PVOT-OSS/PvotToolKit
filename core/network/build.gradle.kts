@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.danascape.kernelmanager.core.network"
+    namespace = "org.prauga.toolkit.core.network"
 
     buildFeatures { buildConfig = true }
 

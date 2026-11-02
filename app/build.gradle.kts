@@ -9,9 +9,9 @@ plugins {
 }
 
 android {
-    namespace = "dev.danascape.kernelmanager"
+    namespace = "org.prauga.toolkit"
 
-    defaultConfig { applicationId = "dev.danascape.kernelmanager" }
+    defaultConfig { applicationId = "org.prauga.toolkit" }
 
     buildTypes { release { optimization { enable = false } } }
 }

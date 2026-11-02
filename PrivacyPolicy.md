@@ -7,7 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 
 _Effective 2 November 2026_
 
-SB Kernel Manager (package `dev.danascape.kernelmanager`) is the companion app for Team
+SB Kernel Manager (package `org.prauga.toolkit`) is the companion app for Team
 StormBreaker's kernels, published by Saalim Quadri. This policy explains what the app does with
 your data.
 

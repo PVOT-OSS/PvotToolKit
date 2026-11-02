@@ -3,6 +3,6 @@
 
 plugins { alias(libs.plugins.sbkm.android.feature) }
 
-android { namespace = "dev.danascape.kernelmanager.feature.news" }
+android { namespace = "org.prauga.toolkit.feature.news" }
 
 dependencies { implementation(libs.coil.compose) }

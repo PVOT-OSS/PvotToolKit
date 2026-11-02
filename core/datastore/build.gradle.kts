@@ -3,7 +3,7 @@
 
 plugins { alias(libs.plugins.sbkm.android.library) }
 
-android { namespace = "dev.danascape.kernelmanager.core.datastore" }
+android { namespace = "org.prauga.toolkit.core.datastore" }
 
 dependencies {
     implementation(project(":core:model"))
