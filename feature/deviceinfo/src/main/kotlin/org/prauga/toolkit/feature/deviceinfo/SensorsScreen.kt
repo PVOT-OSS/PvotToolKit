@@ -49,7 +49,9 @@ private fun SensorsContent(state: SensorsUiState, modifier: Modifier = Modifier)
         item(key = "header") { SensorHeader(count = sensors.size, deviceName = state.deviceName) }
         if (sensors.isNotEmpty()) {
             item(key = "title") { GroupTitle(stringResource(R.string.sensors_available)) }
-            itemsIndexed(items = sensors, key = { _, sensor -> sensor.name }) { index, sensor ->
+            itemsIndexed(items = sensors, key = { index, sensor -> "$index#${sensor.name}" }) {
+                index,
+                sensor ->
                 ValueBlock(
                     label = sensor.name,
                     value = stringResource(R.string.sensors_subtitle, sensor.type, sensor.vendor),
