@@ -14,14 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.prauga.pvot.coreui.PvotEmptyContent
+import com.prauga.pvot.designsystem.theme.PvotSpacing
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
-import dev.danascape.kernelmanager.core.designsystem.theme.faint
 
 /** Stand-in for a destination whose content has not been built yet. */
 @Composable
 fun SectionPlaceholder(
-    kicker: String,
     title: String,
     description: String,
     modifier: Modifier = Modifier,
@@ -30,28 +29,17 @@ fun SectionPlaceholder(
         modifier =
             modifier
                 .fillMaxSize()
-                .padding(horizontal = 32.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
+                .padding(horizontal = PvotSpacing.L),
+        verticalArrangement = Arrangement.spacedBy(PvotSpacing.S, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = kicker,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.faint,
-            textAlign = TextAlign.Center,
-        )
-        Text(
             text = title,
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center,
         )
-        Text(
-            text = description,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-        )
+        PvotEmptyContent(message = description)
     }
 }
 
@@ -60,7 +48,6 @@ fun SectionPlaceholder(
 private fun SectionPlaceholderPreview() {
     SBTheme {
         SectionPlaceholder(
-            kicker = "section",
             title = "Title",
             description = "One line saying what will live here.",
         )

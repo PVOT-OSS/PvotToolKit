@@ -15,7 +15,6 @@ import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 @Composable
 fun BuildsScreen(modifier: Modifier = Modifier) {
     SectionPlaceholder(
-        kicker = stringResource(R.string.builds_kicker),
         title = stringResource(R.string.builds_title),
         description = stringResource(R.string.builds_description),
         modifier = modifier.padding(),

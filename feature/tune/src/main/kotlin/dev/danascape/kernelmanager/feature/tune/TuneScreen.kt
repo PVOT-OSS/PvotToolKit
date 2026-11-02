@@ -14,7 +14,6 @@ import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 @Composable
 fun TuneScreen(modifier: Modifier = Modifier) {
     SectionPlaceholder(
-        kicker = stringResource(R.string.tune_kicker),
         title = stringResource(R.string.tune_title),
         description = stringResource(R.string.tune_description),
         modifier = modifier.padding(),

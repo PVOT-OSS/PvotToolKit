@@ -15,7 +15,6 @@ import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
 @Composable
 fun DevicesScreen(modifier: Modifier = Modifier) {
     SectionPlaceholder(
-        kicker = stringResource(R.string.devices_kicker),
         title = stringResource(R.string.devices_title),
         description = stringResource(R.string.devices_description),
         modifier = modifier.padding(),

@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.prauga.pvot.coreui.PvotLoadingContent
 import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.effects.pvotPressScale
 import com.prauga.pvot.designsystem.motion.pvotReveal
@@ -100,12 +102,9 @@ private fun DeviceInfoContent(
                 .fillMaxSize(),
     ) {
         if (profile == null) {
-            Text(
-                text = stringResource(R.string.device_info_loading),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
-            )
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                PvotLoadingContent()
+            }
             return@Column
         }
 

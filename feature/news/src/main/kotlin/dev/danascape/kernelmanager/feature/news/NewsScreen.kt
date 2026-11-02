@@ -9,13 +9,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,15 +24,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.prauga.pvot.coreui.PvotEmptyContent
+import com.prauga.pvot.coreui.PvotErrorContent
 import com.prauga.pvot.designsystem.components.PvotScreen
+import com.prauga.pvot.designsystem.components.PvotSkeleton
 import com.prauga.pvot.designsystem.motion.pvotReveal
+import com.prauga.pvot.designsystem.theme.PvotShapes
+import com.prauga.pvot.designsystem.theme.PvotSpacing
 import dev.danascape.kernelmanager.core.common.LoadError
-import dev.danascape.kernelmanager.core.designsystem.R as DesignSystemR
 import dev.danascape.kernelmanager.core.designsystem.component.openArticle
 import dev.danascape.kernelmanager.core.designsystem.component.screenContentPadding
 import dev.danascape.kernelmanager.core.designsystem.theme.SBTheme
@@ -41,6 +43,9 @@ import dev.danascape.kernelmanager.core.designsystem.theme.faint
 import dev.danascape.kernelmanager.core.model.NewsPost
 import dev.danascape.kernelmanager.feature.news.R
 import java.time.LocalDate
+
+private const val SKELETON_CARDS = 4
+private val SkeletonCardHeight = 132.dp
 
 @Composable
 fun NewsScreen(
@@ -69,19 +74,12 @@ private fun NewsContent(
 ) {
     when (state) {
         NewsUiState.Loading -> {
-            CenteredContent(modifier) {
-                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-            }
+            NewsSkeleton(modifier)
         }
 
         NewsUiState.Empty -> {
             CenteredContent(modifier) {
-                Text(
-                    text = stringResource(R.string.news_empty),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                )
+                PvotEmptyContent(message = stringResource(R.string.news_empty))
             }
         }
 
@@ -138,6 +136,28 @@ private fun LazyListScope.newsItems(
             showCover = post.id == featuredId,
             revealIndex = index,
         )
+    }
+}
+
+/** Card-shaped placeholders where the posts will land. */
+@Composable
+private fun NewsSkeleton(modifier: Modifier = Modifier) {
+    PvotScreen(
+        modifier = modifier.fillMaxSize(),
+        contentPadding = screenContentPadding(),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.spacedBy(PvotSpacing.M),
+    ) {
+        item(key = "header") { Header() }
+        items(SKELETON_CARDS) {
+            PvotSkeleton(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(SkeletonCardHeight),
+                shape = PvotShapes.Card,
+            )
+        }
     }
 }
 
@@ -207,30 +227,7 @@ private fun LoadFailure(
             }
         }
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        modifier = Modifier.padding(horizontal = 32.dp),
-    ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.Center,
-        )
-        Text(
-            text = message,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-        )
-        OutlinedButton(onClick = onRetry) {
-            Text(
-                text = stringResource(DesignSystemR.string.action_retry),
-                style = MaterialTheme.typography.labelMedium,
-            )
-        }
-    }
+    PvotErrorContent(title = title, message = message, onRetry = onRetry)
 }
 
 @Composable

@@ -8,8 +8,6 @@ SPDX-License-Identifier: Apache-2.0
     <string name="device_info_title">Device information</string>
     <string name="device_info_description">Nothing here yet.</string>
 
-    <string name="device_info_loading">Reading the device…</string>
-
     <string name="tests_kicker">tests</string>
     <string name="tests_title">Hardware checks</string>
     <string name="tests_description">Run each one and confirm the hardware behaves. Nothing is wired up yet.</string>
