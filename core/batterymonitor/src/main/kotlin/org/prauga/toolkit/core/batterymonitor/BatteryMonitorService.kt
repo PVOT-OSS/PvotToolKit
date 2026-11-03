@@ -15,6 +15,8 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -30,10 +32,12 @@ private const val NOTIFICATION_ID = 1001
 private const val SAMPLE_INTERVAL_MILLIS = 60_000L
 
 /** Accumulates battery statistics for as long as the user leaves it on. */
+@AndroidEntryPoint
 class BatteryMonitorService : Service() {
+
+    @Inject lateinit var store: BatterySessionStore
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private lateinit var sampler: BatterySampler
-    private lateinit var store: BatterySessionStore
     private lateinit var notification: BatteryNotification
     private var loop: Job? = null
 
@@ -47,7 +51,6 @@ class BatteryMonitorService : Service() {
     override fun onCreate() {
         super.onCreate()
         sampler = BatterySampler(this)
-        store = BatterySessionStore(this)
         notification = BatteryNotification(this)
         notification.ensureChannel()
 

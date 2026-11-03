@@ -3,11 +3,14 @@
 
 package org.prauga.toolkit.core.data.settings
 
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import org.prauga.toolkit.core.datastore.SettingsStore
 import org.prauga.toolkit.core.model.ThemePreference
 
-class ThemeRepository(private val store: SettingsStore) {
+@Singleton
+class ThemeRepository @Inject constructor(private val store: SettingsStore) {
     val theme: Flow<ThemePreference> = store.theme
 
     suspend fun setTheme(preference: ThemePreference) = store.setTheme(preference)

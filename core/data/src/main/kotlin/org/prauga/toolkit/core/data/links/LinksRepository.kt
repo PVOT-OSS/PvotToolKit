@@ -7,8 +7,9 @@ import android.content.res.AssetManager
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.prauga.toolkit.core.model.LinkSection
@@ -20,12 +21,11 @@ import org.prauga.toolkit.core.network.dto.toDomain
 internal const val BUNDLED_LINKS_ASSET = "links.json"
 
 /** Community and project links, published by the site with a copy bundled here. */
-class LinksRepository(
-    private val client: HttpClient,
-    private val assets: AssetManager,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
-) {
-    suspend fun links(): List<LinkSection> = withContext(ioDispatcher) { remote() ?: bundled() }
+@Singleton
+class LinksRepository
+@Inject
+constructor(private val client: HttpClient, private val assets: AssetManager) {
+    suspend fun links(): List<LinkSection> = withContext(Dispatchers.IO) { remote() ?: bundled() }
 
     private suspend fun remote(): List<LinkSection>? =
         try {

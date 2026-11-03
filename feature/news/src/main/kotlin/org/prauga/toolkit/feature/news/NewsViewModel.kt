@@ -4,11 +4,9 @@
 package org.prauga.toolkit.feature.news
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +14,6 @@ import kotlinx.coroutines.launch
 import org.prauga.toolkit.core.common.DataResult
 import org.prauga.toolkit.core.common.LoadError
 import org.prauga.toolkit.core.data.news.NewsRepository
-import org.prauga.toolkit.core.di.appContainer
 import org.prauga.toolkit.core.model.NewsPost
 
 sealed interface NewsUiState {
@@ -31,7 +28,8 @@ sealed interface NewsUiState {
     data class Failed(val error: LoadError) : NewsUiState
 }
 
-class NewsViewModel(private val repository: NewsRepository) : ViewModel() {
+@HiltViewModel
+class NewsViewModel @Inject constructor(private val repository: NewsRepository) : ViewModel() {
     private val _state = MutableStateFlow<NewsUiState>(NewsUiState.Loading)
     val state: StateFlow<NewsUiState> = _state.asStateFlow()
 
@@ -58,15 +56,6 @@ class NewsViewModel(private val repository: NewsRepository) : ViewModel() {
                         NewsUiState.Failed(result.error)
                     }
                 }
-        }
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val container = checkNotNull(this[APPLICATION_KEY]).appContainer()
-                NewsViewModel(container.newsRepository)
-            }
         }
     }
 }

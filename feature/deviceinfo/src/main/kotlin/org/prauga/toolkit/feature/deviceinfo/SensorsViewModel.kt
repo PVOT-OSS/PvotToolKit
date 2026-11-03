@@ -4,18 +4,15 @@
 package org.prauga.toolkit.feature.deviceinfo
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.prauga.toolkit.core.data.device.DeviceRepository
-import org.prauga.toolkit.core.di.appContainer
 import org.prauga.toolkit.core.model.SensorInfo
 
 data class SensorsUiState(
@@ -24,7 +21,9 @@ data class SensorsUiState(
 )
 
 /** Owns the sensor roster. Deliberately does not touch vitals: it shows none. */
-class SensorsViewModel(private val deviceRepository: DeviceRepository) : ViewModel() {
+@HiltViewModel
+class SensorsViewModel @Inject constructor(private val deviceRepository: DeviceRepository) :
+    ViewModel() {
     private val _state = MutableStateFlow(SensorsUiState())
     val state: StateFlow<SensorsUiState> = _state.asStateFlow()
 
@@ -36,15 +35,6 @@ class SensorsViewModel(private val deviceRepository: DeviceRepository) : ViewMod
         viewModelScope.launch {
             val details = deviceRepository.details()
             _state.update { it.copy(sensors = details.sensors) }
-        }
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val container = checkNotNull(this[APPLICATION_KEY]).appContainer()
-                SensorsViewModel(deviceRepository = container.deviceRepository)
-            }
         }
     }
 }

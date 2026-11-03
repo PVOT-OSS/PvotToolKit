@@ -17,8 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.components.PvotScreenDefaults
@@ -29,10 +29,7 @@ import org.prauga.toolkit.core.designsystem.component.ValueBlock
 private val SensorRowGap = 3.dp
 
 @Composable
-fun SensorsScreen(
-    modifier: Modifier = Modifier,
-    viewModel: SensorsViewModel = viewModel(factory = SensorsViewModel.Factory),
-) {
+fun SensorsScreen(modifier: Modifier = Modifier, viewModel: SensorsViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     SensorsContent(state = state, modifier = modifier)
 }
