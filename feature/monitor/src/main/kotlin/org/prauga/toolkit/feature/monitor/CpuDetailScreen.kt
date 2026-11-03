@@ -17,9 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.components.PvotScreenDefaults
@@ -31,10 +31,7 @@ import org.prauga.toolkit.core.designsystem.component.Sparkline
 import org.prauga.toolkit.core.model.CpuCluster
 
 @Composable
-fun CpuDetailScreen(
-    modifier: Modifier = Modifier,
-    viewModel: MonitorViewModel = viewModel(factory = MonitorViewModel.Factory),
-) {
+fun CpuDetailScreen(modifier: Modifier = Modifier, viewModel: MonitorViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LifecycleResumeEffect(viewModel) {

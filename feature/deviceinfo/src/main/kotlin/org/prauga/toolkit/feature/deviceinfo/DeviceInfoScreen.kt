@@ -29,8 +29,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prauga.pvot.coreui.PvotLoadingContent
 import com.prauga.pvot.coreui.PvotSectionHeader
 import com.prauga.pvot.designsystem.components.PvotCard
@@ -58,7 +58,7 @@ private val GroupGap = 17.dp
 @Composable
 fun DeviceInfoScreen(
     modifier: Modifier = Modifier,
-    viewModel: DeviceInfoViewModel = viewModel(factory = DeviceInfoViewModel.Factory),
+    viewModel: DeviceInfoViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     DeviceInfoContent(state = state, onNeedVitals = viewModel::ensureVitals, modifier = modifier)

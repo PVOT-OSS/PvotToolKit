@@ -9,7 +9,10 @@ import android.media.MediaCodecList
 import android.os.Build
 import android.system.Os
 import android.system.OsConstants
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
+import javax.inject.Inject
+import javax.inject.Singleton
 import org.prauga.toolkit.core.model.BuildDetails
 import org.prauga.toolkit.core.model.CodecSummary
 import org.prauga.toolkit.core.model.DeviceDetails
@@ -31,7 +34,8 @@ private val NOTABLE_MIME_TYPES =
     )
 
 /** The parts of the device screen that need a Context rather than a sysfs read. */
-class DeviceDetailsReader(private val context: Context) {
+@Singleton
+class DeviceDetailsReader @Inject constructor(@ApplicationContext private val context: Context) {
     private val display = DisplayInfoReader(context)
     private val sensors = SensorInfoReader(context)
     private val cameras = CameraInfoReader(context)

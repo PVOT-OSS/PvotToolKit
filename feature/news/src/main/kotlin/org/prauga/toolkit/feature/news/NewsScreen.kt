@@ -23,8 +23,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prauga.pvot.coreui.PvotEmptyContent
 import com.prauga.pvot.coreui.PvotErrorContent
 import com.prauga.pvot.designsystem.components.PvotCard
@@ -44,10 +44,7 @@ private const val SKELETON_CARDS = 4
 private val SkeletonCardHeight = 132.dp
 
 @Composable
-fun NewsScreen(
-    modifier: Modifier = Modifier,
-    viewModel: NewsViewModel = viewModel(factory = NewsViewModel.Factory),
-) {
+fun NewsScreen(modifier: Modifier = Modifier, viewModel: NewsViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val toolbarColor = MaterialTheme.colorScheme.surface.toArgb()

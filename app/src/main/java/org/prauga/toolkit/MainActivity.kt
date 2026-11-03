@@ -14,15 +14,18 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.prauga.pvot.designsystem.platform.PvotBaseActivity
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import org.prauga.toolkit.core.data.settings.ThemeRepository
 import org.prauga.toolkit.core.model.ThemePreference
 import org.prauga.toolkit.ui.ToolkitApp
 
+@AndroidEntryPoint
 class MainActivity : PvotBaseActivity() {
+    @Inject lateinit var themeRepository: ThemeRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val themeRepository = (application as ToolkitApplication).appContainer.themeRepository
 
         setPvotContent {
             val darkTheme = isDarkTheme(themeRepository)

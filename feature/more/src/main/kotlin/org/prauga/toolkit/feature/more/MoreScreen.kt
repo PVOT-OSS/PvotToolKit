@@ -26,8 +26,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.pm.PackageInfoCompat
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prauga.pvot.designsystem.components.PvotBottomSheet
 import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.components.PvotScreenDefaults
@@ -49,7 +49,7 @@ fun MoreScreen(
     onOpenNews: () -> Unit,
     onOpenLicenses: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: MoreViewModel = viewModel(factory = MoreViewModel.Factory),
+    viewModel: MoreViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current

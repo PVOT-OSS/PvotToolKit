@@ -16,9 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.components.PvotScreenDefaults
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
@@ -38,7 +38,7 @@ import org.prauga.toolkit.core.model.Vitals
 fun MonitorScreen(
     onOpenCpuDetail: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: MonitorViewModel = viewModel(factory = MonitorViewModel.Factory),
+    viewModel: MonitorViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 

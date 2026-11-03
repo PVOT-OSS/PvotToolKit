@@ -4,6 +4,7 @@
 plugins {
     alias(libs.plugins.toolkit.android.application)
     alias(libs.plugins.toolkit.android.compose)
+    alias(libs.plugins.toolkit.android.hilt)
     // :app declares MoreGraphRoute, so it needs serializers generated too.
     alias(libs.plugins.kotlin.serialization)
 }
@@ -30,7 +31,8 @@ dependencies {
     implementation(project(":feature:news"))
 
     implementation(project(":core:designsystem"))
-    implementation(project(":core:di"))
+    implementation(project(":core:batterymonitor"))
+    implementation(project(":core:data"))
     implementation(project(":core:model"))
 
     implementation(libs.androidx.activity.compose)

@@ -27,8 +27,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.components.PvotScreenDefaults
@@ -66,7 +66,7 @@ fun DiscoverScreen(
     onOpenMonitoring: () -> Unit,
     onOpenNews: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: DiscoverViewModel = viewModel(factory = DiscoverViewModel.Factory),
+    viewModel: DiscoverViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
