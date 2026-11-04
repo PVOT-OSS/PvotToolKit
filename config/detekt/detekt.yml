@@ -71,7 +71,7 @@ style:
     ignorePropertyDeclaration: true
     ignoreCompanionObjectPropertyDeclaration: true
   MaxLineLength:
-    # ktlint owns formatting, from .editorconfig. Two tools enforcing line
+    # ktfmt owns formatting, through pre-commit. Two tools enforcing line
     # length is one tool too many, even while they agree.
     active: false
   ReturnCount:

@@ -8,19 +8,12 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.withType
-import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
-/** Formatting and static analysis, applied to every module from one place. */
+/** Static analysis, applied to every module from one place. */
 class KotlinQualityConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) =
         with(target) {
-            pluginManager.apply("org.jlleitschuh.gradle.ktlint")
             pluginManager.apply("dev.detekt")
-
-            extensions.configure<KtlintExtension> {
-                version.set(libs.findVersion("ktlintEngine").get().requiredVersion)
-                filter { exclude { it.file.path.contains("/build/") } }
-            }
 
             extensions.configure<DetektExtension> {
                 buildUponDefaultConfig.set(true)
