@@ -3,23 +3,19 @@
 
 package org.prauga.toolkit.feature.more
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
-@Serializable data object MoreRoute
-
-fun NavController.navigateToMore(navOptions: NavOptions? = null) = navigate(MoreRoute, navOptions)
+@Serializable data object MoreRoute : NavKey
 
 /** Cross-feature destinations arrive as callbacks, supplied by :app. */
-fun NavGraphBuilder.moreScreen(
+fun EntryProviderScope<NavKey>.moreEntry(
     onOpenDevices: () -> Unit,
     onOpenNews: () -> Unit,
     onOpenLicenses: () -> Unit,
 ) {
-    composable<MoreRoute> {
+    entry<MoreRoute> {
         MoreScreen(
             onOpenDevices = onOpenDevices,
             onOpenNews = onOpenNews,
