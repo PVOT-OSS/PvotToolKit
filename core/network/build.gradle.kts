@@ -3,6 +3,7 @@
 
 plugins {
     alias(libs.plugins.toolkit.android.library)
+    alias(libs.plugins.toolkit.android.hilt)
     alias(libs.plugins.kotlin.serialization)
 }
 

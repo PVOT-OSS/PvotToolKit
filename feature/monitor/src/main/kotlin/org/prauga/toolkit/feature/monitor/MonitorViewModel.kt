@@ -4,11 +4,9 @@
 package org.prauga.toolkit.feature.monitor
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlin.math.abs
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +16,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.prauga.toolkit.core.data.device.DeviceRepository
-import org.prauga.toolkit.core.di.appContainer
 import org.prauga.toolkit.core.model.DeviceProfile
 import org.prauga.toolkit.core.model.Vitals
 
@@ -42,7 +39,9 @@ data class MonitorUiState(
     val history: MetricHistory = MetricHistory(),
 )
 
-class MonitorViewModel(private val deviceRepository: DeviceRepository) : ViewModel() {
+@HiltViewModel
+class MonitorViewModel @Inject constructor(private val deviceRepository: DeviceRepository) :
+    ViewModel() {
     private val _state = MutableStateFlow(MonitorUiState())
     val state: StateFlow<MonitorUiState> = _state.asStateFlow()
 
@@ -118,14 +117,5 @@ class MonitorViewModel(private val deviceRepository: DeviceRepository) : ViewMod
         if (value == null) return this
         val next = this + value
         return if (next.size > WINDOW) next.takeLast(WINDOW) else next
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val container = checkNotNull(this[APPLICATION_KEY]).appContainer()
-                MonitorViewModel(container.deviceRepository)
-            }
-        }
     }
 }

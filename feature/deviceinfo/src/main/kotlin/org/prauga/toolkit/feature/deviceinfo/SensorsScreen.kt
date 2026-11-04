@@ -17,8 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.components.PvotScreenDefaults
@@ -29,10 +29,7 @@ import org.prauga.toolkit.core.designsystem.component.ValueBlock
 private val SensorRowGap = 3.dp
 
 @Composable
-fun SensorsScreen(
-    modifier: Modifier = Modifier,
-    viewModel: SensorsViewModel = viewModel(factory = SensorsViewModel.Factory),
-) {
+fun SensorsScreen(modifier: Modifier = Modifier, viewModel: SensorsViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     SensorsContent(state = state, modifier = modifier)
 }
@@ -49,7 +46,9 @@ private fun SensorsContent(state: SensorsUiState, modifier: Modifier = Modifier)
         item(key = "header") { SensorHeader(count = sensors.size, deviceName = state.deviceName) }
         if (sensors.isNotEmpty()) {
             item(key = "title") { GroupTitle(stringResource(R.string.sensors_available)) }
-            itemsIndexed(items = sensors, key = { _, sensor -> sensor.name }) { index, sensor ->
+            itemsIndexed(items = sensors, key = { index, sensor -> "$index#${sensor.name}" }) {
+                index,
+                sensor ->
                 ValueBlock(
                     label = sensor.name,
                     value = stringResource(R.string.sensors_subtitle, sensor.type, sensor.vendor),

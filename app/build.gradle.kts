@@ -4,8 +4,7 @@
 plugins {
     alias(libs.plugins.toolkit.android.application)
     alias(libs.plugins.toolkit.android.compose)
-    // :app declares MoreGraphRoute, so it needs serializers generated too.
-    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.toolkit.android.hilt)
 }
 
 android {
@@ -30,13 +29,15 @@ dependencies {
     implementation(project(":feature:news"))
 
     implementation(project(":core:designsystem"))
-    implementation(project(":core:di"))
+    implementation(project(":core:batterymonitor"))
+    implementation(project(":core:data"))
     implementation(project(":core:model"))
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.androidx.navigation3.ui)
 
     // Coil's singleton loader is configured in ToolkitApplication.
     implementation(libs.coil.compose)

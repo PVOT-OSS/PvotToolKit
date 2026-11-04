@@ -10,6 +10,9 @@ import android.content.IntentFilter
 import android.os.BatteryManager
 import android.os.Build
 import androidx.core.content.getSystemService
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
 import org.prauga.toolkit.core.model.BatteryVitals
 import org.prauga.toolkit.core.model.MemoryVitals
 import org.prauga.toolkit.core.model.Vitals
@@ -17,7 +20,8 @@ import org.prauga.toolkit.core.model.Vitals
 private const val TENTHS_PER_DEGREE = 10f
 
 /** Samples live state. */
-class SystemVitalsReader(context: Context) {
+@Singleton
+class SystemVitalsReader @Inject constructor(@ApplicationContext context: Context) {
     private val appContext = context.applicationContext
     private val platform = PlatformVitalsReader(appContext)
 

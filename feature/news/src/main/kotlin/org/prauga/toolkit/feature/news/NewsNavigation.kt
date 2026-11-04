@@ -3,16 +3,12 @@
 
 package org.prauga.toolkit.feature.news
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
-@Serializable data object NewsRoute
+@Serializable data object NewsRoute : NavKey
 
-fun NavController.navigateToNews(navOptions: NavOptions? = null) = navigate(NewsRoute, navOptions)
-
-fun NavGraphBuilder.newsScreen() {
-    composable<NewsRoute> { NewsScreen() }
+fun EntryProviderScope<NavKey>.newsEntry() {
+    entry<NewsRoute> { NewsScreen() }
 }

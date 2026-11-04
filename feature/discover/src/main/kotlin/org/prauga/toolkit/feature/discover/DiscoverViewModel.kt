@@ -4,11 +4,9 @@
 package org.prauga.toolkit.feature.discover
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +15,6 @@ import kotlinx.coroutines.launch
 import org.prauga.toolkit.core.common.DataResult
 import org.prauga.toolkit.core.data.device.DeviceRepository
 import org.prauga.toolkit.core.data.news.NewsRepository
-import org.prauga.toolkit.core.di.appContainer
 import org.prauga.toolkit.core.model.DeviceProfile
 import org.prauga.toolkit.core.model.NewsPost
 import org.prauga.toolkit.core.model.Vitals
@@ -30,7 +27,10 @@ data class DiscoverUiState(
     val headlines: List<NewsPost> = emptyList(),
 )
 
-class DiscoverViewModel(
+@HiltViewModel
+class DiscoverViewModel
+@Inject
+constructor(
     private val deviceRepository: DeviceRepository,
     private val newsRepository: NewsRepository,
 ) : ViewModel() {
@@ -54,18 +54,6 @@ class DiscoverViewModel(
             val result = newsRepository.news()
             if (result is DataResult.Success) {
                 _state.update { it.copy(headlines = result.data.take(HEADLINE_COUNT)) }
-            }
-        }
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val container = checkNotNull(this[APPLICATION_KEY]).appContainer()
-                DiscoverViewModel(
-                    deviceRepository = container.deviceRepository,
-                    newsRepository = container.newsRepository,
-                )
             }
         }
     }

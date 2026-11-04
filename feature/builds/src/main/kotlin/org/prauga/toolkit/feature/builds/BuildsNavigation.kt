@@ -3,17 +3,12 @@
 
 package org.prauga.toolkit.feature.builds
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
-@Serializable data object BuildsRoute
+@Serializable data object BuildsRoute : NavKey
 
-fun NavController.navigateToBuilds(navOptions: NavOptions? = null) =
-    navigate(BuildsRoute, navOptions)
-
-fun NavGraphBuilder.buildsScreen() {
-    composable<BuildsRoute> { BuildsScreen() }
+fun EntryProviderScope<NavKey>.buildsEntry() {
+    entry<BuildsRoute> { BuildsScreen() }
 }

@@ -4,10 +4,14 @@
 package org.prauga.toolkit.core.device
 
 import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
 import org.prauga.toolkit.core.model.DeviceProfile
 
 /** Reads everything fixed for the life of the process, in one pass. */
-class DeviceProfileReader(context: Context) {
+@Singleton
+class DeviceProfileReader @Inject constructor(@ApplicationContext context: Context) {
     private val platform = PlatformVitalsReader(context)
 
     fun read(): DeviceProfile {

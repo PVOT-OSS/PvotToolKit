@@ -4,11 +4,9 @@
 package org.prauga.toolkit.feature.deviceinfo
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +14,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.prauga.toolkit.core.data.device.DeviceRepository
-import org.prauga.toolkit.core.di.appContainer
 import org.prauga.toolkit.core.model.DeviceDetails
 import org.prauga.toolkit.core.model.DeviceProfile
 import org.prauga.toolkit.core.model.Vitals
@@ -28,7 +25,9 @@ data class DeviceInfoUiState(
 )
 
 /** Owns the hardware and build readouts behind the Device HW screen. */
-class DeviceInfoViewModel(private val deviceRepository: DeviceRepository) : ViewModel() {
+@HiltViewModel
+class DeviceInfoViewModel @Inject constructor(private val deviceRepository: DeviceRepository) :
+    ViewModel() {
     private val _state = MutableStateFlow(DeviceInfoUiState())
     val state: StateFlow<DeviceInfoUiState> = _state.asStateFlow()
 
@@ -58,14 +57,5 @@ class DeviceInfoViewModel(private val deviceRepository: DeviceRepository) : View
                 val vitals = deviceRepository.vitals()
                 _state.update { it.copy(vitals = vitals) }
             }
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val container = checkNotNull(this[APPLICATION_KEY]).appContainer()
-                DeviceInfoViewModel(deviceRepository = container.deviceRepository)
-            }
-        }
     }
 }

@@ -3,16 +3,12 @@
 
 package org.prauga.toolkit.feature.tune
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
-@Serializable data object TuneRoute
+@Serializable data object TuneRoute : NavKey
 
-fun NavController.navigateToTune(navOptions: NavOptions? = null) = navigate(TuneRoute, navOptions)
-
-fun NavGraphBuilder.tuneScreen() {
-    composable<TuneRoute> { TuneScreen() }
+fun EntryProviderScope<NavKey>.tuneEntry() {
+    entry<TuneRoute> { TuneScreen() }
 }

@@ -11,7 +11,10 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -28,7 +31,8 @@ private val PreviousSampleKey = stringPreferencesKey("previous_sample")
 private val EnabledKey = booleanPreferencesKey("enabled")
 
 /** Persists the session so it survives process death and reboot. */
-class BatterySessionStore(context: Context) {
+@Singleton
+class BatterySessionStore @Inject constructor(@ApplicationContext context: Context) {
     private val dataStore = context.applicationContext.batteryDataStore
 
     private val json = Json { ignoreUnknownKeys = true }

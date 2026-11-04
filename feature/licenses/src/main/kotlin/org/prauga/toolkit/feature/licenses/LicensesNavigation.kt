@@ -3,17 +3,12 @@
 
 package org.prauga.toolkit.feature.licenses
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
-@Serializable data object LicensesRoute
+@Serializable data object LicensesRoute : NavKey
 
-fun NavController.navigateToLicenses(navOptions: NavOptions? = null) =
-    navigate(LicensesRoute, navOptions)
-
-fun NavGraphBuilder.licensesScreen() {
-    composable<LicensesRoute> { LicensesScreen() }
+fun EntryProviderScope<NavKey>.licensesEntry() {
+    entry<LicensesRoute> { LicensesScreen() }
 }

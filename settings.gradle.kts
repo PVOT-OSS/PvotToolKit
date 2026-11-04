@@ -48,8 +48,6 @@ include(":core:data")
 
 include(":core:designsystem")
 
-include(":core:di")
-
 include(":feature:discover")
 
 include(":feature:tune")

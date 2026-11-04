@@ -9,8 +9,9 @@ import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.http.HttpHeaders
 import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
@@ -22,16 +23,14 @@ import org.prauga.toolkit.core.network.dto.NewsFeedDto
 import org.prauga.toolkit.core.network.dto.toDomain
 
 /** The newsroom, read from the site's static feed. */
-class NewsRepository(
-    private val client: HttpClient,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
-) {
+@Singleton
+class NewsRepository @Inject constructor(private val client: HttpClient) {
     // The final catch is deliberately broad: anything Ktor or the platform
     // raises that is not IO or a parse failure is reported as a server problem,
     // and the cause travels with it rather than being discarded.
     @Suppress("TooGenericExceptionCaught")
     suspend fun news(): DataResult<List<NewsPost>> =
-        withContext(ioDispatcher) {
+        withContext(Dispatchers.IO) {
             try {
                 DataResult.Success(client.get(ToolkitEndpoints.NEWS).body<NewsFeedDto>().toDomain())
             } catch (cancellation: CancellationException) {
