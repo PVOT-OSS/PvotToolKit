@@ -3,27 +3,19 @@
 
 package org.prauga.toolkit.feature.monitor
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
-@Serializable data object MonitorRoute
+@Serializable data object MonitorRoute : NavKey
 
 /** Detail pushed from the CPU card. */
-@Serializable data object CpuDetailRoute
+@Serializable data object CpuDetailRoute : NavKey
 
-fun NavController.navigateToMonitor(navOptions: NavOptions? = null) =
-    navigate(MonitorRoute, navOptions)
-
-fun NavController.navigateToCpuDetail(navOptions: NavOptions? = null) =
-    navigate(CpuDetailRoute, navOptions)
-
-fun NavGraphBuilder.monitorScreen(onOpenCpuDetail: () -> Unit) {
-    composable<MonitorRoute> { MonitorScreen(onOpenCpuDetail = onOpenCpuDetail) }
+fun EntryProviderScope<NavKey>.monitorEntry(onOpenCpuDetail: () -> Unit) {
+    entry<MonitorRoute> { MonitorScreen(onOpenCpuDetail = onOpenCpuDetail) }
 }
 
-fun NavGraphBuilder.cpuDetailScreen() {
-    composable<CpuDetailRoute> { CpuDetailScreen() }
+fun EntryProviderScope<NavKey>.cpuDetailEntry() {
+    entry<CpuDetailRoute> { CpuDetailScreen() }
 }

@@ -3,6 +3,12 @@
 
 package org.prauga.toolkit.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,19 +27,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.prauga.pvot.designsystem.effects.pvotGlassBackdrop
 import com.prauga.pvot.designsystem.effects.rememberPvotGlassBackdrop
+import com.prauga.pvot.designsystem.motion.PvotDurations
+import com.prauga.pvot.designsystem.motion.PvotMotion
 import com.prauga.pvot.designsystem.navigation.PvotNavBar
 import com.prauga.pvot.designsystem.navigation.PvotTabItem
 import org.prauga.toolkit.navigation.DeviceDestination
+import org.prauga.toolkit.navigation.Navigator
 import org.prauga.toolkit.navigation.ToolkitDestination
-import org.prauga.toolkit.navigation.ToolkitNavHost
-import org.prauga.toolkit.navigation.deviceDestination
-import org.prauga.toolkit.navigation.navigateToDevice
-import org.prauga.toolkit.navigation.navigateToTopLevel
-import org.prauga.toolkit.navigation.topLevelDestination
+import org.prauga.toolkit.navigation.ToolkitNavDisplay
+import org.prauga.toolkit.navigation.rememberNavigationState
+
+/** How the nav bar leaves and returns around screens opened on top of a tab. */
+private fun <T> barMotion() = tween<T>(PvotDurations.Medium, easing = PvotMotion.Settle)
 
 /** Pixels of scroll in one event before the nav bar reacts, so a jitter does not flip it. */
 private const val SCROLL_THRESHOLD = 4f
@@ -41,11 +48,11 @@ private const val SCROLL_THRESHOLD = 4f
 /** The app shell: one glass nav bar floating over the screens, which are its backdrop. */
 @Composable
 fun ToolkitApp(modifier: Modifier = Modifier) {
-    val navController = rememberNavController()
-    val backStackEntry by navController.currentBackStackEntryAsState()
+    val navigationState = rememberNavigationState()
+    val navigator = remember(navigationState) { Navigator(navigationState) }
 
-    val device = backStackEntry?.destination.deviceDestination()
-    val current = backStackEntry?.destination.topLevelDestination() ?: ToolkitDestination.DISCOVER
+    val device = navigationState.openDeviceScreen
+    val current = navigationState.selectedTab
 
     val backdrop = rememberPvotGlassBackdrop()
     var navCompact by rememberSaveable { mutableStateOf(false) }
@@ -87,29 +94,36 @@ fun ToolkitApp(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = Color.Transparent,
+        contentColor = MaterialTheme.colorScheme.onBackground,
         bottomBar = {
-            if (device != null) {
-                PvotNavBar(
-                    selectedTab = device.ordinal,
-                    onTabClick = { index ->
-                        navCompact = false
-                        navController.navigateToDevice(DeviceDestination.entries[index])
-                    },
-                    tabs = deviceTabs,
-                    backdrop = backdrop,
-                    compact = navCompact,
-                )
-            } else {
-                PvotNavBar(
-                    selectedTab = current.ordinal,
-                    onTabClick = { index ->
-                        navCompact = false
-                        navController.navigateToTopLevel(ToolkitDestination.entries[index])
-                    },
-                    tabs = tabs,
-                    backdrop = backdrop,
-                    compact = navCompact,
-                )
+            AnimatedVisibility(
+                visible = !navigationState.fullScreen,
+                enter = slideInVertically(barMotion()) { it } + fadeIn(barMotion()),
+                exit = slideOutVertically(barMotion()) { it } + fadeOut(barMotion()),
+            ) {
+                if (device != null) {
+                    PvotNavBar(
+                        selectedTab = device.ordinal,
+                        onTabClick = { index ->
+                            navCompact = false
+                            navigator.switchDevice(DeviceDestination.entries[index])
+                        },
+                        tabs = deviceTabs,
+                        backdrop = backdrop,
+                        compact = navCompact,
+                    )
+                } else {
+                    PvotNavBar(
+                        selectedTab = current.ordinal,
+                        onTabClick = { index ->
+                            navCompact = false
+                            navigator.selectTab(ToolkitDestination.entries[index])
+                        },
+                        tabs = tabs,
+                        backdrop = backdrop,
+                        compact = navCompact,
+                    )
+                }
             }
         },
     ) { innerPadding ->
@@ -119,8 +133,9 @@ fun ToolkitApp(modifier: Modifier = Modifier) {
                     .pvotGlassBackdrop(backdrop)
                     .background(MaterialTheme.colorScheme.background)
         ) {
-            ToolkitNavHost(
-                navController = navController,
+            ToolkitNavDisplay(
+                state = navigationState,
+                navigator = navigator,
                 modifier =
                     Modifier.fillMaxSize()
                         .nestedScroll(scrollConnection)

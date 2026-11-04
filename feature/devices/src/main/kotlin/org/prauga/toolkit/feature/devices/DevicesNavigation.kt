@@ -3,17 +3,12 @@
 
 package org.prauga.toolkit.feature.devices
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
-@Serializable data object DevicesRoute
+@Serializable data object DevicesRoute : NavKey
 
-fun NavController.navigateToDevices(navOptions: NavOptions? = null) =
-    navigate(DevicesRoute, navOptions)
-
-fun NavGraphBuilder.devicesScreen() {
-    composable<DevicesRoute> { DevicesScreen() }
+fun EntryProviderScope<NavKey>.devicesEntry() {
+    entry<DevicesRoute> { DevicesScreen() }
 }

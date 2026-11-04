@@ -3,23 +3,18 @@
 
 package org.prauga.toolkit.feature.discover
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
-@Serializable data object DiscoverRoute
+@Serializable data object DiscoverRoute : NavKey
 
-fun NavController.navigateToDiscover(navOptions: NavOptions? = null) =
-    navigate(DiscoverRoute, navOptions)
-
-fun NavGraphBuilder.discoverScreen(
+fun EntryProviderScope<NavKey>.discoverEntry(
     onOpenDevice: () -> Unit,
     onOpenMonitoring: () -> Unit,
     onOpenNews: () -> Unit,
 ) {
-    composable<DiscoverRoute> {
+    entry<DiscoverRoute> {
         DiscoverScreen(
             onOpenDevice = onOpenDevice,
             onOpenMonitoring = onOpenMonitoring,

@@ -23,7 +23,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("implementation", libs.lib("androidx-lifecycle-runtime-compose"))
                 add("implementation", libs.lib("androidx-lifecycle-viewmodel-compose"))
                 add("implementation", libs.lib("androidx-hilt-lifecycle-viewmodel-compose"))
-                add("implementation", libs.lib("androidx-navigation-compose"))
+                add("implementation", libs.lib("androidx-navigation3-runtime"))
                 add("testImplementation", libs.lib("junit"))
             }
         }

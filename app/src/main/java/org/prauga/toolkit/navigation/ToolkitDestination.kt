@@ -5,16 +5,17 @@ package org.prauga.toolkit.navigation
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation3.runtime.NavKey
 import org.prauga.toolkit.R
 import org.prauga.toolkit.feature.builds.BuildsRoute
+import org.prauga.toolkit.feature.discover.DiscoverRoute
+import org.prauga.toolkit.feature.monitor.MonitorRoute
+import org.prauga.toolkit.feature.more.MoreRoute
 import org.prauga.toolkit.feature.tune.TuneRoute
 
 /** Top-level destinations, in nav bar order. */
 enum class ToolkitDestination(
-    val route: Any,
+    val route: NavKey,
     @param:DrawableRes val iconRes: Int,
     @param:StringRes val labelRes: Int,
     @param:StringRes val contentDescriptionRes: Int,
@@ -22,7 +23,7 @@ enum class ToolkitDestination(
     @param:StringRes val expandedLabelRes: Int? = null,
 ) {
     DISCOVER(
-        route = DiscoverGraphRoute,
+        route = DiscoverRoute,
         iconRes = R.drawable.ic_tab_discover,
         labelRes = R.string.tab_discover,
         contentDescriptionRes = R.string.tab_discover_description,
@@ -34,7 +35,7 @@ enum class ToolkitDestination(
         contentDescriptionRes = R.string.tab_tune_description,
     ),
     MONITOR(
-        route = MonitorGraphRoute,
+        route = MonitorRoute,
         iconRes = R.drawable.ic_tab_monitor,
         labelRes = R.string.tab_monitor,
         contentDescriptionRes = R.string.tab_monitor_description,
@@ -46,17 +47,9 @@ enum class ToolkitDestination(
         contentDescriptionRes = R.string.tab_builds_description,
     ),
     MORE(
-        route = MoreGraphRoute,
+        route = MoreRoute,
         iconRes = R.drawable.ic_tab_more,
         labelRes = R.string.tab_more,
         contentDescriptionRes = R.string.tab_more_description,
     ),
-}
-
-/** The top-level destination this entry sits under. */
-fun NavDestination?.topLevelDestination(): ToolkitDestination? {
-    val hierarchy = this?.hierarchy ?: return null
-    return ToolkitDestination.entries.firstOrNull { destination ->
-        hierarchy.any { it.hasRoute(destination.route::class) }
-    }
 }
