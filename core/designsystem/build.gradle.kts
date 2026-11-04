@@ -9,8 +9,8 @@ plugins {
 android { namespace = "org.prauga.toolkit.core.designsystem" }
 
 dependencies {
-    api(project(":design-system"))
-    api(project(":core-ui"))
+    api(libs.pvot.design.system)
+    api(libs.pvot.core.ui)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.browser)
 }

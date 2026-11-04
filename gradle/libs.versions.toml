@@ -24,6 +24,7 @@ androidxDatastore = "1.2.1"
 kotlinxSerializationJson = "1.11.0"
 detekt = "2.0.0-alpha.6"
 detektCompose = "0.6.4"
+pvot = "1.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -64,6 +65,8 @@ detekt-composeRules = { group = "io.nlopez.compose.rules", name = "detekt", vers
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 compose-gradlePlugin = { group = "org.jetbrains.kotlin", name = "compose-compiler-gradle-plugin", version.ref = "kotlin" }
 kotlin-metadata-jvm = { group = "org.jetbrains.kotlin", name = "kotlin-metadata-jvm", version.ref = "kotlin" }
+pvot-design-system = { group = "com.prauga.pvot", name = "design-system", version.ref = "pvot" }
+pvot-core-ui = { group = "com.prauga.pvot", name = "core-ui", version.ref = "pvot" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

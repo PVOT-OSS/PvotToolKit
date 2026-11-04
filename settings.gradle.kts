@@ -23,6 +23,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven("https://pvot-oss.github.io/PvotLib/maven") {
+            content { includeGroup("com.prauga.pvot") }
+        }
     }
 }
 
@@ -65,13 +68,3 @@ include(":feature:deviceinfo")
 include(":feature:more")
 
 include(":feature:licenses")
-
-includeBuild("PvotLib/build-logic") { name = "pvot-build-logic" }
-
-include(":design-system")
-
-project(":design-system").projectDir = file("PvotLib/design-system")
-
-include(":core-ui")
-
-project(":core-ui").projectDir = file("PvotLib/core-ui")
