@@ -20,9 +20,8 @@ internal class CpuReader(
         if (policies.isEmpty()) return null
 
         val coreCount =
-            (listCoreDirs(cpuRoot).keys + policies.flatMap { it.relatedCores })
-                .maxOrNull()
-                ?.plus(1) ?: 0
+            (listCoreDirs(cpuRoot).keys + policies.flatMap { it.relatedCores }).maxOrNull()?.plus(1)
+                ?: 0
 
         return CpuVitals(
             perCoreKhz =

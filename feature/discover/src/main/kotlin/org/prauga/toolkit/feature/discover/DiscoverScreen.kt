@@ -243,16 +243,18 @@ private fun VitalsGroup(vitals: Vitals?, onOpenMonitoring: () -> Unit) {
                 vitals?.memory?.let { memory -> add { i, n -> MemoryRow(memory, i, n) } }
                 vitals?.cpu?.let { cpu ->
                     add { i, n -> CpuRow(cpu, i, n) }
-                    cpu.governors.takeIf { it.isNotEmpty() }?.let { governors ->
-                        add { i, n ->
-                            ValueRow(
-                                stringResource(R.string.discover_governor),
-                                governors.joinToString(", "),
-                                i,
-                                n,
-                            )
+                    cpu.governors
+                        .takeIf { it.isNotEmpty() }
+                        ?.let { governors ->
+                            add { i, n ->
+                                ValueRow(
+                                    stringResource(R.string.discover_governor),
+                                    governors.joinToString(", "),
+                                    i,
+                                    n,
+                                )
+                            }
                         }
-                    }
                 }
                 add { i, n ->
                     ActionRow(

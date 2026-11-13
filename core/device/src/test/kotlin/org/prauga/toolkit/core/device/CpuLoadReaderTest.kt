@@ -46,8 +46,7 @@ class CpuLoadReaderTest {
 
     @Test
     fun `average spans all cores`() {
-        val load =
-            requireNotNull(CpuLoadReader.load(sampleAt(0, 0, 0), sampleAt(1, 1_000_000, 0)))
+        val load = requireNotNull(CpuLoadReader.load(sampleAt(0, 0, 0), sampleAt(1, 1_000_000, 0)))
         assertEquals(0.5f, requireNotNull(load.average), 0.001f)
     }
 

@@ -6,4 +6,5 @@ package org.prauga.toolkit.core.device
 import android.os.Build
 
 // Build fills a missing property with the literal "unknown".
-internal fun String?.knownOrNull(): String? = this?.takeIf { it.isNotBlank() && it != Build.UNKNOWN }
+internal fun String?.knownOrNull(): String? =
+    this?.takeIf { it.isNotBlank() && it != Build.UNKNOWN }

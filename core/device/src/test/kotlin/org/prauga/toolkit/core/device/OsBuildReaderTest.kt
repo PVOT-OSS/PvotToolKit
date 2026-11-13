@@ -47,7 +47,10 @@ class OsBuildReaderTest {
 
     @Test
     fun `a locked bootloader reads as locked`() {
-        assertEquals(false, reader("ro.boot.flash.locked" to "1").readBootState().bootloaderUnlocked)
+        assertEquals(
+            false,
+            reader("ro.boot.flash.locked" to "1").readBootState().bootloaderUnlocked,
+        )
     }
 
     @Test

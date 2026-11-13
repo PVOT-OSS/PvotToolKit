@@ -34,8 +34,7 @@ object CpuLoadReader {
 
     // A core with no readable idle time would otherwise sum to zero and read as fully busy.
     private fun summedIdleMicros(core: File): Long? {
-        val states =
-            core.resolve("cpuidle").listFiles { file -> file.name.startsWith("state") }
+        val states = core.resolve("cpuidle").listFiles { file -> file.name.startsWith("state") }
         if (states.isNullOrEmpty()) return null
         return states.sumOf { state ->
             state.resolve("time").readTextOrNull()?.toLongOrNull() ?: return null

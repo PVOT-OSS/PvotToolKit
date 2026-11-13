@@ -58,9 +58,7 @@ class DeviceDetailsReader @Inject constructor(@ApplicationContext private val co
             device = Build.DEVICE.knownOrNull(),
             hardware = Build.HARDWARE.knownOrNull(),
             bootloader = Build.BOOTLOADER.knownOrNull(),
-            radio =
-                properties["gsm.version.baseband"]
-                    ?: Build.getRadioVersion().knownOrNull(),
+            radio = properties["gsm.version.baseband"] ?: Build.getRadioVersion().knownOrNull(),
             incremental = Build.VERSION.INCREMENTAL.knownOrNull(),
             host = Build.HOST.knownOrNull(),
             buildTimeMillis = Build.TIME,
@@ -89,7 +87,8 @@ class DeviceDetailsReader @Inject constructor(@ApplicationContext private val co
             ?.mapNotNull { line ->
                 val parts = line.split(':', limit = 2)
                 if (parts.size != 2) return@mapNotNull null
-                val kb = parts[1].trim().removeSuffix(" kB").toLongOrNull() ?: return@mapNotNull null
+                val kb =
+                    parts[1].trim().removeSuffix(" kB").toLongOrNull() ?: return@mapNotNull null
                 parts[0] to kb * BYTES_PER_KILOBYTE
             }
             ?.toMap()
