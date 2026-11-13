@@ -12,18 +12,19 @@ import coil3.svg.SvgDecoder
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.prauga.toolkit.core.batterymonitor.BatteryMonitorService
 import org.prauga.toolkit.core.batterymonitor.BatterySessionStore
+import org.prauga.toolkit.core.common.coroutines.ApplicationScope
 import timber.log.Timber
 
 @HiltAndroidApp
 class ToolkitApplication : Application(), SingletonImageLoader.Factory {
 
     @Inject lateinit var batterySessionStore: BatterySessionStore
+
+    @Inject @ApplicationScope lateinit var applicationScope: CoroutineScope
 
     override fun onCreate() {
         super.onCreate()
@@ -33,7 +34,7 @@ class ToolkitApplication : Application(), SingletonImageLoader.Factory {
 
     /** Second line of defence behind the restart receiver. */
     private fun restoreBatteryMonitor() {
-        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+        applicationScope.launch {
             if (BatteryMonitorService.running) return@launch
             if (batterySessionStore.enabled.first()) {
                 BatteryMonitorService.start(this@ToolkitApplication)
