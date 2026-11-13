@@ -17,4 +17,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.timber)
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.ktor.client.mock)
 }

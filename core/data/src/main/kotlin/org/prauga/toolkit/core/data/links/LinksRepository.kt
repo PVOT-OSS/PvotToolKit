@@ -25,12 +25,24 @@ private const val BUNDLED_LINKS_ASSET = "links.json"
 /** Community and project links, published by the site with a copy bundled here. */
 @Singleton
 class LinksRepository
-@Inject
-constructor(
+internal constructor(
     private val api: ToolkitApi,
-    private val assets: AssetManager,
-    @Dispatcher(ToolkitDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+    private val readBundled: suspend () -> String,
 ) {
+    @Inject
+    constructor(
+        api: ToolkitApi,
+        assets: AssetManager,
+        @Dispatcher(ToolkitDispatchers.IO) ioDispatcher: CoroutineDispatcher,
+    ) : this(
+        api,
+        {
+            withContext(ioDispatcher) {
+                assets.open(BUNDLED_LINKS_ASSET).bufferedReader().use { it.readText() }
+            }
+        },
+    )
+
     suspend fun links(): DataResult.Success<List<LinkSection>> =
         remote()?.let { DataResult.Success(it) } ?: DataResult.Success(bundled(), stale = true)
 
@@ -53,11 +65,7 @@ constructor(
 
     /** A broken bundled copy is a build mistake, so it throws; BundledLinksTest guards the asset. */
     private suspend fun bundled(): List<LinkSection> {
-        val text =
-            withContext(ioDispatcher) {
-                assets.open(BUNDLED_LINKS_ASSET).bufferedReader().use { it.readText() }
-            }
-        val sections = ToolkitJson.decodeFromString<LinksDto>(text).toDomain()
+        val sections = ToolkitJson.decodeFromString<LinksDto>(readBundled()).toDomain()
         check(sections.isNotEmpty()) { "$BUNDLED_LINKS_ASSET has no links to show" }
         return sections
     }
