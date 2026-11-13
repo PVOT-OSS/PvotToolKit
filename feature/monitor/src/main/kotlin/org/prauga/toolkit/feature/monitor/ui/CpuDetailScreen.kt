@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Saalim Quadri <danascape@gmail.com>
 // SPDX-License-Identifier: Apache-2.0
 
-package org.prauga.toolkit.feature.monitor
+package org.prauga.toolkit.feature.monitor.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,9 +29,10 @@ import org.prauga.toolkit.core.designsystem.component.MetricLine
 import org.prauga.toolkit.core.designsystem.component.Sparkline
 import org.prauga.toolkit.core.designsystem.format.rememberUnitFormatter
 import org.prauga.toolkit.core.model.CpuCluster
+import org.prauga.toolkit.feature.monitor.R
 
 @Composable
-fun CpuDetailScreen(modifier: Modifier = Modifier, viewModel: MonitorViewModel = hiltViewModel()) {
+internal fun CpuDetailScreen(modifier: Modifier = Modifier, viewModel: MonitorViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val topology = state.profile?.cpu

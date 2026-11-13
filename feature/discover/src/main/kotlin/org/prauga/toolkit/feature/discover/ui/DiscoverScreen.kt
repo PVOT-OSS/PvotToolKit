@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Saalim Quadri <danascape@gmail.com>
 // SPDX-License-Identifier: Apache-2.0
 
-package org.prauga.toolkit.feature.discover
+package org.prauga.toolkit.feature.discover.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -57,9 +57,10 @@ import org.prauga.toolkit.core.model.SocInfo
 import org.prauga.toolkit.core.model.StorageVitals
 import org.prauga.toolkit.core.model.ThermalStatus
 import org.prauga.toolkit.core.model.Vitals
+import org.prauga.toolkit.feature.discover.R
 
 @Composable
-fun DiscoverScreen(
+internal fun DiscoverScreen(
     onOpenDevice: () -> Unit,
     onOpenMonitoring: () -> Unit,
     onOpenNews: () -> Unit,

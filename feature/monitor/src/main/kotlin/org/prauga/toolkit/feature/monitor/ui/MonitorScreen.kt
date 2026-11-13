@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Saalim Quadri <danascape@gmail.com>
 // SPDX-License-Identifier: Apache-2.0
 
-package org.prauga.toolkit.feature.monitor
+package org.prauga.toolkit.feature.monitor.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,9 +34,10 @@ import org.prauga.toolkit.core.model.MemoryVitals
 import org.prauga.toolkit.core.model.SleepStats
 import org.prauga.toolkit.core.model.StorageVitals
 import org.prauga.toolkit.core.model.Vitals
+import org.prauga.toolkit.feature.monitor.R
 
 @Composable
-fun MonitorScreen(
+internal fun MonitorScreen(
     onOpenCpuDetail: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MonitorViewModel = hiltViewModel(),

@@ -27,7 +27,7 @@ import com.prauga.pvot.designsystem.theme.PvotSpacing
 import org.prauga.toolkit.core.designsystem.component.BackButton
 import org.prauga.toolkit.feature.devices.DevicesRoute
 import org.prauga.toolkit.feature.licenses.LicensesRoute
-import org.prauga.toolkit.feature.monitor.CpuDetailRoute
+import org.prauga.toolkit.feature.monitor.navigation.CpuDetailRoute
 import org.prauga.toolkit.feature.news.NewsRoute
 
 /** Screens opened on top of a tab: no nav bar, and a back arrow instead. */

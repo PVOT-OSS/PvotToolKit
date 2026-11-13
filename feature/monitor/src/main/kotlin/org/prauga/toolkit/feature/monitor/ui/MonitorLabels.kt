@@ -1,10 +1,11 @@
 // SPDX-FileCopyrightText: 2026 Saalim Quadri <danascape@gmail.com>
 // SPDX-License-Identifier: Apache-2.0
 
-package org.prauga.toolkit.feature.monitor
+package org.prauga.toolkit.feature.monitor.ui
 
 import androidx.annotation.StringRes
 import org.prauga.toolkit.core.model.BatteryHealth
+import org.prauga.toolkit.feature.monitor.R
 
 @StringRes
 internal fun BatteryHealth.labelRes(): Int =

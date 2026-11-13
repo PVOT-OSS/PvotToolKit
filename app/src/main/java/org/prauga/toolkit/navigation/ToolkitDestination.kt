@@ -8,8 +8,8 @@ import androidx.annotation.StringRes
 import androidx.navigation3.runtime.NavKey
 import org.prauga.toolkit.R
 import org.prauga.toolkit.feature.builds.BuildsRoute
-import org.prauga.toolkit.feature.discover.DiscoverRoute
-import org.prauga.toolkit.feature.monitor.MonitorRoute
+import org.prauga.toolkit.feature.discover.navigation.DiscoverRoute
+import org.prauga.toolkit.feature.monitor.navigation.MonitorRoute
 import org.prauga.toolkit.feature.more.MoreRoute
 import org.prauga.toolkit.feature.tune.TuneRoute
 

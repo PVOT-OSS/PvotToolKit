@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Saalim Quadri <danascape@gmail.com>
 // SPDX-License-Identifier: Apache-2.0
 
-package org.prauga.toolkit.feature.monitor
+package org.prauga.toolkit.feature.monitor.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
