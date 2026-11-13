@@ -6,8 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 <resources>
     <string name="app_name">Toolkit</string>
 
-    <!-- Nav bar. Labels sit inside the pill, so they stay one short word;
-         content descriptions carry the full meaning. -->
+    <!-- Tab labels sit inside the nav bar pill, so each stays one short word. -->
     <string name="tab_discover">Discover</string>
     <string name="tab_discover_description">Your device at a glance</string>
     <string name="tab_tune">Tune</string>

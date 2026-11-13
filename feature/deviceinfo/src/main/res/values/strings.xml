@@ -5,8 +5,6 @@ SPDX-License-Identifier: Apache-2.0
 
 <resources>
     <string name="device_info_kicker">device</string>
-    <string name="device_info_title">Device information</string>
-    <string name="device_info_description">Nothing here yet.</string>
 
     <string name="tests_kicker">tests</string>
     <string name="tests_title">Hardware checks</string>
@@ -46,7 +44,6 @@ SPDX-License-Identifier: Apache-2.0
     <string name="device_info_section_battery">Battery</string>
     <string name="device_info_section_codecs">Media codecs</string>
     <string name="device_info_section_boot">Boot and security</string>
-    <string name="device_info_section_sensors">Sensors</string>
     <string name="device_info_section_camera">Camera %1$s · %2$s</string>
     <string name="device_info_section_cameras">Cameras</string>
 
@@ -129,12 +126,6 @@ SPDX-License-Identifier: Apache-2.0
     <string name="device_info_present">Present</string>
     <string name="device_info_absent">Absent</string>
 
-    <string name="device_info_sensor_vendor">Vendor</string>
-    <string name="device_info_sensor_power">Power</string>
-    <string name="device_info_sensor_range">Max range</string>
-    <string name="device_info_sensor_resolution">Resolution</string>
-    <string name="device_info_sensor_wake">Wake-up</string>
-
     <string name="device_info_cam_resolution">Resolution</string>
     <string name="device_info_cam_aperture">Aperture</string>
     <string name="device_info_cam_focal">Focal length</string>
@@ -146,7 +137,6 @@ SPDX-License-Identifier: Apache-2.0
     <string name="device_info_cam_level">Hardware level</string>
 
     <string name="device_info_megapixels">%1$s MP (%2$d×%3$d)</string>
-    <string name="device_info_millimetres">%1$s mm</string>
     <string name="device_info_microns">%1$s µm</string>
     <string name="device_info_iso_range">%1$d–%2$d</string>
     <string name="device_info_zoom">%1$s×</string>
@@ -160,7 +150,6 @@ SPDX-License-Identifier: Apache-2.0
     <string name="device_info_milliamps">%1$d mA</string>
     <string name="device_info_milliamp_hours">%1$d mAh</string>
     <string name="device_info_volts">%1$s V</string>
-    <string name="device_info_milliwatts">%1$s mA</string>
     <string name="device_info_yes">Yes</string>
     <string name="device_info_no">No</string>
 </resources>
