@@ -22,7 +22,7 @@ class AndroidHiltConventionPlugin : Plugin<Project> {
                 }
             val kspTasks = tasks.named { it.startsWith("ksp") && it.endsWith("Kotlin") }
             kspTasks.configureEach { usesService(kspLock) }
-            orderLintAfter(kspTasks)
+            orderLintAfter(kspTasks, tasks.named { it.startsWith("hiltJavaCompile") })
 
             dependencies {
                 add("implementation", libs.lib("hilt-android"))
@@ -31,9 +31,11 @@ class AndroidHiltConventionPlugin : Plugin<Project> {
         }
 }
 
-/** Lint reads every variant's generated sources, so it must not run while KSP is writing them. */
-private fun Project.orderLintAfter(kspTasks: NamedDomainObjectCollection<Task>) {
-    tasks.named { it.startsWith("lint") }.configureEach { mustRunAfter(kspTasks.names) }
+/** Lint reads every variant's generated sources, so it waits for KSP and Hilt to write them. */
+private fun Project.orderLintAfter(vararg generators: NamedDomainObjectCollection<Task>) {
+    tasks
+        .named { it.startsWith("lint") }
+        .configureEach { generators.forEach { mustRunAfter(it.names) } }
 }
 
 /** KSP2 tasks running at once in one daemon resolve the classpath wrongly and drop Hilt output. */
