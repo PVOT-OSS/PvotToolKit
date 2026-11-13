@@ -18,7 +18,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.components.PvotScreen
@@ -34,11 +33,6 @@ import org.prauga.toolkit.core.model.CpuCluster
 @Composable
 fun CpuDetailScreen(modifier: Modifier = Modifier, viewModel: MonitorViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    LifecycleResumeEffect(viewModel) {
-        viewModel.startSampling()
-        onPauseOrDispose { viewModel.stopSampling() }
-    }
 
     val topology = state.profile?.cpu
 

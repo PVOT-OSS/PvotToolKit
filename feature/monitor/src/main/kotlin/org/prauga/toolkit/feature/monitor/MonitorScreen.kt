@@ -17,11 +17,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.components.PvotScreenDefaults
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
+import org.prauga.toolkit.core.data.vitals.MetricHistory
 import org.prauga.toolkit.core.designsystem.component.Meter
 import org.prauga.toolkit.core.designsystem.component.MetricCard
 import org.prauga.toolkit.core.designsystem.component.MetricLine
@@ -42,11 +42,6 @@ fun MonitorScreen(
     viewModel: MonitorViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    LifecycleResumeEffect(viewModel) {
-        viewModel.startSampling()
-        onPauseOrDispose { viewModel.stopSampling() }
-    }
 
     MonitorContent(state = state, onOpenCpuDetail = onOpenCpuDetail, modifier = modifier)
 }
@@ -171,7 +166,7 @@ private fun BatteryCard(battery: BatteryVitals, history: MetricHistory, revealIn
         caption = battery.temperatureC?.let { format.temperature(it) },
         revealIndex = revealIndex,
     ) {
-        Sparkline(values = history.batteryDrawMilliAmps, domain = null)
+        Sparkline(values = history.batteryDrawMicroAmps, domain = null)
 
         battery.currentMicroAmps?.let {
             MetricLine(stringResource(R.string.monitor_draw), format.current(kotlin.math.abs(it)))
