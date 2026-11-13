@@ -42,4 +42,6 @@ dependencies {
     implementation(libs.coil.network.okhttp)
     implementation(libs.coil.svg)
     implementation(libs.timber)
+
+    testImplementation(libs.junit)
 }
