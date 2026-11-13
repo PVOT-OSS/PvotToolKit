@@ -6,6 +6,6 @@ plugins { alias(libs.plugins.toolkit.android.feature) }
 android { namespace = "org.prauga.toolkit.feature.more" }
 
 dependencies {
-    implementation(project(":core:batterymonitor"))
+    implementation(project(":core:battery-monitor"))
     implementation(libs.androidx.activity.compose)
 }

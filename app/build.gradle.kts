@@ -17,7 +17,7 @@ android {
 
 dependencies {
     implementation(project(":feature:devices"))
-    implementation(project(":feature:deviceinfo"))
+    implementation(project(":feature:device-info"))
     implementation(project(":feature:builds"))
     implementation(project(":feature:discover"))
     implementation(project(":feature:monitor"))
@@ -27,7 +27,7 @@ dependencies {
     implementation(project(":feature:news"))
 
     implementation(project(":core:designsystem"))
-    implementation(project(":core:batterymonitor"))
+    implementation(project(":core:battery-monitor"))
     implementation(project(":core:data"))
     implementation(project(":core:model"))
 

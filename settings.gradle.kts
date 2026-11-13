@@ -41,7 +41,7 @@ include(":core:datastore")
 
 include(":core:battery")
 
-include(":core:batterymonitor")
+include(":core:battery-monitor")
 
 include(":core:device")
 
@@ -61,7 +61,7 @@ include(":feature:news")
 
 include(":feature:devices")
 
-include(":feature:deviceinfo")
+include(":feature:device-info")
 
 include(":feature:more")
 
