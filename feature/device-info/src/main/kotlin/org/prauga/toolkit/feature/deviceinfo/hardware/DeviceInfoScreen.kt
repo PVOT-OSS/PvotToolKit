@@ -21,12 +21,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -39,15 +36,12 @@ import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotSpacing
 import org.prauga.toolkit.core.designsystem.component.ValueBlock
 import org.prauga.toolkit.core.designsystem.component.ValueRow
-import org.prauga.toolkit.core.model.DeviceProfile
+import org.prauga.toolkit.core.designsystem.format.rememberUnitFormatter
 import org.prauga.toolkit.feature.deviceinfo.R
 import org.prauga.toolkit.feature.deviceinfo.ui.GroupTitle
 
 /** Longer than this and the value gets its own line rather than starving the label. */
 private const val INLINE_VALUE_LIMIT = 28
-
-/** The only tabs whose rows come from a live read. */
-private val TABS_NEEDING_VITALS = setOf(DeviceInfoTab.MEMORY, DeviceInfoTab.BATTERY)
 
 private val RowGap = 3.dp
 
@@ -57,41 +51,53 @@ internal fun DeviceInfoScreen(
     viewModel: DeviceInfoViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    DeviceInfoContent(state = state, onNeedVitals = viewModel::ensureVitals, modifier = modifier)
+    DeviceInfoContent(state = state, onEvent = viewModel::onEvent, modifier = modifier)
 }
 
 @Composable
 private fun DeviceInfoContent(
     state: DeviceInfoUiState,
-    onNeedVitals: () -> Unit,
+    onEvent: (DeviceInfoEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var tab by rememberSaveable { mutableStateOf(DeviceInfoTab.SYSTEM) }
+    when (state) {
+        DeviceInfoUiState.Loading ->
+            Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                PvotLoadingContent()
+            }
+        is DeviceInfoUiState.Ready ->
+            DeviceInfoTabs(
+                state = state,
+                onSelectTab = { onEvent(DeviceInfoEvent.TabSelected(it)) },
+                modifier = modifier,
+            )
+    }
+}
+
+@Composable
+private fun DeviceInfoTabs(
+    state: DeviceInfoUiState.Ready,
+    onSelectTab: (DeviceInfoTab) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val listState = rememberLazyListState()
     val stripState = rememberLazyListState()
-    val profile = state.profile
+    val resources = LocalResources.current
+    val format = rememberUnitFormatter()
 
-    val needVitals by rememberUpdatedState(onNeedVitals)
-    LaunchedEffect(tab) { if (tab in TABS_NEEDING_VITALS) needVitals() }
-
-    // A restored tab can sit off the end of the strip, and its rows start at the top.
-    LaunchedEffect(tab) {
-        stripState.animateScrollToItem(tab.ordinal)
+    LaunchedEffect(state.tab) {
+        stripState.animateScrollToItem(state.tab.ordinal)
         listState.scrollToItem(0)
     }
 
     Column(modifier = modifier.fillMaxSize()) {
-        if (profile == null) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                PvotLoadingContent()
-            }
-            return@Column
-        }
-
-        HeaderCard(profile, modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp))
-        TabStrip(selected = tab, stripState = stripState, onSelect = { tab = it })
-
-        val sections = tabSections(tab = tab, state = state, profile = profile)
+        HeaderCard(
+            deviceName = state.deviceName,
+            codename = state.codename,
+            modifier =
+                Modifier.padding(start = PvotSpacing.L, end = PvotSpacing.L, top = PvotSpacing.L),
+        )
+        TabStrip(selected = state.tab, stripState = stripState, onSelect = onSelectTab)
 
         PvotScreen(
             state = listState,
@@ -99,15 +105,17 @@ private fun DeviceInfoContent(
             contentPadding = PvotScreenDefaults.contentPadding(top = 0.dp),
             verticalArrangement = Arrangement.spacedBy(RowGap),
         ) {
-            sections.forEach { section ->
-                item(key = "${section.title}#title") { GroupTitle(section.title) }
+            state.sections.forEachIndexed { sectionIndex, section ->
+                item(key = "$sectionIndex#title") {
+                    GroupTitle(section.title.resolve(resources, format))
+                }
                 itemsIndexed(
                     items = section.lines,
-                    key = { _, line -> "${section.title}#${line.label}" },
+                    key = { _, line -> "$sectionIndex#${line.label}" },
                 ) { index, line ->
                     InfoRow(
-                        label = line.label,
-                        value = line.value,
+                        label = stringResource(line.label),
+                        value = line.value.resolve(resources, format),
                         index = index,
                         count = section.lines.size,
                     )
@@ -146,7 +154,7 @@ private fun TabChip(label: String, selected: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-private fun HeaderCard(profile: DeviceProfile, modifier: Modifier = Modifier) {
+private fun HeaderCard(deviceName: String?, codename: String?, modifier: Modifier = Modifier) {
     PvotCard(modifier = modifier.fillMaxWidth().pvotReveal(0)) {
         Column(
             modifier = Modifier.padding(PvotSpacing.L),
@@ -157,14 +165,14 @@ private fun HeaderCard(profile: DeviceProfile, modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.tertiary,
             )
-            profile.identity.displayName?.let {
+            deviceName?.let {
                 Text(
                     text = it,
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
             }
-            profile.identity.codename?.let {
+            codename?.let {
                 Text(
                     text = it,
                     style = MaterialTheme.typography.labelMedium,

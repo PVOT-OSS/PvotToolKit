@@ -3,14 +3,17 @@
 
 package org.prauga.toolkit.feature.deviceinfo.hardware
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.prauga.toolkit.core.data.device.DeviceRepository
@@ -18,44 +21,74 @@ import org.prauga.toolkit.core.model.DeviceDetails
 import org.prauga.toolkit.core.model.DeviceProfile
 import org.prauga.toolkit.core.model.Vitals
 
-data class DeviceInfoUiState(
-    val profile: DeviceProfile? = null,
-    val details: DeviceDetails? = null,
-    val vitals: Vitals? = null,
-)
+private const val TAB_KEY = "tab"
+private const val STOP_TIMEOUT_MILLIS = 5_000L
 
-/** Owns the hardware and build readouts behind the Device HW screen. */
+// Vitals cost a sampling window, so they are read only once a tab that shows them opens.
+private val TabsNeedingVitals = setOf(DeviceInfoTab.MEMORY, DeviceInfoTab.BATTERY)
+
 @HiltViewModel
-class DeviceInfoViewModel @Inject constructor(private val deviceRepository: DeviceRepository) :
-    ViewModel() {
-    private val _state = MutableStateFlow(DeviceInfoUiState())
-    val state: StateFlow<DeviceInfoUiState> = _state.asStateFlow()
-
+internal class DeviceInfoViewModel
+@Inject
+constructor(
+    private val deviceRepository: DeviceRepository,
+    private val savedStateHandle: SavedStateHandle,
+) : ViewModel() {
+    private val readings = MutableStateFlow(DeviceReadings())
+    private val tab = savedStateHandle.getStateFlow(TAB_KEY, DeviceInfoTab.SYSTEM)
     private var vitalsJob: Job? = null
+
+    val state: StateFlow<DeviceInfoUiState> =
+        combine(readings, tab, ::uiState)
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS),
+                DeviceInfoUiState.Loading,
+            )
 
     init {
         viewModelScope.launch {
             val profile = deviceRepository.profile()
-            _state.update { it.copy(profile = profile) }
+            readings.update { it.copy(profile = profile) }
         }
         viewModelScope.launch {
             val details = deviceRepository.details()
-            _state.update { it.copy(details = details) }
+            readings.update { it.copy(details = details) }
+        }
+        readVitalsFor(tab.value)
+    }
+
+    fun onEvent(event: DeviceInfoEvent) {
+        when (event) {
+            is DeviceInfoEvent.TabSelected -> {
+                savedStateHandle[TAB_KEY] = event.tab
+                readVitalsFor(event.tab)
+            }
         }
     }
 
-    /**
-     * Reads the live vitals, once.
-     *
-     * Only two of the tabs show them and the read costs a sampling window, so the screen asks for
-     * them when they are about to be displayed rather than on open.
-     */
-    fun ensureVitals() {
-        if (vitalsJob != null) return
+    private fun readVitalsFor(tab: DeviceInfoTab) {
+        if (tab !in TabsNeedingVitals || vitalsJob != null) return
         vitalsJob =
             viewModelScope.launch {
                 val vitals = deviceRepository.vitals()
-                _state.update { it.copy(vitals = vitals) }
+                readings.update { it.copy(vitals = vitals) }
             }
     }
+
+    private fun uiState(readings: DeviceReadings, tab: DeviceInfoTab): DeviceInfoUiState {
+        val profile = readings.profile ?: return DeviceInfoUiState.Loading
+        return DeviceInfoUiState.Ready(
+            deviceName = profile.identity.displayName,
+            codename = profile.identity.codename,
+            tab = tab,
+            sections = tab.sections(profile, readings.details, readings.vitals),
+        )
+    }
+
+    private data class DeviceReadings(
+        val profile: DeviceProfile? = null,
+        val details: DeviceDetails? = null,
+        val vitals: Vitals? = null,
+    )
 }

@@ -3,7 +3,4 @@
 
 package org.prauga.toolkit.feature.deviceinfo.hardware
 
-/** A titled block of readouts, resolved once so the list can emit its rows lazily. */
-internal data class InfoSection(val title: String, val lines: List<InfoLine>)
-
-internal data class InfoLine(val label: String, val value: String)
+internal data class InfoSection(val title: InfoText, val lines: List<InfoLine>)

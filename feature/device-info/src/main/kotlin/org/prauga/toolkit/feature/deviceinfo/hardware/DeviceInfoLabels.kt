@@ -4,8 +4,6 @@
 package org.prauga.toolkit.feature.deviceinfo.hardware
 
 import androidx.annotation.StringRes
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import org.prauga.toolkit.core.model.BatteryHealth
 import org.prauga.toolkit.core.model.CameraFacing
 import org.prauga.toolkit.core.model.CameraHardwareLevel
@@ -42,12 +40,11 @@ internal fun CameraHardwareLevel.labelRes(): Int =
         CameraHardwareLevel.EXTERNAL -> R.string.device_info_cam_level_external
     }
 
-@Composable
-internal fun HdrType.label(): String =
+internal fun HdrType.text(): InfoText =
     when (this) {
-        HdrType.DolbyVision -> stringResource(R.string.device_info_hdr_dolby_vision)
-        HdrType.Hdr10 -> stringResource(R.string.device_info_hdr_hdr10)
-        HdrType.Hdr10Plus -> stringResource(R.string.device_info_hdr_hdr10_plus)
-        HdrType.Hlg -> stringResource(R.string.device_info_hdr_hlg)
-        is HdrType.Other -> stringResource(R.string.device_info_hdr_other, code)
+        HdrType.DolbyVision -> InfoText.Res(R.string.device_info_hdr_dolby_vision)
+        HdrType.Hdr10 -> InfoText.Res(R.string.device_info_hdr_hdr10)
+        HdrType.Hdr10Plus -> InfoText.Res(R.string.device_info_hdr_hdr10_plus)
+        HdrType.Hlg -> InfoText.Res(R.string.device_info_hdr_hlg)
+        is HdrType.Other -> InfoText.Res(R.string.device_info_hdr_other, listOf(code))
     }

@@ -156,14 +156,17 @@ SPDX-License-Identifier: Apache-2.0
     <string name="device_info_cam_level_3">Level 3</string>
     <string name="device_info_cam_level_external">External</string>
 
-    <string name="device_info_megapixels">%1$s MP (%2$d×%3$d)</string>
-    <string name="device_info_microns">%1$s µm</string>
+    <string name="device_info_megapixels">%1$.1f MP (%2$d×%3$d)</string>
+    <string name="device_info_microns">%1$.2f µm</string>
     <string name="device_info_iso_range">%1$d–%2$d</string>
-    <string name="device_info_zoom">%1$s×</string>
-    <string name="device_info_hertz">%1$s Hz</string>
+    <string name="device_info_zoom">%1$.1f×</string>
+    <string name="device_info_hertz">%1$.0f Hz</string>
     <string name="device_info_dpi_value">%1$d dpi</string>
-    <string name="device_info_dpi_physical">%1$s × %2$s</string>
-    <string name="device_info_inches">%1$s\"</string>
+    <string name="device_info_dpi_physical">%1$.0f × %2$.0f</string>
+    <string name="device_info_inches">%1$.1f\"</string>
+    <string name="device_info_f_number">f/%1$.1f</string>
+    <string name="device_info_millimetres">%1$.2f mm</string>
+    <string name="device_info_sensor_size">%1$.2f × %2$.2f mm</string>
     <string name="device_info_pixels">%1$d × %2$d</string>
     <string name="device_info_yes">Yes</string>
     <string name="device_info_no">No</string>
