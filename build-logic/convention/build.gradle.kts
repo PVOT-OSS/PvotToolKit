@@ -5,7 +5,6 @@ plugins { `kotlin-dsl` }
 
 group = "org.prauga.toolkit.buildlogic"
 
-// Matches the toolchain the daemon runs on (gradle-daemon-jvm.properties).
 java { toolchain { languageVersion.set(JavaLanguageVersion.of(21)) } }
 
 kotlin { compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21) } }

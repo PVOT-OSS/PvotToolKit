@@ -37,13 +37,11 @@ class AndroidComposeConventionPlugin : Plugin<Project> {
             dependencies {
                 val bom = libs.lib("androidx-compose-bom")
                 add("implementation", platform(bom))
-                add("androidTestImplementation", platform(bom))
                 add("implementation", libs.lib("androidx-compose-ui"))
                 add("implementation", libs.lib("androidx-compose-ui-graphics"))
                 add("implementation", libs.lib("androidx-compose-ui-tooling-preview"))
                 add("implementation", libs.lib("androidx-compose-material3"))
                 add("debugImplementation", libs.lib("androidx-compose-ui-tooling"))
-                add("debugImplementation", libs.lib("androidx-compose-ui-test-manifest"))
             }
         }
 }

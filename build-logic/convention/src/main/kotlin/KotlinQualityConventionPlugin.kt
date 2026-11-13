@@ -18,8 +18,6 @@ class KotlinQualityConventionPlugin : Plugin<Project> {
             extensions.configure<DetektExtension> {
                 buildUponDefaultConfig.set(true)
                 config.setFrom(rootProject.file("config/detekt/detekt.yml"))
-                val moduleBaseline = file("detekt-baseline.xml")
-                if (moduleBaseline.exists()) baseline.set(moduleBaseline)
             }
 
             tasks.withType<Detekt>().configureEach {
