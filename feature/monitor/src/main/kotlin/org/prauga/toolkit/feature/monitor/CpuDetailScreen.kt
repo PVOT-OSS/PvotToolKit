@@ -73,6 +73,7 @@ fun CpuDetailScreen(modifier: Modifier = Modifier, viewModel: MonitorViewModel =
             CoreChart(
                 core = core,
                 values = values,
+                currentLoad = state.vitals?.load?.perCore?.getOrNull(core),
                 clusterFor = { topology?.clusters?.firstOrNull { core in it.cores } },
                 currentKhz = state.vitals?.cpu?.perCoreKhz?.getOrNull(core),
                 revealIndex = core + 1,
@@ -96,6 +97,7 @@ private fun androidx.compose.foundation.lazy.LazyListScope.itemsIndexed(
 private fun CoreChart(
     core: Int,
     values: List<Float>,
+    currentLoad: Float?,
     clusterFor: () -> CpuCluster?,
     currentKhz: Int?,
     revealIndex: Int,
@@ -118,7 +120,7 @@ private fun CoreChart(
                 Text(
                     text =
                         buildString {
-                            append(values.lastOrNull()?.let { percent(it) } ?: "—")
+                            append(currentLoad?.let { percent(it) } ?: "—")
                             currentKhz?.let { append(" · ${frequency(it)}") }
                         },
                     style = MaterialTheme.typography.labelMedium,

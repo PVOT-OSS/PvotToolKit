@@ -28,10 +28,7 @@ data class CpuCluster(
 )
 
 /** Utilisation, derived from idle residency rather than the denied /proc/stat. */
-data class CpuLoad(val perCore: List<Float>) {
-    val average: Float
-        get() = if (perCore.isEmpty()) 0f else perCore.average().toFloat()
+data class CpuLoad(val perCore: List<Float?>) {
+    val average: Float?
+        get() = perCore.filterNotNull().takeIf { it.isNotEmpty() }?.average()?.toFloat()
 }
-
-/** A point-in-time snapshot used to derive [CpuLoad] from two samples. */
-data class CpuIdleSample(val elapsedNanos: Long, val idleMicrosPerCore: List<Long>)

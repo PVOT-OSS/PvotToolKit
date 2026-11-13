@@ -91,7 +91,7 @@ class DeviceReadersTest {
         Log.i(TAG, "cpu=${vitals.cpu}")
         Log.i(
             TAG,
-            "load=${vitals.load?.perCore?.map { "%.0f%%".format(it * 100) }} avg=${vitals.load?.average}",
+            "load=${vitals.load?.perCore?.map { it?.let { "%.0f%%".format(it * 100) } }} avg=${vitals.load?.average}",
         )
         Log.i(TAG, "memory=${vitals.memory}")
         Log.i(TAG, "battery=${vitals.battery}")
@@ -106,7 +106,7 @@ class DeviceReadersTest {
 
         assertTrue(vitals.uptimeMillis > 0)
         assertTrue(vitals.sleep.awakeMillis <= vitals.sleep.elapsedMillis)
-        vitals.load?.perCore?.forEach { assertTrue("load out of range: $it", it in 0f..1f) }
+        vitals.load?.perCore?.filterNotNull()?.forEach { assertTrue("load out of range: $it", it in 0f..1f) }
         vitals.memory?.let { assertTrue(it.usedBytes in 0..it.totalBytes) }
         vitals.battery?.let { assertTrue(it.percent in 0..100) }
     }
