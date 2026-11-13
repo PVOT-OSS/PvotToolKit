@@ -19,7 +19,7 @@ class DeviceReadersTest {
 
     @Test
     fun dumpProfile() {
-        val profile = DeviceProfileReader(context).read()
+        val profile = DeviceProfileReader(context).read(SystemProperties.read())
 
         Log.i(TAG, "=== IDENTITY ===")
         Log.i(TAG, "codename=${profile.identity.codename} model=${profile.identity.displayName}")

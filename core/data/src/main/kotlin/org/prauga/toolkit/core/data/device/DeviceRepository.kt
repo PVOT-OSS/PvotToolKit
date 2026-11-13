@@ -5,9 +5,11 @@ package org.prauga.toolkit.core.data.device
 
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import org.prauga.toolkit.core.common.coroutines.Dispatcher
+import org.prauga.toolkit.core.common.coroutines.ToolkitDispatchers
 import org.prauga.toolkit.core.device.CpuLoadReader
 import org.prauga.toolkit.core.device.DeviceDetailsReader
 import org.prauga.toolkit.core.device.DeviceProfileReader
@@ -26,26 +28,27 @@ constructor(
     private val profileReader: DeviceProfileReader,
     private val detailsReader: DeviceDetailsReader,
     private val vitalsReader: SystemVitalsReader,
+    @Dispatcher(ToolkitDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) {
-    @Volatile private var cachedProfile: DeviceProfile? = null
+    private val properties = SuspendLazy { withContext(ioDispatcher) { SystemProperties.read() } }
 
-    @Volatile private var cachedDetails: DeviceDetails? = null
+    private val cachedProfile = SuspendLazy {
+        val properties = properties.get()
+        withContext(ioDispatcher) { profileReader.read(properties) }
+    }
 
-    /** Read once and cached. */
-    suspend fun profile(): DeviceProfile =
-        cachedProfile
-            ?: withContext(Dispatchers.IO) { profileReader.read().also { cachedProfile = it } }
+    private val cachedDetails = SuspendLazy {
+        val properties = properties.get()
+        withContext(ioDispatcher) { detailsReader.read(properties) }
+    }
 
-    /** Read once and cached, like the profile. */
-    suspend fun details(): DeviceDetails =
-        cachedDetails
-            ?: withContext(Dispatchers.IO) {
-                detailsReader.read(SystemProperties.read()).also { cachedDetails = it }
-            }
+    suspend fun profile(): DeviceProfile = cachedProfile.get()
+
+    suspend fun details(): DeviceDetails = cachedDetails.get()
 
     /** Suspends for the sampling window: utilisation needs two spaced samples. */
     suspend fun vitals(): Vitals =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             val first = CpuLoadReader.sample()
             delay(LOAD_WINDOW_MILLIS)
             val load =

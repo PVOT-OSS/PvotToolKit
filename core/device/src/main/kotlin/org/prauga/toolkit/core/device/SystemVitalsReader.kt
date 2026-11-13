@@ -25,6 +25,7 @@ class SystemVitalsReader @Inject constructor(@ApplicationContext context: Contex
     private val appContext = context.applicationContext
     private val platform = PlatformVitalsReader(appContext)
     private val cpu = CpuReader()
+    private val designCapacityMah: Int? by lazy { BatteryCapacity.designMah(appContext) }
 
     /** @param load supplied by the caller, which owns the two spaced samples. */
     fun read(load: org.prauga.toolkit.core.model.CpuLoad? = null): Vitals =
@@ -77,7 +78,7 @@ class SystemVitalsReader @Inject constructor(@ApplicationContext context: Contex
             voltageMillivolts =
                 intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1).takeIf { it > 0 },
             cycleCount = readCycleCount(intent),
-            designCapacityMah = BatteryCapacity.designMah(appContext),
+            designCapacityMah = designCapacityMah,
         )
     }
 

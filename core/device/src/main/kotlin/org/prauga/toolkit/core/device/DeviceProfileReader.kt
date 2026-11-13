@@ -14,8 +14,7 @@ import org.prauga.toolkit.core.model.DeviceProfile
 class DeviceProfileReader @Inject constructor(@ApplicationContext context: Context) {
     private val platform = PlatformVitalsReader(context)
 
-    fun read(): DeviceProfile {
-        val properties = SystemProperties.read()
+    fun read(properties: SystemProperties): DeviceProfile {
         val osBuild = OsBuildReader(properties)
         return DeviceProfile(
             identity = DeviceIdentityReader.read(),
