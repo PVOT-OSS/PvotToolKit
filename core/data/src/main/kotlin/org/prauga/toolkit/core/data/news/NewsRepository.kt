@@ -3,11 +3,6 @@
 
 package org.prauga.toolkit.core.data.news
 
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.request.get
-import io.ktor.client.request.header
-import io.ktor.http.HttpHeaders
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -18,13 +13,11 @@ import kotlinx.serialization.SerializationException
 import org.prauga.toolkit.core.common.DataResult
 import org.prauga.toolkit.core.common.LoadError
 import org.prauga.toolkit.core.model.NewsPost
-import org.prauga.toolkit.core.network.ToolkitEndpoints
-import org.prauga.toolkit.core.network.dto.NewsFeedDto
-import org.prauga.toolkit.core.network.dto.toDomain
+import org.prauga.toolkit.core.network.ToolkitApi
 
 /** The newsroom, read from the site's static feed. */
 @Singleton
-class NewsRepository @Inject constructor(private val client: HttpClient) {
+class NewsRepository @Inject constructor(private val api: ToolkitApi) {
     // The final catch is deliberately broad: anything Ktor or the platform
     // raises that is not IO or a parse failure is reported as a server problem,
     // and the cause travels with it rather than being discarded.
@@ -32,7 +25,7 @@ class NewsRepository @Inject constructor(private val client: HttpClient) {
     suspend fun news(): DataResult<List<NewsPost>> =
         withContext(Dispatchers.IO) {
             try {
-                DataResult.Success(client.get(ToolkitEndpoints.NEWS).body<NewsFeedDto>().toDomain())
+                DataResult.Success(api.news().toDomain())
             } catch (cancellation: CancellationException) {
                 throw cancellation
             } catch (io: IOException) {
@@ -44,19 +37,9 @@ class NewsRepository @Inject constructor(private val client: HttpClient) {
             }
         }
 
-    /** `only-if-cached` is answered from disk or refused; it never hits the network. */
     private suspend fun cached(): DataResult.Success<List<NewsPost>>? =
         try {
-            val feed: NewsFeedDto =
-                client
-                    .get(ToolkitEndpoints.NEWS) {
-                        header(
-                            HttpHeaders.CacheControl,
-                            "only-if-cached, max-stale=${Int.MAX_VALUE}",
-                        )
-                    }
-                    .body()
-            DataResult.Success(feed.toDomain(), stale = true)
+            DataResult.Success(api.news(cacheOnly = true).toDomain(), stale = true)
         } catch (cancellation: CancellationException) {
             throw cancellation
         } catch (_: Exception) {

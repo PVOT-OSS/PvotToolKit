@@ -1,16 +1,17 @@
 // SPDX-FileCopyrightText: 2026 Saalim Quadri <danascape@gmail.com>
 // SPDX-License-Identifier: Apache-2.0
 
-package org.prauga.toolkit.core.network.dto
+package org.prauga.toolkit.core.data.news
 
 import java.time.LocalDate
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
 import org.prauga.toolkit.core.network.ToolkitJson
+import org.prauga.toolkit.core.network.dto.NewsFeedDto
 
 /** Guards the contract with `/api/v1/news.json`. */
-class NewsFeedDtoTest {
+class NewsMapperTest {
     @Test
     fun `decodes a post as published by the site`() {
         val feed =

@@ -1,14 +1,13 @@
 // SPDX-FileCopyrightText: 2026 Saalim Quadri <danascape@gmail.com>
 // SPDX-License-Identifier: Apache-2.0
 
-package org.prauga.toolkit.core.data
+package org.prauga.toolkit.core.data.links
 
 import java.io.File
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.prauga.toolkit.core.network.ToolkitJson
 import org.prauga.toolkit.core.network.dto.LinksDto
-import org.prauga.toolkit.core.network.dto.toDomain
 
 /** The bundled links.json is what renders on first run with no network. */
 class BundledLinksTest {

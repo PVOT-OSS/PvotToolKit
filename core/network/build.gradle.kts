@@ -10,10 +10,9 @@ plugins {
 android { namespace = "org.prauga.toolkit.core.network" }
 
 dependencies {
-    implementation(project(":core:model"))
+    api(libs.ktor.client.core)
+    api(libs.kotlinx.serialization.json)
     implementation(libs.ktor.client.okhttp)
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
-    implementation(libs.kotlinx.serialization.json)
-    testImplementation(libs.junit)
 }

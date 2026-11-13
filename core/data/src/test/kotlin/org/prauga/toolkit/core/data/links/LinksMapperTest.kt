@@ -1,16 +1,17 @@
 // SPDX-FileCopyrightText: 2026 Saalim Quadri <danascape@gmail.com>
 // SPDX-License-Identifier: Apache-2.0
 
-package org.prauga.toolkit.core.network.dto
+package org.prauga.toolkit.core.data.links
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.prauga.toolkit.core.network.ToolkitJson
+import org.prauga.toolkit.core.network.dto.LinksDto
 
 /** Guards the contract with `/api/v1/links.json` and the bundled fallback copy. */
-class LinksDtoTest {
+class LinksMapperTest {
     @Test
     fun `decodes a section as published by the site`() {
         val dto =

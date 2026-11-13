@@ -14,7 +14,7 @@ dependencies {
     api(project(":core:device"))
     implementation(project(":core:datastore"))
     implementation(project(":core:network"))
-    implementation(libs.ktor.client.okhttp)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.timber)
     testImplementation(libs.junit)
 }

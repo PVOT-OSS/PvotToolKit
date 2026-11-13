@@ -4,45 +4,26 @@
 package org.prauga.toolkit.core.network
 
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.header
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
-import java.io.File
 import kotlinx.serialization.json.Json
-import okhttp3.Cache
-
-private const val BASE_URL = "https://stormbreaker.squadri.me"
-
-/** Static endpoints published by the website's own deploy. */
-object ToolkitEndpoints {
-    const val NEWS: String = "$BASE_URL/api/v1/news.json"
-    const val LINKS: String = "$BASE_URL/api/v1/links.json"
-}
 
 val ToolkitJson: Json = Json {
     ignoreUnknownKeys = true
     explicitNulls = false
 }
 
-private const val HTTP_CACHE_BYTES = 8L * 1024 * 1024
 private const val CONNECT_TIMEOUT_MS = 15_000L
 private const val REQUEST_TIMEOUT_MS = 30_000L
 
-/** Static files behind an ETag, so OkHttp's disk cache is the persistence. */
-fun createHttpClient(cacheDir: File): HttpClient =
-    HttpClient(OkHttp) {
+internal fun toolkitHttpClient(engine: HttpClientEngine): HttpClient =
+    HttpClient(engine) {
         expectSuccess = true
-
-        engine {
-            config {
-                cache(Cache(File(cacheDir, "http"), HTTP_CACHE_BYTES))
-                retryOnConnectionFailure(true)
-            }
-        }
 
         install(ContentNegotiation) { json(ToolkitJson) }
 

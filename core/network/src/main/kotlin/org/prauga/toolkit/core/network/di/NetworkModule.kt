@@ -9,17 +9,25 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import io.ktor.client.HttpClient
+import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.okhttp.OkHttp
+import java.io.File
 import javax.inject.Singleton
-import org.prauga.toolkit.core.network.createHttpClient
+import okhttp3.Cache
 
-/** One HTTP client, so every request shares the disk cache. */
+private const val HTTP_CACHE_BYTES = 8L * 1024 * 1024
+
+/** Static files behind an ETag, so OkHttp's disk cache is the persistence. */
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
     @Provides
     @Singleton
-    fun httpClient(@ApplicationContext context: Context): HttpClient =
-        createHttpClient(context.cacheDir)
+    fun httpClientEngine(@ApplicationContext context: Context): HttpClientEngine =
+        OkHttp.create {
+            config {
+                cache(Cache(File(context.cacheDir, "http"), HTTP_CACHE_BYTES))
+                retryOnConnectionFailure(true)
+            }
+        }
 }

@@ -4,8 +4,6 @@
 package org.prauga.toolkit.core.network.dto
 
 import kotlinx.serialization.Serializable
-import org.prauga.toolkit.core.model.LinkItem
-import org.prauga.toolkit.core.model.LinkSection
 
 /** Wire shape of `/api/v1/links.json`, and of the bundled fallback copy. */
 @Serializable
@@ -27,27 +25,3 @@ data class LinkItemDto(
     val external: Boolean = false,
     val soon: Boolean = false,
 )
-
-/** Drops items with nothing to show and sections left empty by that. */
-fun LinksDto.toDomain(): List<LinkSection> =
-    sections
-        .map { section ->
-            LinkSection(
-                id = section.id,
-                title = section.title,
-                items =
-                    section.items
-                        .filter { it.url != null || it.soon }
-                        .map {
-                            LinkItem(
-                                id = it.id,
-                                label = it.label,
-                                description = it.description,
-                                url = it.url,
-                                external = it.external,
-                                soon = it.soon,
-                            )
-                        },
-            )
-        }
-        .filter { it.items.isNotEmpty() }

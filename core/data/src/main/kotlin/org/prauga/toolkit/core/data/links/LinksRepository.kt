@@ -4,19 +4,15 @@
 package org.prauga.toolkit.core.data.links
 
 import android.content.res.AssetManager
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.request.get
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.prauga.toolkit.core.model.LinkSection
-import org.prauga.toolkit.core.network.ToolkitEndpoints
+import org.prauga.toolkit.core.network.ToolkitApi
 import org.prauga.toolkit.core.network.ToolkitJson
 import org.prauga.toolkit.core.network.dto.LinksDto
-import org.prauga.toolkit.core.network.dto.toDomain
 
 internal const val BUNDLED_LINKS_ASSET = "links.json"
 
@@ -24,14 +20,12 @@ internal const val BUNDLED_LINKS_ASSET = "links.json"
 @Singleton
 class LinksRepository
 @Inject
-constructor(private val client: HttpClient, private val assets: AssetManager) {
+constructor(private val api: ToolkitApi, private val assets: AssetManager) {
     suspend fun links(): List<LinkSection> = withContext(Dispatchers.IO) { remote() ?: bundled() }
 
     private suspend fun remote(): List<LinkSection>? =
         try {
-            client.get(ToolkitEndpoints.LINKS).body<LinksDto>().toDomain().takeIf {
-                it.isNotEmpty()
-            }
+            api.links().toDomain().takeIf { it.isNotEmpty() }
         } catch (cancellation: CancellationException) {
             throw cancellation
         } catch (_: Exception) {

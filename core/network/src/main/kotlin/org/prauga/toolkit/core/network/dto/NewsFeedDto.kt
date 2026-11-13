@@ -3,11 +3,8 @@
 
 package org.prauga.toolkit.core.network.dto
 
-import java.time.LocalDate
-import java.time.format.DateTimeParseException
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.prauga.toolkit.core.model.NewsPost
 
 /** Wire shape of `/api/v1/news.json`. */
 @Serializable
@@ -25,26 +22,3 @@ data class NewsPostDto(
     val url: String,
     @SerialName("reading_minutes") val readingMinutes: Int = 1,
 )
-
-/** Maps the feed to domain posts, dropping any entry that cannot be represented. */
-fun NewsFeedDto.toDomain(): List<NewsPost> = posts.mapNotNull { it.toDomainOrNull() }
-
-private fun NewsPostDto.toDomainOrNull(): NewsPost? {
-    val parsedDate =
-        try {
-            LocalDate.parse(date)
-        } catch (_: DateTimeParseException) {
-            return null
-        }
-    return NewsPost(
-        id = id,
-        title = title,
-        date = parsedDate,
-        tag = tag,
-        author = author,
-        summary = summary,
-        coverUrl = cover,
-        url = url,
-        readingMinutes = readingMinutes.coerceAtLeast(1),
-    )
-}
