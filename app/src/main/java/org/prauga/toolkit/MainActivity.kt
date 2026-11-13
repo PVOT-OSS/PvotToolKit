@@ -18,7 +18,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.prauga.toolkit.core.data.settings.ThemeRepository
 import org.prauga.toolkit.core.model.ThemePreference
-import org.prauga.toolkit.ui.ToolkitApp
 
 @AndroidEntryPoint
 class MainActivity : PvotBaseActivity() {

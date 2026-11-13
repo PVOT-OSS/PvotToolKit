@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Saalim Quadri <danascape@gmail.com>
 // SPDX-License-Identifier: Apache-2.0
 
-package org.prauga.toolkit.ui
+package org.prauga.toolkit
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
