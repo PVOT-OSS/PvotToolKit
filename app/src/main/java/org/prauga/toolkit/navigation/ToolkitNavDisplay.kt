@@ -19,7 +19,7 @@ import org.prauga.toolkit.feature.monitor.navigation.CpuDetailRoute
 import org.prauga.toolkit.feature.monitor.navigation.MonitorRoute
 import org.prauga.toolkit.feature.monitor.navigation.cpuDetailEntry
 import org.prauga.toolkit.feature.monitor.navigation.monitorEntry
-import org.prauga.toolkit.feature.more.moreEntry
+import org.prauga.toolkit.feature.more.navigation.moreEntry
 import org.prauga.toolkit.feature.news.navigation.NewsRoute
 import org.prauga.toolkit.feature.news.navigation.newsEntry
 import org.prauga.toolkit.feature.tune.navigation.tuneEntry

@@ -12,6 +12,8 @@ android {
 
     defaultConfig { applicationId = "org.prauga.toolkit" }
 
+    buildFeatures { buildConfig = true }
+
     buildTypes { release { optimization { enable = false } } }
 }
 

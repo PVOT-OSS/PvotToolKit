@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Saalim Quadri <danascape@gmail.com>
 // SPDX-License-Identifier: Apache-2.0
 
-package org.prauga.toolkit.feature.more
+package org.prauga.toolkit.feature.more.ui
 
 import android.Manifest
 import android.os.Build
@@ -17,16 +17,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.core.content.pm.PackageInfoCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.prauga.pvot.designsystem.components.PvotBottomSheet
@@ -35,16 +38,19 @@ import com.prauga.pvot.designsystem.components.PvotScreenDefaults
 import com.prauga.pvot.designsystem.components.PvotSheetItem
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
+import com.prauga.pvot.designsystem.theme.PvotSpacing
 import org.prauga.toolkit.core.designsystem.component.ActionRow
 import org.prauga.toolkit.core.designsystem.component.SettingsGroup
 import org.prauga.toolkit.core.designsystem.component.ValueRow
 import org.prauga.toolkit.core.designsystem.link.openArticle
+import org.prauga.toolkit.core.model.AppVersion
 import org.prauga.toolkit.core.model.LinkItem
 import org.prauga.toolkit.core.model.LinkSection
 import org.prauga.toolkit.core.model.ThemePreference
+import org.prauga.toolkit.feature.more.R
 
 @Composable
-fun MoreScreen(
+internal fun MoreScreen(
     onOpenDevices: () -> Unit,
     onOpenNews: () -> Unit,
     onOpenLicenses: () -> Unit,
@@ -54,12 +60,15 @@ fun MoreScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val toolbarColor = MaterialTheme.colorScheme.surface.toArgb()
+    val openDevices by rememberUpdatedState(onOpenDevices)
+    val openNews by rememberUpdatedState(onOpenNews)
+    val openLicenses by rememberUpdatedState(onOpenLicenses)
+    val currentToolbarColor by rememberUpdatedState(toolbarColor)
 
     val notificationPermission =
-        rememberLauncherForActivityResult(
-            ActivityResultContracts.RequestPermission(),
-            viewModel::onNotificationPermissionResult,
-        )
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            viewModel.onEvent(MoreEvent.NotificationPermissionResult(granted))
+        }
 
     LaunchedEffect(viewModel) {
         viewModel.effects.collect { effect ->
@@ -68,31 +77,21 @@ fun MoreScreen(
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
                     }
+                MoreEffect.OpenDevices -> openDevices()
+                MoreEffect.OpenNews -> openNews()
+                MoreEffect.OpenLicenses -> openLicenses()
+                is MoreEffect.OpenLink -> context.openArticle(effect.url, currentToolbarColor)
             }
         }
     }
 
-    MoreContent(
-        state = state,
-        onLinkClick = { item -> item.url?.let { context.openArticle(it, toolbarColor) } },
-        onThemeChange = viewModel::setTheme,
-        onToggleBatteryMonitor = viewModel::setBatteryMonitorEnabled,
-        onOpenDevices = onOpenDevices,
-        onOpenNews = onOpenNews,
-        onOpenLicenses = onOpenLicenses,
-        modifier = modifier,
-    )
+    MoreContent(state = state, onEvent = viewModel::onEvent, modifier = modifier)
 }
 
 @Composable
 private fun MoreContent(
     state: MoreUiState,
-    onLinkClick: (LinkItem) -> Unit,
-    onThemeChange: (ThemePreference) -> Unit,
-    onToggleBatteryMonitor: (Boolean) -> Unit,
-    onOpenDevices: () -> Unit,
-    onOpenNews: () -> Unit,
-    onOpenLicenses: () -> Unit,
+    onEvent: (MoreEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PvotScreen(
@@ -101,26 +100,42 @@ private fun MoreContent(
     ) {
         item(key = "header") { Header() }
 
-        item(key = "browse") { BrowseGroup(onOpenDevices = onOpenDevices, onOpenNews = onOpenNews) }
+        item(key = "browse") {
+            BrowseGroup(
+                onOpenDevices = { onEvent(MoreEvent.DevicesClicked) },
+                onOpenNews = { onEvent(MoreEvent.NewsClicked) },
+            )
+        }
 
         item(key = "battery") {
             BatteryMonitorGroup(
                 enabled = state.batteryMonitorEnabled,
-                onToggle = onToggleBatteryMonitor,
+                onToggle = { onEvent(MoreEvent.BatteryMonitorToggled(it)) },
             )
         }
 
         item(key = "appearance") {
             SettingsGroup(title = stringResource(R.string.more_appearance)) {
-                ThemeRow(selected = state.theme, onSelect = onThemeChange)
+                ThemeRow(
+                    selected = state.theme,
+                    onSelect = { onEvent(MoreEvent.ThemeSelected(it)) },
+                )
             }
         }
 
         items(state.sections.size, key = { state.sections[it].id }) { index ->
-            LinkGroup(section = state.sections[index], onLinkClick = onLinkClick)
+            LinkGroup(
+                section = state.sections[index],
+                onLinkClick = { onEvent(MoreEvent.LinkClicked(it)) },
+            )
         }
 
-        item(key = "about") { AboutGroup(onOpenLicenses = onOpenLicenses) }
+        item(key = "about") {
+            AboutGroup(
+                appVersion = state.appVersion,
+                onOpenLicenses = { onEvent(MoreEvent.LicensesClicked) },
+            )
+        }
     }
 }
 
@@ -138,11 +153,15 @@ private fun BatteryMonitorGroup(enabled: Boolean, onToggle: (Boolean) -> Unit) {
                     if (enabled) R.string.more_battery_on else R.string.more_battery_off
                 ),
             onClick = { onToggle(!enabled) },
+            modifier =
+                Modifier.semantics {
+                    role = Role.Switch
+                    toggleableState = ToggleableState(enabled)
+                },
         )
     }
 }
 
-/** Destinations that lost their tab in favour of the kernel-facing ones. */
 @Composable
 private fun BrowseGroup(onOpenDevices: () -> Unit, onOpenNews: () -> Unit) {
     SettingsGroup(title = stringResource(R.string.more_browse)) {
@@ -167,7 +186,7 @@ private fun BrowseGroup(onOpenDevices: () -> Unit, onOpenNews: () -> Unit) {
 private fun Header() {
     Column(
         modifier = Modifier.fillMaxWidth().pvotReveal(0),
-        verticalArrangement = Arrangement.spacedBy(6.dp),
+        verticalArrangement = Arrangement.spacedBy(PvotSpacing.S),
     ) {
         Text(
             text = stringResource(R.string.more_kicker),
@@ -230,11 +249,16 @@ private fun ThemeRow(selected: ThemePreference, onSelect: (ThemePreference) -> U
 }
 
 @Composable
-private fun AboutGroup(onOpenLicenses: () -> Unit) {
+private fun AboutGroup(appVersion: AppVersion, onOpenLicenses: () -> Unit) {
     SettingsGroup(title = stringResource(R.string.more_about)) {
         ValueRow(
             label = stringResource(R.string.more_about_version),
-            value = appVersion(),
+            value =
+                stringResource(
+                    R.string.more_about_version_format,
+                    appVersion.name,
+                    appVersion.code,
+                ),
             index = 0,
             count = 2,
         )
@@ -246,18 +270,6 @@ private fun AboutGroup(onOpenLicenses: () -> Unit) {
             onClick = onOpenLicenses,
         )
     }
-}
-
-/** Read from the installed package, so a feature module needs no app BuildConfig. */
-@Composable
-private fun appVersion(): String {
-    val context = LocalContext.current
-    val info = remember(context) { context.packageManager.getPackageInfo(context.packageName, 0) }
-    return stringResource(
-        R.string.more_about_version_format,
-        info.versionName.orEmpty(),
-        PackageInfoCompat.getLongVersionCode(info),
-    )
 }
 
 private fun ThemePreference.labelRes(): Int =
@@ -272,13 +284,8 @@ private fun ThemePreference.labelRes(): Int =
 private fun MorePreview() {
     PvotAppTheme {
         MoreContent(
-            state = MoreUiState(),
-            onLinkClick = {},
-            onThemeChange = {},
-            onToggleBatteryMonitor = {},
-            onOpenDevices = {},
-            onOpenNews = {},
-            onOpenLicenses = {},
+            state = MoreUiState(appVersion = AppVersion(name = "0.1.0", code = 100)),
+            onEvent = {},
         )
     }
 }
