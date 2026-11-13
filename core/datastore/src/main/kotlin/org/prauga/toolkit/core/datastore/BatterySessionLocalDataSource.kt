@@ -57,7 +57,9 @@ class BatterySessionLocalDataSource @Inject constructor(@ApplicationContext cont
             false
         }
 
-    /** Folds [sample] into the session in one transaction, so concurrent samples cannot count twice. */
+    /**
+     * Folds [sample] into the session in one transaction, so concurrent samples cannot count twice.
+     */
     suspend fun record(sample: BatterySample): BatterySession? {
         var recorded: BatterySession? = null
         try {
@@ -65,7 +67,8 @@ class BatterySessionLocalDataSource @Inject constructor(@ApplicationContext cont
                 val session =
                     BatteryTracker.fold(
                         session = preferences[SessionKey]?.let { decode<BatterySession>(it) },
-                        previous = preferences[PreviousSampleKey]?.let { decode<BatterySample>(it) },
+                        previous =
+                            preferences[PreviousSampleKey]?.let { decode<BatterySample>(it) },
                         sample = sample,
                     )
                 preferences[SessionKey] = json.encodeToString(session)

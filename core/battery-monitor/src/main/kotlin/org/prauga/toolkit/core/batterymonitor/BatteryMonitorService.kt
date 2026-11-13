@@ -42,9 +42,7 @@ class BatteryMonitorService : Service() {
 
     @Inject internal lateinit var store: BatterySessionLocalDataSource
 
-    @Inject
-    @Dispatcher(ToolkitDispatchers.IO)
-    internal lateinit var dispatcher: CoroutineDispatcher
+    @Inject @Dispatcher(ToolkitDispatchers.IO) internal lateinit var dispatcher: CoroutineDispatcher
 
     private lateinit var scope: CoroutineScope
     private lateinit var sampler: BatterySampler

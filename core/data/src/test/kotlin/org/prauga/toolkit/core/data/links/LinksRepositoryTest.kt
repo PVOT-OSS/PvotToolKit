@@ -25,7 +25,8 @@ private const val REMOTE =
     """{"schema":1,"sections":[{"id":"remote","title":"Remote","items":[
       {"id":"x","label":"X","url":"https://example.invalid/"}]}]}"""
 
-private val JsonHeaders = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+private val JsonHeaders =
+    headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
 
 class LinksRepositoryTest {
     private val bundledAsset = File("src/main/assets/links.json").readText()

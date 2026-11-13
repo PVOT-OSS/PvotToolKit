@@ -6,6 +6,4 @@ package org.prauga.toolkit.core.common.coroutines
 import javax.inject.Qualifier
 
 /** Outlives every screen; for work that must finish even when the UI goes away. */
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class ApplicationScope
+@Qualifier @Retention(AnnotationRetention.RUNTIME) annotation class ApplicationScope

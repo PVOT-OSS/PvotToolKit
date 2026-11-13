@@ -25,10 +25,7 @@ private const val BUNDLED_LINKS_ASSET = "links.json"
 /** Community and project links, published by the site with a copy bundled here. */
 @Singleton
 class LinksRepository
-internal constructor(
-    private val api: ToolkitApi,
-    private val readBundled: suspend () -> String,
-) {
+internal constructor(private val api: ToolkitApi, private val readBundled: suspend () -> String) {
     @Inject
     constructor(
         api: ToolkitApi,
@@ -56,14 +53,20 @@ internal constructor(
             Timber.i(failure, "Links unreachable, falling back to the bundled copy")
             null
         } catch (failure: ApiStatusException) {
-            Timber.w(failure, "Links answered HTTP %d, falling back to the bundled copy", failure.status)
+            Timber.w(
+                failure,
+                "Links answered HTTP %d, falling back to the bundled copy",
+                failure.status,
+            )
             null
         } catch (failure: SerializationException) {
             Timber.w(failure, "Links are malformed, falling back to the bundled copy")
             null
         }
 
-    /** A broken bundled copy is a build mistake, so it throws; BundledLinksTest guards the asset. */
+    /**
+     * A broken bundled copy is a build mistake, so it throws; BundledLinksTest guards the asset.
+     */
     private suspend fun bundled(): List<LinkSection> {
         val sections = ToolkitJson.decodeFromString<LinksDto>(readBundled()).toDomain()
         check(sections.isNotEmpty()) { "$BUNDLED_LINKS_ASSET has no links to show" }

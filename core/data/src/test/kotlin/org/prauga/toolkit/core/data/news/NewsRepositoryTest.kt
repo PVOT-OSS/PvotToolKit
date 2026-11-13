@@ -25,7 +25,8 @@ import org.prauga.toolkit.core.network.ToolkitApi
 private const val FEED =
     """{"schema":1,"posts":[{"id":"a","title":"A","date":"2026-08-11","url":"https://example.invalid/a/"}]}"""
 
-private val JsonHeaders = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+private val JsonHeaders =
+    headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
 
 class NewsRepositoryTest {
     private fun repository(handler: MockRequestHandler) =

@@ -69,6 +69,7 @@ constructor(
     }
 
     fun onNotificationPermissionResult(granted: Boolean) {
-        if (!granted) Timber.i("Notification permission denied; the battery monitor runs without its readout")
+        if (!granted)
+            Timber.i("Notification permission denied; the battery monitor runs without its readout")
     }
 }

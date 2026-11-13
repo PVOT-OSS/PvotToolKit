@@ -23,7 +23,10 @@ private const val NEWS_URL = "$BASE_URL/api/v1/news.json"
 private const val LINKS_URL = "$BASE_URL/api/v1/links.json"
 private const val CACHE_ONLY = "only-if-cached, max-stale=${Int.MAX_VALUE}"
 
-/** Throws IOException when unreachable, [ApiStatusException] on a non-2xx, SerializationException on a bad body. */
+/**
+ * Throws IOException when unreachable, [ApiStatusException] on a non-2xx, SerializationException on
+ * a bad body.
+ */
 @Singleton
 class ToolkitApi @Inject constructor(engine: HttpClientEngine) {
     private val client = toolkitHttpClient(engine)
