@@ -36,7 +36,6 @@ private const val NOTIFICATION_ID = 1001
 
 private const val SAMPLE_INTERVAL_MILLIS = 60_000L
 
-/** Accumulates battery statistics for as long as the user leaves it on. */
 @AndroidEntryPoint
 class BatteryMonitorService : Service() {
 

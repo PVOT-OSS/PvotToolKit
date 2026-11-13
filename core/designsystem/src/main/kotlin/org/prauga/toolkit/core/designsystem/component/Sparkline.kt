@@ -25,7 +25,6 @@ private val LineWidth = 2.dp
 private val EndDotRadius = 4.dp
 private val SurfaceRing = 2.dp
 
-/** A single series over time, drawn without axes or labels. */
 @Composable
 fun Sparkline(
     values: List<Float>,

@@ -3,7 +3,6 @@
 
 package org.prauga.toolkit.core.model
 
-/** How the CPU is laid out and what it is allowed to do. */
 data class CpuTopology(
     val clusters: List<CpuCluster>,
     val coreCount: Int,

@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: 2026 Saalim Quadri <danascape@gmail.com>
 // SPDX-License-Identifier: Apache-2.0
 
-/** The app's version, as MAJOR.MINOR.PATCH. */
 data class SemanticVersion(val major: Int, val minor: Int, val patch: Int) {
     val name: String
         get() = "$major.$minor.$patch"

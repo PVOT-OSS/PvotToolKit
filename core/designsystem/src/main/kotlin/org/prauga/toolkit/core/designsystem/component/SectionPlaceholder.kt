@@ -18,7 +18,6 @@ import com.prauga.pvot.coreui.PvotEmptyContent
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import com.prauga.pvot.designsystem.theme.PvotSpacing
 
-/** Stand-in for a destination whose content has not been built yet. */
 @Composable
 fun SectionPlaceholder(title: String, description: String, modifier: Modifier = Modifier) {
     Column(

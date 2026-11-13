@@ -13,7 +13,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import org.prauga.toolkit.core.designsystem.R
 
-/** Leads the header of a screen opened on top of a tab. */
 @Composable
 fun BackButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
     IconButton(onClick = onClick, modifier = modifier) {

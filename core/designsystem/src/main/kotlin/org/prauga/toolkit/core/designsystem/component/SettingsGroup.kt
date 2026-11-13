@@ -42,7 +42,6 @@ fun groupShape(index: Int, count: Int): Shape {
     )
 }
 
-/** A titled run of rows that read as one grouped surface. */
 @Composable
 fun SettingsGroup(
     title: String,
@@ -65,7 +64,6 @@ fun SettingsGroup(
     }
 }
 
-/** One row of a group. */
 @Composable
 private fun GroupedRow(
     index: Int,
@@ -95,10 +93,7 @@ private fun GroupedRow(
     }
 }
 
-/**
- * A label and a readout; pass a null [revealIndex] inside a lazy list so fast scrolling shows rows,
- * not fades.
- */
+/** Pass a null [revealIndex] inside a lazy list, so fast scrolling shows rows instead of fades. */
 @Composable
 fun ValueRow(
     label: String,
@@ -165,7 +160,6 @@ fun ValueBlock(
     }
 }
 
-/** A tappable row. */
 @Composable
 fun ActionRow(
     label: String,

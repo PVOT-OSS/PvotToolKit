@@ -5,7 +5,6 @@ package org.prauga.toolkit.core.battery
 
 import kotlinx.serialization.Serializable
 
-/** One reading of the battery and the clocks, taken together. */
 @Serializable
 data class BatterySample(
     val elapsedMillis: Long,

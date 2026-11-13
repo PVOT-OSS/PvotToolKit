@@ -3,7 +3,6 @@
 
 package org.prauga.toolkit.core.model
 
-/** A group of outbound links on the More screen. */
 data class LinkSection(val id: String, val title: String, val items: List<LinkItem>)
 
 data class LinkItem(

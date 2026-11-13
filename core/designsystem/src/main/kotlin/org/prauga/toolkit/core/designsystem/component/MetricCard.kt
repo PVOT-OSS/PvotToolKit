@@ -18,7 +18,6 @@ import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotSpacing
 
-/** A stat tile: what a metric reads right now, with its recent shape. */
 @Composable
 fun MetricCard(
     title: String,
@@ -64,7 +63,6 @@ fun MetricCard(
     }
 }
 
-/** A label and its reading, for the secondary lines under a headline value. */
 @Composable
 fun MetricLine(label: String, value: String, modifier: Modifier = Modifier) {
     Row(

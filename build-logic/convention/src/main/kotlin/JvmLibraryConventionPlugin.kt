@@ -7,7 +7,6 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 
-/** Pure Kotlin module — no Android dependency. */
 class JvmLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) =
         with(target) {

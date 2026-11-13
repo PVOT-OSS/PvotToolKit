@@ -42,13 +42,11 @@ import org.prauga.toolkit.navigation.ToolkitNavDisplay
 import org.prauga.toolkit.navigation.rememberNavigator
 import org.prauga.toolkit.navigation.toolkitEntryProvider
 
-/** How the nav bar leaves and returns around screens opened on top of a tab. */
 private fun <T> barMotion() = tween<T>(PvotDurations.Medium, easing = PvotMotion.Settle)
 
 /** Scroll in one event before the nav bar reacts, so a jitter does not flip it. */
 private val ScrollThreshold = 4.dp
 
-/** The app shell: one glass nav bar floating over the screens, which are its backdrop. */
 @Composable
 internal fun ToolkitApp(modifier: Modifier = Modifier) {
     val navigator = rememberNavigator()

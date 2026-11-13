@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.prauga.toolkit.core.data.device.DeviceRepository
 
-/** Deliberately does not touch vitals: the screen shows none. */
 @HiltViewModel
 internal class SensorsViewModel @Inject constructor(deviceRepository: DeviceRepository) :
     ViewModel() {

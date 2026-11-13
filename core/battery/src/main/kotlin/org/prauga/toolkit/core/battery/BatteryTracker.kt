@@ -6,7 +6,6 @@ package org.prauga.toolkit.core.battery
 private const val TENTHS_PER_PERCENT = 10
 
 object BatteryTracker {
-    /** Attributes the interval to the screen state it was spent in. */
     fun fold(
         session: BatterySession?,
         previous: BatterySample?,
