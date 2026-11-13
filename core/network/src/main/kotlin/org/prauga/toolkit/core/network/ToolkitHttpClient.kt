@@ -15,10 +15,10 @@ import java.io.File
 import kotlinx.serialization.json.Json
 import okhttp3.Cache
 
+private const val BASE_URL = "https://stormbreaker.squadri.me"
+
 /** Static endpoints published by the website's own deploy. */
 object ToolkitEndpoints {
-    const val BASE_URL: String = BuildConfig.API_BASE_URL
-
     const val NEWS: String = "$BASE_URL/api/v1/news.json"
     const val LINKS: String = "$BASE_URL/api/v1/links.json"
 }

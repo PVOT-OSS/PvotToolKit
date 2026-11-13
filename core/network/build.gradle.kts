@@ -7,16 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-android {
-    namespace = "org.prauga.toolkit.core.network"
-
-    buildFeatures { buildConfig = true }
-
-    defaultConfig {
-        // Kept out of source so a debug build can be pointed at a staging deploy.
-        buildConfigField("String", "API_BASE_URL", "\"https://stormbreaker.squadri.me\"")
-    }
-}
+android { namespace = "org.prauga.toolkit.core.network" }
 
 dependencies {
     implementation(project(":core:model"))

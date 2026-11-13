@@ -16,8 +16,6 @@ android {
 }
 
 dependencies {
-    // The shell owns navigation and the Application; every screen lives behind
-    // a feature module.
     implementation(project(":feature:devices"))
     implementation(project(":feature:deviceinfo"))
     implementation(project(":feature:builds"))
@@ -33,19 +31,12 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:model"))
 
-    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.androidx.navigation3.ui)
 
-    // Coil's singleton loader is configured in ToolkitApplication.
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
     implementation(libs.coil.svg)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.androidx.junit)
 }
