@@ -3,6 +3,7 @@
 
 pluginManagement {
     includeBuild("build-logic")
+    includeBuild("PvotLib/build-logic") { name = "pvot-build-logic" }
     repositories {
         google {
             content {
@@ -65,8 +66,6 @@ include(":feature:deviceinfo")
 include(":feature:more")
 
 include(":feature:licenses")
-
-includeBuild("PvotLib/build-logic") { name = "pvot-build-logic" }
 
 include(":design-system")
 
