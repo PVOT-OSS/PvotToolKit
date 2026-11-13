@@ -21,6 +21,7 @@ SPDX-License-Identifier: Apache-2.0
     <string name="discover_cpu">CPU</string>
     <string name="discover_governor">Governor</string>
     <string name="discover_battery_charging">%1$s · charging</string>
+    <string name="discover_battery_temperature">%1$s · %2$s</string>
     <string name="discover_memory_value">%1$s / %2$s</string>
     <string name="discover_cpu_value">%1$s of %2$s</string>
     <string name="discover_view_monitoring">View monitoring</string>

@@ -11,7 +11,6 @@ import org.prauga.toolkit.feature.monitor.ui.MonitorScreen
 
 @Serializable data object MonitorRoute : NavKey
 
-/** Detail pushed from the CPU card. */
 @Serializable data object CpuDetailRoute : NavKey
 
 fun EntryProviderScope<NavKey>.monitorEntry(onOpenCpuDetail: () -> Unit) {

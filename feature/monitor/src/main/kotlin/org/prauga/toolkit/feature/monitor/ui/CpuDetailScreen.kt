@@ -32,6 +32,10 @@ import org.prauga.toolkit.core.designsystem.format.rememberUnitFormatter
 import org.prauga.toolkit.core.model.CpuCluster
 import org.prauga.toolkit.feature.monitor.R
 
+private const val LIST_SEPARATOR = ", "
+
+private val CoreChartHeight = 44.dp
+
 @Composable
 internal fun CpuDetailScreen(
     modifier: Modifier = Modifier,
@@ -50,10 +54,10 @@ private fun CpuDetailContent(state: CpuDetailUiState, modifier: Modifier = Modif
         item(key = "header") {
             Column(
                 modifier = Modifier.fillMaxWidth().pvotReveal(0),
-                verticalArrangement = Arrangement.spacedBy(6.dp),
+                verticalArrangement = Arrangement.spacedBy(PvotSpacing.S),
             ) {
                 Text(
-                    text = stringResource(R.string.monitor_cpu).lowercase(),
+                    text = stringResource(R.string.monitor_cpu_kicker),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.tertiary,
                 )
@@ -83,10 +87,11 @@ private fun CpuDetailContent(state: CpuDetailUiState, modifier: Modifier = Modif
 @Composable
 private fun CoreChart(core: CpuCoreState, revealIndex: Int) {
     val format = rememberUnitFormatter()
+    val load = core.load?.let { format.percent(it) } ?: format.unknown
     PvotCard(modifier = Modifier.fillMaxWidth().pvotReveal(revealIndex)) {
         Column(
             modifier = Modifier.padding(PvotSpacing.L),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(PvotSpacing.S),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -99,21 +104,26 @@ private fun CoreChart(core: CpuCoreState, revealIndex: Int) {
                 )
                 Text(
                     text =
-                        buildString {
-                            append(core.load?.let { format.percent(it) } ?: format.unknown)
-                            core.khz?.let { append(" · ${format.frequency(it)}") }
-                        },
+                        core.khz?.let {
+                            stringResource(
+                                R.string.monitor_core_reading,
+                                load,
+                                format.frequency(it),
+                            )
+                        } ?: load,
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            Sparkline(values = core.loadHistory, domain = 0f..1f, height = 44.dp)
+            Sparkline(values = core.loadHistory, domain = 0f..1f, height = CoreChartHeight)
             core.cluster?.let {
                 Text(
                     text =
-                        stringResource(R.string.monitor_cluster, it.id) +
-                            " · " +
-                            (it.hardwareMaxKhz?.let(format::frequency) ?: format.unknown),
+                        stringResource(
+                            R.string.monitor_cluster_peak_value,
+                            it.id,
+                            it.hardwareMaxKhz?.let(format::frequency) ?: format.unknown,
+                        ),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -128,7 +138,7 @@ private fun ClusterCard(cluster: CpuCluster) {
     PvotCard(modifier = Modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier.padding(PvotSpacing.L),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(PvotSpacing.S),
         ) {
             Text(
                 text = stringResource(R.string.monitor_cluster, cluster.id),
@@ -137,21 +147,37 @@ private fun ClusterCard(cluster: CpuCluster) {
             )
             MetricLine(
                 stringResource(R.string.monitor_freq_range),
-                "${cluster.minKhz?.let(format::frequency) ?: format.unknown} – " +
-                    (cluster.hardwareMaxKhz?.let(format::frequency) ?: format.unknown),
+                stringResource(
+                    R.string.monitor_freq_range_value,
+                    cluster.minKhz?.let(format::frequency) ?: format.unknown,
+                    cluster.hardwareMaxKhz?.let(format::frequency) ?: format.unknown,
+                ),
             )
             cluster.governor?.let { MetricLine(stringResource(R.string.monitor_governor), it) }
             if (cluster.availableGovernors.isNotEmpty()) {
                 MetricLine(
                     stringResource(R.string.monitor_governors_available),
-                    cluster.availableGovernors.joinToString(", "),
+                    cluster.availableGovernors.joinToString(LIST_SEPARATOR),
                 )
             }
             if (cluster.availableKhz.isNotEmpty()) {
-                MetricLine(
-                    stringResource(R.string.monitor_opp_count, cluster.availableKhz.size),
-                    cluster.availableKhz.joinToString(" ") { (it / 1000).toString() },
-                )
+                Column(verticalArrangement = Arrangement.spacedBy(PvotSpacing.XS)) {
+                    Text(
+                        text =
+                            stringResource(R.string.monitor_opp_count, cluster.availableKhz.size),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Text(
+                        text =
+                            cluster.availableKhz.joinToString(
+                                LIST_SEPARATOR,
+                                transform = format::frequency,
+                            ),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
             }
         }
     }

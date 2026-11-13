@@ -9,11 +9,13 @@ SPDX-License-Identifier: Apache-2.0
     <string name="monitor_description">Read without root. What is missing needs a StormBreaker kernel.</string>
 
     <string name="monitor_cpu">CPU</string>
+    <string name="monitor_cpu_kicker">cpu</string>
     <string name="monitor_cluster">Cluster %1$d</string>
     <string name="monitor_core">Core %1$d</string>
     <string name="monitor_governor">Governor</string>
     <string name="monitor_governors_available">Available</string>
     <string name="monitor_freq_range">Range</string>
+    <string name="monitor_freq_range_value">%1$s – %2$s</string>
     <string name="monitor_opp_count">%1$d steps</string>
 
     <string name="monitor_gpu">GPU</string>
@@ -40,17 +42,27 @@ SPDX-License-Identifier: Apache-2.0
     <string name="monitor_uptime">Uptime</string>
     <string name="monitor_awake">Awake</string>
     <string name="monitor_deep_sleep">Deep sleep</string>
+    <string name="monitor_deep_sleep_value">%1$s · %2$s</string>
 
     <string name="monitor_network">Network since boot</string>
     <string name="monitor_received">Received</string>
     <string name="monitor_sent">Sent</string>
 
     <string name="monitor_thermal">Thermal</string>
+    <string name="monitor_thermal_none">None</string>
+    <string name="monitor_thermal_light">Light</string>
+    <string name="monitor_thermal_moderate">Moderate</string>
+    <string name="monitor_thermal_severe">Severe</string>
+    <string name="monitor_thermal_critical">Critical</string>
+    <string name="monitor_thermal_emergency">Emergency</string>
+    <string name="monitor_thermal_shutdown">Shutdown</string>
 
     <string name="monitor_tap_detail">Tap for detail</string>
     <string name="monitor_collecting">Collecting…</string>
     <string name="monitor_cores_summary">%1$d cores · %2$d clusters</string>
     <string name="monitor_cluster_peak">Cluster %1$d peak</string>
+    <string name="monitor_cluster_peak_value">Cluster %1$d · %2$s</string>
+    <string name="monitor_core_reading">%1$s · %2$s</string>
     <string name="monitor_rate">%1$s/s</string>
     <string name="monitor_of_total">of %1$s</string>
     <string name="monitor_detail_cpu">Per-core load</string>

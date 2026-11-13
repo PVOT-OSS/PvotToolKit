@@ -3,6 +3,7 @@
 
 package org.prauga.toolkit.feature.monitor.ui
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,12 +18,13 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.components.PvotScreenDefaults
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
+import com.prauga.pvot.designsystem.theme.PvotSpacing
+import kotlin.math.abs
 import org.prauga.toolkit.core.data.vitals.MetricHistory
 import org.prauga.toolkit.core.designsystem.component.Meter
 import org.prauga.toolkit.core.designsystem.component.MetricCard
@@ -33,10 +35,13 @@ import org.prauga.toolkit.core.model.BatteryVitals
 import org.prauga.toolkit.core.model.CpuTopology
 import org.prauga.toolkit.core.model.GpuInfo
 import org.prauga.toolkit.core.model.MemoryVitals
+import org.prauga.toolkit.core.model.NetworkVitals
 import org.prauga.toolkit.core.model.SleepStats
 import org.prauga.toolkit.core.model.StorageVitals
 import org.prauga.toolkit.core.model.Vitals
 import org.prauga.toolkit.feature.monitor.R
+
+private const val LIST_SEPARATOR = ", "
 
 @Composable
 internal fun MonitorScreen(
@@ -88,21 +93,25 @@ private fun MonitorContent(
         vitals?.battery?.let { battery ->
             item(key = "battery") { BatteryCard(battery, history, revealIndex = 3) }
         }
-        vitals?.let { item(key = "network") { NetworkCard(it, history, revealIndex = 4) } }
+        vitals?.network?.let { network ->
+            item(key = "network") { NetworkCard(network, history, revealIndex = 4) }
+        }
         vitals?.storage?.let { storage ->
             item(key = "storage") { StorageCard(storage, revealIndex = 5) }
         }
         vitals?.let { item(key = "uptime") { UptimeCard(it.sleep, revealIndex = 6) } }
         state.profile?.gpu?.let { gpu -> item(key = "gpu") { GpuCard(gpu, revealIndex = 7) } }
-        vitals?.let { item(key = "thermal") { ThermalCard(it, revealIndex = 8) } }
+        vitals?.thermal?.labelRes()?.let { label ->
+            item(key = "thermal") { ThermalCard(label, revealIndex = 8) }
+        }
     }
 }
 
 @Composable
 private fun Header() {
     Column(
-        modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp),
-        verticalArrangement = Arrangement.spacedBy(6.dp),
+        modifier = Modifier.fillMaxWidth().padding(bottom = PvotSpacing.S),
+        verticalArrangement = Arrangement.spacedBy(PvotSpacing.S),
     ) {
         Text(
             text = stringResource(R.string.monitor_kicker),
@@ -148,7 +157,7 @@ private fun CpuCard(
                 topology.coreCount,
                 topology.clusters.size,
             ),
-            vitals?.cpu?.governors?.joinToString(", ").orEmpty(),
+            vitals?.cpu?.governors?.joinToString(LIST_SEPARATOR).orEmpty(),
         )
         topology.clusters.forEach { cluster ->
             MetricLine(
@@ -185,7 +194,7 @@ private fun BatteryCard(battery: BatteryVitals, history: MetricHistory, revealIn
         Sparkline(values = history.batteryDrawMicroAmps, domain = null)
 
         battery.currentMicroAmps?.let {
-            MetricLine(stringResource(R.string.monitor_draw), format.current(kotlin.math.abs(it)))
+            MetricLine(stringResource(R.string.monitor_draw), format.current(abs(it)))
         }
         battery.chargeCounterMicroAmpHours?.let {
             MetricLine(stringResource(R.string.monitor_capacity), format.charge(it))
@@ -197,9 +206,8 @@ private fun BatteryCard(battery: BatteryVitals, history: MetricHistory, revealIn
 }
 
 @Composable
-private fun NetworkCard(vitals: Vitals, history: MetricHistory, revealIndex: Int) {
+private fun NetworkCard(network: NetworkVitals, history: MetricHistory, revealIndex: Int) {
     val format = rememberUnitFormatter()
-    val network = vitals.network ?: return
     MetricCard(
         title = stringResource(R.string.monitor_network),
         value =
@@ -243,7 +251,11 @@ private fun UptimeCard(sleep: SleepStats, revealIndex: Int) {
         Meter(fraction = sleep.deepSleepFraction, color = MaterialTheme.colorScheme.tertiary)
         MetricLine(
             stringResource(R.string.monitor_deep_sleep),
-            "${format.duration(sleep.deepSleepMillis)} · ${format.percent(sleep.deepSleepFraction)}",
+            stringResource(
+                R.string.monitor_deep_sleep_value,
+                format.duration(sleep.deepSleepMillis),
+                format.percent(sleep.deepSleepFraction),
+            ),
         )
         MetricLine(stringResource(R.string.monitor_awake), format.duration(sleep.awakeMillis))
     }
@@ -267,12 +279,11 @@ private fun GpuCard(gpu: GpuInfo, revealIndex: Int) {
     }
 }
 
-/** A discrete state, so a chip rather than a chart. */
 @Composable
-private fun ThermalCard(vitals: Vitals, revealIndex: Int) {
+private fun ThermalCard(@StringRes label: Int, revealIndex: Int) {
     MetricCard(
         title = stringResource(R.string.monitor_thermal),
-        value = vitals.thermal.name.lowercase().replaceFirstChar(Char::uppercase),
+        value = stringResource(label),
         revealIndex = revealIndex,
     ) {
         Text(

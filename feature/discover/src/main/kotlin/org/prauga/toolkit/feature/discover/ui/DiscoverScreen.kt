@@ -3,18 +3,15 @@
 
 package org.prauga.toolkit.feature.discover.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,13 +19,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.prauga.pvot.coreui.R as CoreUiR
@@ -37,7 +32,6 @@ import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.components.PvotScreenDefaults
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
-import com.prauga.pvot.designsystem.theme.PvotShapes
 import com.prauga.pvot.designsystem.theme.PvotSpacing
 import org.prauga.toolkit.core.designsystem.component.ActionRow
 import org.prauga.toolkit.core.designsystem.component.SettingsGroup
@@ -61,6 +55,8 @@ import org.prauga.toolkit.core.model.StorageVitals
 import org.prauga.toolkit.core.model.ThermalStatus
 import org.prauga.toolkit.core.model.Vitals
 import org.prauga.toolkit.feature.discover.R
+
+private const val LIST_SEPARATOR = ", "
 
 @Composable
 internal fun DiscoverScreen(
@@ -132,7 +128,7 @@ private fun IdentityCard(identity: DeviceIdentity, onClick: () -> Unit) {
     PvotCard(modifier = Modifier.fillMaxWidth().pvotReveal(0), onClick = onClick) {
         Column(
             modifier = Modifier.padding(PvotSpacing.L),
-            verticalArrangement = Arrangement.spacedBy(6.dp),
+            verticalArrangement = Arrangement.spacedBy(PvotSpacing.S),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -170,7 +166,7 @@ private fun IdentityCard(identity: DeviceIdentity, onClick: () -> Unit) {
             )
 
             HorizontalDivider(
-                modifier = Modifier.padding(vertical = 10.dp),
+                modifier = Modifier.padding(vertical = PvotSpacing.S),
                 color = MaterialTheme.colorScheme.outlineVariant,
             )
 
@@ -191,44 +187,33 @@ private fun IdentityCard(identity: DeviceIdentity, onClick: () -> Unit) {
                 )
             }
 
-            StatusChip(identity, modifier = Modifier.padding(top = 10.dp))
+            StatusChip(
+                identity,
+                onClick = onClick,
+                modifier = Modifier.padding(top = PvotSpacing.S),
+            )
         }
     }
 }
 
 @Composable
-private fun StatusChip(identity: DeviceIdentity, modifier: Modifier = Modifier) {
-    val running = identity.isStormBreakerKernel
-    Row(
-        modifier =
-            modifier
-                .clip(PvotShapes.Pill)
-                .background(MaterialTheme.colorScheme.surfaceContainerHighest)
-                .padding(horizontal = PvotSpacing.M, vertical = PvotSpacing.S),
-        horizontalArrangement = Arrangement.spacedBy(PvotSpacing.S),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Box(
-            modifier =
-                Modifier.size(7.dp)
-                    .clip(CircleShape)
-                    .background(
-                        if (running) MaterialTheme.colorScheme.tertiary
-                        else MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-        )
-        Text(
-            text =
+private fun StatusChip(
+    identity: DeviceIdentity,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    SuggestionChip(
+        onClick = onClick,
+        label = {
+            Text(
                 stringResource(
-                    if (running) R.string.discover_kernel_running
+                    if (identity.isStormBreakerKernel) R.string.discover_kernel_running
                     else R.string.discover_kernel_stock
-                ),
-            style = MaterialTheme.typography.labelSmall,
-            color =
-                if (running) MaterialTheme.colorScheme.onSurface
-                else MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-    }
+                )
+            )
+        },
+        modifier = modifier,
+    )
 }
 
 /** Deliberately a placeholder rather than a fake "up to date". */
@@ -261,7 +246,7 @@ private fun VitalsGroup(vitals: Vitals?, onOpenMonitoring: () -> Unit) {
                             add { i, n ->
                                 ValueRow(
                                     stringResource(R.string.discover_governor),
-                                    governors.joinToString(", "),
+                                    governors.joinToString(LIST_SEPARATOR),
                                     i,
                                     n,
                                 )
@@ -285,7 +270,9 @@ private fun VitalsGroup(vitals: Vitals?, onOpenMonitoring: () -> Unit) {
             text = stringResource(R.string.discover_thermal_locked),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.fillMaxWidth().padding(top = 10.dp, start = 4.dp, end = 4.dp),
+            modifier =
+                Modifier.fillMaxWidth()
+                    .padding(top = PvotSpacing.S, start = PvotSpacing.XS, end = PvotSpacing.XS),
         )
     }
 }
@@ -300,7 +287,10 @@ private fun BatteryRow(battery: BatteryVitals, index: Int, count: Int) {
         } else {
             percent
         }
-    val withTemp = battery.temperatureC?.let { "$value · " + format.temperature(it) } ?: value
+    val withTemp =
+        battery.temperatureC?.let {
+            stringResource(R.string.discover_battery_temperature, value, format.temperature(it))
+        } ?: value
     ValueRow(stringResource(R.string.discover_battery), withTemp, index, count)
 }
 
