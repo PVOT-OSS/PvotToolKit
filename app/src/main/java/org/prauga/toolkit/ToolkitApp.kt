@@ -27,6 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
 import com.prauga.pvot.designsystem.effects.pvotGlassBackdrop
 import com.prauga.pvot.designsystem.effects.rememberPvotGlassBackdrop
 import com.prauga.pvot.designsystem.motion.PvotDurations
@@ -43,8 +45,8 @@ import org.prauga.toolkit.navigation.toolkitEntryProvider
 /** How the nav bar leaves and returns around screens opened on top of a tab. */
 private fun <T> barMotion() = tween<T>(PvotDurations.Medium, easing = PvotMotion.Settle)
 
-/** Pixels of scroll in one event before the nav bar reacts, so a jitter does not flip it. */
-private const val SCROLL_THRESHOLD = 4f
+/** Scroll in one event before the nav bar reacts, so a jitter does not flip it. */
+private val ScrollThreshold = 4.dp
 
 /** The app shell: one glass nav bar floating over the screens, which are its backdrop. */
 @Composable
@@ -61,18 +63,20 @@ internal fun ToolkitApp(modifier: Modifier = Modifier) {
 
     val backdrop = rememberPvotGlassBackdrop()
     var navCompact by rememberSaveable { mutableStateOf(false) }
-    val scrollConnection = remember {
-        object : NestedScrollConnection {
-            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                if (available.y < -SCROLL_THRESHOLD) {
-                    navCompact = true
-                } else if (available.y > SCROLL_THRESHOLD) {
-                    navCompact = false
+    val scrollThresholdPx = with(LocalDensity.current) { ScrollThreshold.toPx() }
+    val scrollConnection =
+        remember(scrollThresholdPx) {
+            object : NestedScrollConnection {
+                override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                    if (available.y < -scrollThresholdPx) {
+                        navCompact = true
+                    } else if (available.y > scrollThresholdPx) {
+                        navCompact = false
+                    }
+                    return Offset.Zero
                 }
-                return Offset.Zero
             }
         }
-    }
 
     val deviceTabs = remember {
         DeviceDestination.entries.map {
@@ -90,8 +94,6 @@ internal fun ToolkitApp(modifier: Modifier = Modifier) {
                 iconRes = it.iconRes,
                 labelRes = it.labelRes,
                 contentDescriptionRes = it.contentDescriptionRes,
-                expandedIconRes = it.expandedIconRes,
-                expandedLabelRes = it.expandedLabelRes,
             )
         }
     }

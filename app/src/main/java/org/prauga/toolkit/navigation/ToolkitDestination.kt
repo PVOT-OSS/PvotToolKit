@@ -14,13 +14,11 @@ import org.prauga.toolkit.feature.more.navigation.MoreRoute
 import org.prauga.toolkit.feature.tune.navigation.TuneRoute
 
 /** Top-level destinations, in nav bar order. */
-enum class ToolkitDestination(
+internal enum class ToolkitDestination(
     val route: NavKey,
     @param:DrawableRes val iconRes: Int,
     @param:StringRes val labelRes: Int,
     @param:StringRes val contentDescriptionRes: Int,
-    @param:DrawableRes val expandedIconRes: Int? = null,
-    @param:StringRes val expandedLabelRes: Int? = null,
 ) {
     DISCOVER(
         route = DiscoverRoute,
