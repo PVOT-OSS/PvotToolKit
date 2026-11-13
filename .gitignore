@@ -1,18 +1,11 @@
 *.iml
 .gradle
-/local.properties
 /.idea
 .DS_Store
-/build
-# Build output in any module, not just the root.
 build/
 /captures
 .externalNativeBuild
 .cxx
 local.properties
-
-# Claude Code
 .claude/
-
-# Kotlin compiler scratch output
 .kotlin/

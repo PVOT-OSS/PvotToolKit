@@ -4,13 +4,12 @@
 version = 1
 SPDX-PackageName = "Toolkit"
 SPDX-PackageSupplier = "Saalim Quadri <danascape@gmail.com>"
-SPDX-PackageDownloadLocation = "https://github.com/PVOT-OSS/ToolKit"
+SPDX-PackageDownloadLocation = "https://github.com/PVOT-OSS/PvotToolKit"
 
 [[annotations]]
 path = [
     ".gitignore",
     ".gitmodules",
-    "app/.gitignore",
     "core/data/src/main/assets/links.json",
 ]
 precedence = "aggregate"
