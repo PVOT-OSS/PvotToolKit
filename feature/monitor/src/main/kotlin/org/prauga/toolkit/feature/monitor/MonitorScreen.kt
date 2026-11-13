@@ -135,7 +135,7 @@ private fun CpuCard(
                 topology.coreCount,
                 topology.clusters.size,
             ),
-            vitals?.cpu?.governor.orEmpty(),
+            vitals?.cpu?.governors?.joinToString(", ").orEmpty(),
         )
         topology.clusters.forEach { cluster ->
             MetricLine(

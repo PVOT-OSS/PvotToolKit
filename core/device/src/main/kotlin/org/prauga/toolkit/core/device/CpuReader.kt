@@ -6,43 +6,50 @@ package org.prauga.toolkit.core.device
 import java.io.File
 import org.prauga.toolkit.core.model.CpuVitals
 
-private const val CPU_ROOT = "/sys/devices/system/cpu"
 private const val THERMAL_ROOT = "/sys/class/thermal"
 
 private const val MILLI_DEGREES_PER_DEGREE = 1000f
 
-/** cpufreq is one of the few kernel nodes still world-readable on a stock device. */
-object CpuReader {
+// Read per policy: cpu0's cpuinfo_max_freq is a little core's, not the SoC's peak.
+internal class CpuReader(
+    private val cpuRoot: File = File(CPU_ROOT),
+    private val thermalRoot: File = File(THERMAL_ROOT),
+) {
     fun read(): CpuVitals? {
-        val cores = coreDirectories()
-        if (cores.isEmpty()) return null
+        val policies = listPolicyDirs(cpuRoot).map { (id, dir) -> readPolicy(id, dir) }
+        if (policies.isEmpty()) return null
 
-        val frequencies =
-            cores.mapNotNull { core -> core.resolve("cpufreq/scaling_cur_freq").readIntOrNull() }
-        if (frequencies.isEmpty()) return null
+        val coreCount =
+            (listCoreDirs(cpuRoot).keys + policies.flatMap { it.relatedCores })
+                .maxOrNull()
+                ?.plus(1) ?: 0
 
         return CpuVitals(
-            perCoreKhz = frequencies,
-            maxKhz =
-                cores
-                    .mapNotNull { it.resolve("cpufreq/cpuinfo_max_freq").readIntOrNull() }
-                    .maxOrNull(),
-            governor = cores.first().resolve("cpufreq/scaling_governor").readTextOrNull(),
+            perCoreKhz =
+                List(coreCount) { core ->
+                    policies.firstOrNull { core in it.onlineCores }?.currentKhz
+                },
+            maxKhz = policies.mapNotNull { it.maxKhz }.maxOrNull(),
+            governors = policies.mapNotNull { it.governor }.distinct(),
             temperatureC = cpuTemperatureC(),
         )
     }
 
-    private fun coreDirectories(): List<File> =
-        File(CPU_ROOT)
-            .listFiles { file -> file.name.matches(Regex("cpu\\d+")) }
-            ?.sortedBy { it.name.removePrefix("cpu").toIntOrNull() ?: 0 }
-            .orEmpty()
+    private fun readPolicy(id: Int, dir: File): Policy {
+        val related = dir.resolve("related_cpus").readTextOrNull()?.let(::parseCpuList)
+        val affected = dir.resolve("affected_cpus").readTextOrNull()?.let(::parseCpuList)
+        return Policy(
+            relatedCores = related ?: listOf(id),
+            onlineCores = affected ?: related ?: listOf(id),
+            currentKhz = dir.resolve("scaling_cur_freq").readIntOrNull(),
+            maxKhz = dir.resolve("cpuinfo_max_freq").readIntOrNull(),
+            governor = dir.resolve("scaling_governor").readTextOrNull(),
+        )
+    }
 
-    /** Normally null. */
     private fun cpuTemperatureC(): Float? {
         val zones =
-            File(THERMAL_ROOT).listFiles { file -> file.name.startsWith("thermal_zone") }
-                ?: return null
+            thermalRoot.listFiles { file -> file.name.startsWith("thermal_zone") } ?: return null
         return zones
             .firstNotNullOfOrNull { zone ->
                 zone
@@ -53,13 +60,12 @@ object CpuReader {
             }
             ?.div(MILLI_DEGREES_PER_DEGREE)
     }
+
+    private class Policy(
+        val relatedCores: List<Int>,
+        val onlineCores: List<Int>,
+        val currentKhz: Int?,
+        val maxKhz: Int?,
+        val governor: String?,
+    )
 }
-
-internal fun File.readTextOrNull(): String? =
-    try {
-        takeIf { it.canRead() }?.readText()?.trim()?.takeIf { it.isNotEmpty() }
-    } catch (_: Exception) {
-        null
-    }
-
-internal fun File.readIntOrNull(): Int? = readTextOrNull()?.toIntOrNull()

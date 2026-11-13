@@ -92,7 +92,7 @@ private fun socSection(profile: DeviceProfile): InfoSection {
                 stringResource(R.string.device_info_cores) to cpu?.coreCount?.toString(),
                 stringResource(R.string.device_info_clusters) to clusters,
                 stringResource(R.string.device_info_governor) to
-                    cpu?.clusters?.firstNotNullOfOrNull { it.governor },
+                    cpu?.clusters?.mapNotNull { it.governor }?.distinct()?.joinToString(", "),
                 stringResource(R.string.device_info_abis) to soc.supportedAbis.joinToString(" "),
                 stringResource(R.string.device_info_instructions) to
                     cpu?.features?.joinToString(" "),

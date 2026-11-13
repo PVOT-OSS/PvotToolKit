@@ -7,36 +7,22 @@ import java.io.File
 import org.prauga.toolkit.core.model.CpuCluster
 import org.prauga.toolkit.core.model.CpuTopology
 
-private const val CPU_ROOT = "/sys/devices/system/cpu"
 private const val CPUINFO = "/proc/cpuinfo"
 
 /** Reads the cpufreq policy groups. */
 object CpuTopologyReader {
     fun read(): CpuTopology? {
-        val policies =
-            File("$CPU_ROOT/cpufreq")
-                .listFiles { file -> file.name.startsWith("policy") }
-                ?.sortedBy { it.name.removePrefix("policy").toIntOrNull() ?: 0 }
-
-        val coreIds =
-            File(CPU_ROOT)
-                .listFiles { file -> file.name.matches(Regex("cpu\\d+")) }
-                ?.mapNotNull { it.name.removePrefix("cpu").toIntOrNull() }
-                ?.sorted()
-                .orEmpty()
-
-        if (policies.isNullOrEmpty()) return null
+        val cpuRoot = File(CPU_ROOT)
+        val policies = listPolicyDirs(cpuRoot)
+        if (policies.isEmpty()) return null
+        val coreIds = listCoreDirs(cpuRoot).keys
 
         val parts = readCoreParts()
         val clusters =
-            policies.mapNotNull { policy ->
-                val id = policy.name.removePrefix("policy").toIntOrNull() ?: return@mapNotNull null
+            policies.map { (id, policy) ->
                 val cores =
-                    policy
-                        .resolve("related_cpus")
-                        .readTextOrNull()
-                        ?.split(' ')
-                        ?.mapNotNull(String::toIntOrNull) ?: listOf(id)
+                    policy.resolve("related_cpus").readTextOrNull()?.let(::parseCpuList)
+                        ?: listOf(id)
                 CpuCluster(
                     id = id,
                     cores = cores,

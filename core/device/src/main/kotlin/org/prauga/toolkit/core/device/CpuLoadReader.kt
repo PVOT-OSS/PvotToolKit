@@ -8,8 +8,6 @@ import java.util.concurrent.TimeUnit
 import org.prauga.toolkit.core.model.CpuIdleSample
 import org.prauga.toolkit.core.model.CpuLoad
 
-private const val CPU_ROOT = "/sys/devices/system/cpu"
-
 /** Derives CPU utilisation from idle residency. */
 object CpuLoadReader {
     fun sample(): CpuIdleSample? {

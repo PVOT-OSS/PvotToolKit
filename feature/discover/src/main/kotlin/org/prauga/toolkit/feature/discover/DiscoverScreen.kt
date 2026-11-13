@@ -238,9 +238,14 @@ private fun VitalsGroup(vitals: Vitals?, onOpenMonitoring: () -> Unit) {
                 vitals?.memory?.let { memory -> add { i, n -> MemoryRow(memory, i, n) } }
                 vitals?.cpu?.let { cpu ->
                     add { i, n -> CpuRow(cpu, i, n) }
-                    cpu.governor?.let { governor ->
+                    cpu.governors.takeIf { it.isNotEmpty() }?.let { governors ->
                         add { i, n ->
-                            ValueRow(stringResource(R.string.discover_governor), governor, i, n)
+                            ValueRow(
+                                stringResource(R.string.discover_governor),
+                                governors.joinToString(", "),
+                                i,
+                                n,
+                            )
                         }
                     }
                 }
@@ -297,7 +302,7 @@ private fun MemoryRow(memory: MemoryVitals, index: Int, count: Int) {
 
 @Composable
 private fun CpuRow(cpu: CpuVitals, index: Int, count: Int) {
-    val current = cpu.perCoreKhz.maxOrNull()
+    val current = cpu.perCoreKhz.filterNotNull().maxOrNull()
     val max = cpu.maxKhz
     val value =
         when {
@@ -395,7 +400,12 @@ private fun DiscoverPreview() {
                     vitals =
                         Vitals(
                             cpu =
-                                CpuVitals(listOf(1_804_800, 820_000), 2_208_000, "schedutil", null),
+                                CpuVitals(
+                                    listOf(1_804_800, 820_000),
+                                    2_208_000,
+                                    listOf("schedutil"),
+                                    null,
+                                ),
                             load = null,
                             memory = MemoryVitals(6_600_000_000, 12_000_000_000),
                             battery =

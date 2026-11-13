@@ -24,11 +24,12 @@ private const val TENTHS_PER_DEGREE = 10f
 class SystemVitalsReader @Inject constructor(@ApplicationContext context: Context) {
     private val appContext = context.applicationContext
     private val platform = PlatformVitalsReader(appContext)
+    private val cpu = CpuReader()
 
     /** @param load supplied by the caller, which owns the two spaced samples. */
     fun read(load: org.prauga.toolkit.core.model.CpuLoad? = null): Vitals =
         Vitals(
-            cpu = CpuReader.read(),
+            cpu = cpu.read(),
             load = load,
             memory = readMemory(),
             battery = readBattery(),

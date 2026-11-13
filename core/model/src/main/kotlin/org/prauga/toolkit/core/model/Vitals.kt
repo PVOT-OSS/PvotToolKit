@@ -17,9 +17,9 @@ data class Vitals(
 )
 
 data class CpuVitals(
-    val perCoreKhz: List<Int>,
+    val perCoreKhz: List<Int?>,
     val maxKhz: Int?,
-    val governor: String?,
+    val governors: List<String>,
     val temperatureC: Float?,
 )
 
