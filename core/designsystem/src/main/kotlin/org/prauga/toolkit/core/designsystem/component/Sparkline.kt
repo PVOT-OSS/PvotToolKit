@@ -16,6 +16,8 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -27,13 +29,19 @@ private val SurfaceRing = 2.dp
 @Composable
 fun Sparkline(
     values: List<Float>,
+    contentDescription: String?,
     modifier: Modifier = Modifier,
     domain: ClosedFloatingPointRange<Float>? = 0f..1f,
     color: Color = MaterialTheme.colorScheme.primary,
     surface: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
     height: Dp = 40.dp,
 ) {
-    Canvas(modifier = modifier.fillMaxWidth().height(height)) {
+    Canvas(
+        modifier =
+            modifier.fillMaxWidth().height(height).semantics {
+                contentDescription?.let { this.contentDescription = it }
+            }
+    ) {
         if (values.size < 2) return@Canvas
 
         val low = domain?.start ?: values.min()

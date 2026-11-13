@@ -149,7 +149,11 @@ private fun CpuCard(
         revealIndex = revealIndex,
         onClick = onClick,
     ) {
-        Sparkline(values = history.totalLoad, domain = 0f..1f)
+        Sparkline(
+            values = history.totalLoad,
+            contentDescription = stringResource(R.string.monitor_cpu),
+            domain = 0f..1f,
+        )
 
         MetricLine(
             stringResource(
@@ -177,7 +181,11 @@ private fun MemoryCard(memory: MemoryVitals, history: MetricHistory, revealIndex
         caption = stringResource(R.string.monitor_of_total, format.bytes(memory.totalBytes)),
         revealIndex = revealIndex,
     ) {
-        Sparkline(values = history.memoryUsed, domain = 0f..1f)
+        Sparkline(
+            values = history.memoryUsed,
+            contentDescription = stringResource(R.string.monitor_memory),
+            domain = 0f..1f,
+        )
         MetricLine(stringResource(R.string.monitor_used), format.bytes(memory.usedBytes))
     }
 }
@@ -191,7 +199,11 @@ private fun BatteryCard(battery: BatteryVitals, history: MetricHistory, revealIn
         caption = battery.temperatureC?.let { format.temperature(it) },
         revealIndex = revealIndex,
     ) {
-        Sparkline(values = history.batteryDrawMicroAmps, domain = null)
+        Sparkline(
+            values = history.batteryDrawMicroAmps,
+            contentDescription = stringResource(R.string.monitor_draw),
+            domain = null,
+        )
 
         battery.currentMicroAmps?.let {
             MetricLine(stringResource(R.string.monitor_draw), format.current(abs(it)))
@@ -217,7 +229,11 @@ private fun NetworkCard(network: NetworkVitals, history: MetricHistory, revealIn
             ),
         revealIndex = revealIndex,
     ) {
-        Sparkline(values = history.networkBytesPerSecond, domain = null)
+        Sparkline(
+            values = history.networkBytesPerSecond,
+            contentDescription = stringResource(R.string.monitor_network),
+            domain = null,
+        )
         MetricLine(stringResource(R.string.monitor_received), format.bytes(network.rxBytes))
         MetricLine(stringResource(R.string.monitor_sent), format.bytes(network.txBytes))
     }
@@ -233,7 +249,10 @@ private fun StorageCard(storage: StorageVitals, revealIndex: Int) {
         caption = stringResource(R.string.monitor_of_total, format.bytes(storage.totalBytes)),
         revealIndex = revealIndex,
     ) {
-        Meter(fraction = storage.usedFraction)
+        Meter(
+            fraction = storage.usedFraction,
+            contentDescription = stringResource(R.string.monitor_storage),
+        )
         MetricLine(stringResource(R.string.monitor_used), format.bytes(storage.usedBytes))
         storage.fileSystem?.let { MetricLine(stringResource(R.string.monitor_filesystem), it) }
     }
@@ -248,7 +267,11 @@ private fun UptimeCard(sleep: SleepStats, revealIndex: Int) {
         value = format.duration(sleep.elapsedMillis),
         revealIndex = revealIndex,
     ) {
-        Meter(fraction = sleep.deepSleepFraction, color = MaterialTheme.colorScheme.tertiary)
+        Meter(
+            fraction = sleep.deepSleepFraction,
+            contentDescription = stringResource(R.string.monitor_deep_sleep),
+            color = MaterialTheme.colorScheme.tertiary,
+        )
         MetricLine(
             stringResource(R.string.monitor_deep_sleep),
             stringResource(

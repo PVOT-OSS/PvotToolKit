@@ -115,7 +115,12 @@ private fun CoreChart(core: CpuCoreState, revealIndex: Int) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            Sparkline(values = core.loadHistory, domain = 0f..1f, height = CoreChartHeight)
+            Sparkline(
+                values = core.loadHistory,
+                contentDescription = stringResource(R.string.monitor_core, core.index),
+                domain = 0f..1f,
+                height = CoreChartHeight,
+            )
             core.cluster?.let {
                 Text(
                     text =
