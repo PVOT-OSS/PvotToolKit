@@ -9,7 +9,6 @@ import android.app.NotificationManager
 import android.content.Context
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
-import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import org.prauga.toolkit.core.battery.BatterySession
@@ -24,7 +23,6 @@ private const val MILLIS_PER_SECOND = 1000
 private const val SECONDS_PER_HOUR = 3600
 private const val SECONDS_PER_MINUTE = 60
 
-/** Renders the session as an ongoing notification. */
 internal class BatteryNotification(private val context: Context) {
     fun ensureChannel() {
         val manager = context.getSystemService<NotificationManager>() ?: return
@@ -41,10 +39,10 @@ internal class BatteryNotification(private val context: Context) {
         manager.createNotificationChannel(channel)
     }
 
-    fun build(session: BatterySession?, smallIcon: Int): Notification {
+    fun build(session: BatterySession?): Notification {
         val builder =
             NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(smallIcon)
+                .setSmallIcon(R.drawable.ic_stat_battery)
                 .setOngoing(true)
                 .setSilent(true)
                 .setShowWhen(false)
@@ -66,7 +64,6 @@ internal class BatteryNotification(private val context: Context) {
             .build()
     }
 
-    /** Level · temperature · charge state · current. */
     private fun summaryLine(session: BatterySession): String {
         val sample = session.latest ?: return ""
         return buildList {
@@ -137,9 +134,9 @@ internal class BatteryNotification(private val context: Context) {
         val m = (seconds % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE
         val s = seconds % SECONDS_PER_MINUTE
         return when {
-            h > 0 -> String.format(Locale.getDefault(), "%dh %dm %ds", h, m, s)
-            m > 0 -> String.format(Locale.getDefault(), "%dm %ds", m, s)
-            else -> String.format(Locale.getDefault(), "%ds", s)
+            h > 0 -> context.getString(R.string.battery_duration_hours, h, m, s)
+            m > 0 -> context.getString(R.string.battery_duration_minutes, m, s)
+            else -> context.getString(R.string.battery_duration_seconds, s)
         }
     }
 }

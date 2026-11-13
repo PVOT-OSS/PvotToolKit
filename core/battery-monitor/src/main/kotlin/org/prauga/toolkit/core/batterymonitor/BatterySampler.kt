@@ -15,7 +15,7 @@ import org.prauga.toolkit.core.battery.BatterySample
 private const val TENTHS_PER_DEGREE = 10f
 
 /** Takes one reading of the battery and both clocks. */
-class BatterySampler(context: Context) {
+internal class BatterySampler(context: Context) {
     private val appContext = context.applicationContext
 
     fun sample(): BatterySample? {

@@ -9,10 +9,9 @@ plugins {
 android { namespace = "org.prauga.toolkit.core.batterymonitor" }
 
 dependencies {
-    api(project(":core:battery"))
+    implementation(project(":core:battery"))
     implementation(project(":core:common"))
     implementation(project(":core:datastore"))
-    implementation(project(":core:model"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.timber)
 }

@@ -15,10 +15,11 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
+import androidx.core.content.ContextCompat
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -26,7 +27,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.prauga.toolkit.core.battery.BatterySession
+import org.prauga.toolkit.core.common.coroutines.Dispatcher
+import org.prauga.toolkit.core.common.coroutines.ToolkitDispatchers
 import org.prauga.toolkit.core.datastore.BatterySessionLocalDataSource
+import timber.log.Timber
 
 private const val NOTIFICATION_ID = 1001
 
@@ -37,7 +41,12 @@ private const val SAMPLE_INTERVAL_MILLIS = 60_000L
 class BatteryMonitorService : Service() {
 
     @Inject internal lateinit var store: BatterySessionLocalDataSource
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
+    @Inject
+    @Dispatcher(ToolkitDispatchers.IO)
+    internal lateinit var dispatcher: CoroutineDispatcher
+
+    private lateinit var scope: CoroutineScope
     private lateinit var sampler: BatterySampler
     private lateinit var notification: BatteryNotification
     private var loop: Job? = null
@@ -51,11 +60,13 @@ class BatteryMonitorService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        scope = CoroutineScope(SupervisorJob() + dispatcher)
         sampler = BatterySampler(this)
         notification = BatteryNotification(this)
         notification.ensureChannel()
 
-        registerReceiver(
+        ContextCompat.registerReceiver(
+            this,
             transitions,
             IntentFilter().apply {
                 addAction(Intent.ACTION_SCREEN_ON)
@@ -63,6 +74,7 @@ class BatteryMonitorService : Service() {
                 addAction(Intent.ACTION_POWER_CONNECTED)
                 addAction(Intent.ACTION_POWER_DISCONNECTED)
             },
+            ContextCompat.RECEIVER_NOT_EXPORTED,
         )
     }
 
@@ -87,7 +99,7 @@ class BatteryMonitorService : Service() {
     }
 
     private fun startInForeground() {
-        val built = notification.build(null, applicationInfo.icon)
+        val built = notification.build(null)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             ServiceCompat.startForeground(
                 this,
@@ -103,10 +115,12 @@ class BatteryMonitorService : Service() {
     /** A denied POST_NOTIFICATIONS silences the readout but not the service. */
     private fun updateNotification(session: BatterySession) {
         if (!canPostNotifications()) return
-        val built = notification.build(session, applicationInfo.icon)
+        val built = notification.build(session)
         try {
             NotificationManagerCompat.from(this).notify(NOTIFICATION_ID, built)
-        } catch (_: SecurityException) {}
+        } catch (denied: SecurityException) {
+            Timber.w(denied, "Battery readout not posted")
+        }
     }
 
     private fun canPostNotifications(): Boolean =
@@ -115,7 +129,7 @@ class BatteryMonitorService : Service() {
                 PackageManager.PERMISSION_GRANTED
 
     override fun onDestroy() {
-        runCatching { unregisterReceiver(transitions) }
+        unregisterReceiver(transitions)
         loop?.cancel()
         scope.cancel()
         super.onDestroy()
