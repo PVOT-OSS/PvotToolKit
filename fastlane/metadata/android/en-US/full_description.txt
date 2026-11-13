@@ -1,0 +1,33 @@
+Pvot Toolkit is the companion app for Team StormBreaker's open-source custom kernels. It shows what your device and its kernel are doing, read honestly and without root: if a value cannot be read, it is not shown.
+
+Your device at a glance
+• Model, Android version and kernel release, and whether it is a StormBreaker kernel
+• Battery, memory, CPU frequency and governor in one place
+• The latest news from the StormBreaker project
+
+Live metrics
+• Overall CPU load and a chart for every core, each with its own frequency and cluster
+• CPU clusters read per frequency policy, with their peak clocks and governors
+• Memory, battery level, temperature and current, network traffic and storage
+• Uptime with how much of it the device spent in deep sleep
+• GPU identification and the framework's thermal throttling status
+
+Hardware and build details
+• System, processor, screen, memory and battery
+• Every camera: resolution, aperture, focal length, sensor and pixel size, ISO range, zoom and hardware level
+• Media codecs, and boot and security state (bootloader lock, verified boot, encryption)
+• Every sensor on the device, with its vendor part names
+
+Battery monitor
+• Optional and off by default: tracks active and idle drain in an ongoing notification, from the moment you turn it on
+
+News and community
+• Kernel releases, project updates and announcements from Team StormBreaker
+• Links to the community, the source code and the issue tracker
+
+The Tune and Builds tabs are placeholders for kernel controls and kernel updates in later releases.
+
+Private and open
+• No ads, no accounts, no analytics, no tracking
+• Everything the app reads about your device stays on your device; it only downloads the project's news and links
+• Free and open source under the Apache-2.0 licence: github.com/PVOT-OSS/PvotToolKit

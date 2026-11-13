@@ -1,0 +1,2 @@
+First public release
+• Discover, live metrics with per-core CPU detail, hardware and sensor details, news, and the optional battery monitor

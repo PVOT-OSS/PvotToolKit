@@ -1,0 +1,1 @@
+Live CPU, battery and hardware readouts without root, for StormBreaker kernels.
