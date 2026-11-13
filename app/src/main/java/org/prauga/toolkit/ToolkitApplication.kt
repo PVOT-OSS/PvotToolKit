@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.prauga.toolkit.core.batterymonitor.BatteryMonitorService
 import org.prauga.toolkit.core.batterymonitor.BatterySessionStore
+import timber.log.Timber
 
 @HiltAndroidApp
 class ToolkitApplication : Application(), SingletonImageLoader.Factory {
@@ -26,6 +27,7 @@ class ToolkitApplication : Application(), SingletonImageLoader.Factory {
 
     override fun onCreate() {
         super.onCreate()
+        Timber.plant(Timber.DebugTree())
         restoreBatteryMonitor()
     }
 
