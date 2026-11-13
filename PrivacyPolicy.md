@@ -41,9 +41,10 @@ device.
 - **A cache of what it downloads:** the newsroom feed, the links shown in More, and news cover
   images, so it doesn't download them again every time and can show them offline.
 
-None of this leaves your device, except through Android's own backup if you have turned it on: your
-settings may then be backed up to your Google account, under Google's terms. Clearing the app's
-storage or uninstalling it deletes all of it.
+None of this leaves your device, except through Android's own backup and device transfer if you
+use them: your settings may then be backed up to your Google account, under Google's terms, or
+copied to a new device. The battery monitor's data and the download cache are never included.
+Clearing the app's storage or uninstalling it deletes all of it.
 
 ## What the app downloads
 
@@ -64,7 +65,6 @@ covered by that website's own policy.
 ## Permissions
 
 - `INTERNET`, to download the content above.
-- `ACCESS_NETWORK_STATE`, for the networking library to tell whether the device is online.
 - `FOREGROUND_SERVICE` and `FOREGROUND_SERVICE_SPECIAL_USE`, to run the battery monitor only while
   you have it turned on.
 - `POST_NOTIFICATIONS`, asked when you turn the battery monitor on, for its notification only.

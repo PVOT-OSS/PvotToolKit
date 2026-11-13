@@ -22,11 +22,7 @@ SPDX-License-Identifier: Apache-2.0
                 android:value="Accumulates battery discharge statistics, which no platform API reports retroactively." />
         </service>
 
-        <!--
-          MY_PACKAGE_REPLACED is what covers an app update: replacing the
-          package kills the process and stops the service, and nothing else
-          brings it back.
-        -->
+        <!-- MY_PACKAGE_REPLACED must stay: an update kills the service and nothing else restarts it. -->
         <receiver
             android:name=".BatteryMonitorRestartReceiver"
             android:exported="false">
