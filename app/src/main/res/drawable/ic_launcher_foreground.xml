@@ -11,16 +11,20 @@ SPDX-License-Identifier: Apache-2.0
     android:viewportWidth="108"
     android:viewportHeight="108">
     <group
-        android:pivotX="54"
-        android:pivotY="54"
-        android:rotation="38">
+        android:scaleX="0.88496"
+        android:scaleY="0.88496"
+        android:translateX="54"
+        android:translateY="54">
         <path
-            android:pathData="M48,42L48,80"
-            android:strokeColor="#ECECF5"
-            android:strokeWidth="8"
+            android:pathData="M-7.5,-15L-7.5,-20.5M0,-15L0,-20.5M7.5,-15L7.5,-20.5M-7.5,15L-7.5,20.5M0,15L0,20.5M7.5,15L7.5,20.5M-15,-7.5L-20.5,-7.5M-15,0L-20.5,0M-15,7.5L-20.5,7.5M15,-7.5L20.5,-7.5M15,0L20.5,0M15,7.5L20.5,7.5"
+            android:strokeColor="#FFA398FF"
+            android:strokeWidth="4.2"
             android:strokeLineCap="round" />
         <path
-            android:pathData="M42,35L66,25C75,33 75,51 66,59L42,49Z"
-            android:fillColor="#ECECF5" />
+            android:fillColor="#FF5A4BFF"
+            android:pathData="M-9,-15L9,-15A6,6 0 0,1 15,-9L15,9A6,6 0 0,1 9,15L-9,15A6,6 0 0,1 -15,9L-15,-9A6,6 0 0,1 -9,-15Z" />
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M2.4,-11.5L-6.8,1.8L-0.6,1.8L-2.4,11.5L6.8,-1.8L0.6,-1.8Z" />
     </group>
 </vector>
