@@ -8,4 +8,5 @@ android { namespace = "org.prauga.toolkit.feature.more" }
 dependencies {
     implementation(project(":core:battery-monitor"))
     implementation(libs.androidx.activity.compose)
+    implementation(libs.timber)
 }

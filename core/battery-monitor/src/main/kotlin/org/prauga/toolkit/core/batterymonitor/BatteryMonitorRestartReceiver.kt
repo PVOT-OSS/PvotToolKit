@@ -9,31 +9,29 @@ import android.content.Intent
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.prauga.toolkit.core.common.coroutines.ApplicationScope
 
 /** Brings the monitor back after the two events that silently kill it. */
 @AndroidEntryPoint
 class BatteryMonitorRestartReceiver : BroadcastReceiver() {
-    @Inject lateinit var store: BatterySessionStore
+    @Inject lateinit var controller: BatteryMonitorController
+
+    @Inject @ApplicationScope lateinit var scope: CoroutineScope
 
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
             Intent.ACTION_BOOT_COMPLETED,
-            Intent.ACTION_MY_PACKAGE_REPLACED -> restartIfEnabled(context.applicationContext)
+            Intent.ACTION_MY_PACKAGE_REPLACED -> restore()
         }
     }
 
-    private fun restartIfEnabled(context: Context) {
+    private fun restore() {
         val pending = goAsync()
-        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+        scope.launch {
             try {
-                if (store.enabled.first()) {
-                    BatteryMonitorService.start(context)
-                }
-            } catch (_: Exception) {} finally {
+                controller.restore()
+            } finally {
                 pending.finish()
             }
         }

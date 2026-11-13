@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,7 +35,6 @@ import com.prauga.pvot.designsystem.components.PvotScreenDefaults
 import com.prauga.pvot.designsystem.components.PvotSheetItem
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
-import org.prauga.toolkit.core.batterymonitor.BatteryMonitorService
 import org.prauga.toolkit.core.designsystem.component.ActionRow
 import org.prauga.toolkit.core.designsystem.component.SettingsGroup
 import org.prauga.toolkit.core.designsystem.component.ValueRow
@@ -56,23 +56,27 @@ fun MoreScreen(
     val toolbarColor = MaterialTheme.colorScheme.surface.toArgb()
 
     val notificationPermission =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {}
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestPermission(),
+            viewModel::onNotificationPermissionResult,
+        )
+
+    LaunchedEffect(viewModel) {
+        viewModel.effects.collect { effect ->
+            when (effect) {
+                MoreEffect.RequestNotificationPermission ->
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }
+            }
+        }
+    }
 
     MoreContent(
         state = state,
         onLinkClick = { item -> item.url?.let { context.openArticle(it, toolbarColor) } },
         onThemeChange = viewModel::setTheme,
-        onToggleBatteryMonitor = { enabled ->
-            viewModel.setBatteryMonitorEnabled(enabled)
-            if (enabled) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
-                }
-                BatteryMonitorService.start(context)
-            } else {
-                BatteryMonitorService.stop(context)
-            }
-        },
+        onToggleBatteryMonitor = viewModel::setBatteryMonitorEnabled,
         onOpenDevices = onOpenDevices,
         onOpenNews = onOpenNews,
         onOpenLicenses = onOpenLicenses,

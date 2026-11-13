@@ -7,16 +7,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.prauga.toolkit.core.batterymonitor.BatterySessionStore
+import org.prauga.toolkit.core.batterymonitor.BatteryMonitorController
 import org.prauga.toolkit.core.data.links.LinksRepository
 import org.prauga.toolkit.core.data.settings.ThemeRepository
 import org.prauga.toolkit.core.model.LinkSection
 import org.prauga.toolkit.core.model.ThemePreference
+import timber.log.Timber
 
 data class MoreUiState(
     val sections: List<LinkSection> = emptyList(),
@@ -30,10 +34,13 @@ class MoreViewModel
 constructor(
     private val linksRepository: LinksRepository,
     private val themeRepository: ThemeRepository,
-    private val batteryStore: BatterySessionStore,
+    private val batteryMonitor: BatteryMonitorController,
 ) : ViewModel() {
     private val _state = MutableStateFlow(MoreUiState())
     val state: StateFlow<MoreUiState> = _state.asStateFlow()
+
+    private val _effects = Channel<MoreEffect>(Channel.BUFFERED)
+    internal val effects: Flow<MoreEffect> = _effects.receiveAsFlow()
 
     init {
         viewModelScope.launch {
@@ -44,7 +51,7 @@ constructor(
             themeRepository.theme.collect { theme -> _state.update { it.copy(theme = theme) } }
         }
         viewModelScope.launch {
-            batteryStore.enabled.collect { enabled ->
+            batteryMonitor.enabled.collect { enabled ->
                 _state.update { it.copy(batteryMonitorEnabled = enabled) }
             }
         }
@@ -54,8 +61,14 @@ constructor(
         viewModelScope.launch { themeRepository.setTheme(preference) }
     }
 
-    /** Only records the preference; starting the service is the UI's job. */
     fun setBatteryMonitorEnabled(enabled: Boolean) {
-        viewModelScope.launch { batteryStore.setEnabled(enabled) }
+        viewModelScope.launch {
+            if (enabled) _effects.send(MoreEffect.RequestNotificationPermission)
+            batteryMonitor.setEnabled(enabled)
+        }
+    }
+
+    fun onNotificationPermissionResult(granted: Boolean) {
+        if (!granted) Timber.i("Notification permission denied; the battery monitor runs without its readout")
     }
 }
