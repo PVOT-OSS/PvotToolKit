@@ -37,7 +37,7 @@ import com.prauga.pvot.designsystem.theme.PvotShapes
 import com.prauga.pvot.designsystem.theme.PvotSpacing
 import java.time.LocalDate
 import org.prauga.toolkit.core.common.LoadError
-import org.prauga.toolkit.core.designsystem.component.openArticle
+import org.prauga.toolkit.core.designsystem.link.openArticle
 import org.prauga.toolkit.core.model.NewsPost
 
 private const val SKELETON_CARDS = 4

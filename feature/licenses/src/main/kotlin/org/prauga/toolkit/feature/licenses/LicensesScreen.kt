@@ -21,7 +21,7 @@ import com.prauga.pvot.designsystem.components.PvotScreenDefaults
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import org.prauga.toolkit.core.designsystem.component.ActionRow
 import org.prauga.toolkit.core.designsystem.component.SettingsGroup
-import org.prauga.toolkit.core.designsystem.component.openArticle
+import org.prauga.toolkit.core.designsystem.link.openArticle
 
 @Composable
 fun LicensesScreen(modifier: Modifier = Modifier) {

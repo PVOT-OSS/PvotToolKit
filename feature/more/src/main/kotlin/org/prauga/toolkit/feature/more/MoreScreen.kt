@@ -38,7 +38,7 @@ import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import org.prauga.toolkit.core.designsystem.component.ActionRow
 import org.prauga.toolkit.core.designsystem.component.SettingsGroup
 import org.prauga.toolkit.core.designsystem.component.ValueRow
-import org.prauga.toolkit.core.designsystem.component.openArticle
+import org.prauga.toolkit.core.designsystem.link.openArticle
 import org.prauga.toolkit.core.model.LinkItem
 import org.prauga.toolkit.core.model.LinkSection
 import org.prauga.toolkit.core.model.ThemePreference

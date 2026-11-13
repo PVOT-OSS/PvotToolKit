@@ -40,7 +40,7 @@ import java.util.Locale
 import org.prauga.toolkit.core.designsystem.component.ActionRow
 import org.prauga.toolkit.core.designsystem.component.SettingsGroup
 import org.prauga.toolkit.core.designsystem.component.ValueRow
-import org.prauga.toolkit.core.designsystem.component.openArticle
+import org.prauga.toolkit.core.designsystem.link.openArticle
 import org.prauga.toolkit.core.model.BatteryVitals
 import org.prauga.toolkit.core.model.BootState
 import org.prauga.toolkit.core.model.CpuVitals
