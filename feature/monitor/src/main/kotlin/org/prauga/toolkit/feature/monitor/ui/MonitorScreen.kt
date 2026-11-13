@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,14 +45,27 @@ internal fun MonitorScreen(
     viewModel: MonitorViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val openCpuDetail by rememberUpdatedState(onOpenCpuDetail)
 
-    MonitorContent(state = state, onOpenCpuDetail = onOpenCpuDetail, modifier = modifier)
+    LaunchedEffect(viewModel) {
+        viewModel.effects.collect { effect ->
+            when (effect) {
+                MonitorEffect.OpenCpuDetail -> openCpuDetail()
+            }
+        }
+    }
+
+    MonitorContent(
+        state = state,
+        onCpuCardClick = { viewModel.onEvent(MonitorEvent.CpuCardClicked) },
+        modifier = modifier,
+    )
 }
 
 @Composable
 private fun MonitorContent(
     state: MonitorUiState,
-    onOpenCpuDetail: () -> Unit,
+    onCpuCardClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val vitals = state.vitals
@@ -64,7 +79,7 @@ private fun MonitorContent(
 
         state.profile?.cpu?.let { topology ->
             item(key = "cpu") {
-                CpuCard(topology, vitals, history, revealIndex = 1, onClick = onOpenCpuDetail)
+                CpuCard(topology, vitals, history, revealIndex = 1, onClick = onCpuCardClick)
             }
         }
         vitals?.memory?.let { memory ->
@@ -271,5 +286,5 @@ private fun ThermalCard(vitals: Vitals, revealIndex: Int) {
 @Preview
 @Composable
 private fun MonitorPreview() {
-    PvotAppTheme { MonitorContent(state = MonitorUiState(), onOpenCpuDetail = {}) }
+    PvotAppTheme { MonitorContent(state = MonitorUiState(), onCpuCardClick = {}) }
 }

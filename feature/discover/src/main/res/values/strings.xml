@@ -28,4 +28,5 @@ SPDX-License-Identifier: Apache-2.0
 
     <string name="discover_news">Latest from the project</string>
     <string name="discover_news_all">News archive</string>
+    <string name="discover_news_failed">Couldn\'t load the latest news</string>
 </resources>

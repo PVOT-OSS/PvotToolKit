@@ -17,7 +17,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.prauga.pvot.coreui.R as CoreUiR
 import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.components.PvotScreenDefaults
@@ -70,25 +73,30 @@ internal fun DiscoverScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val toolbarColor = MaterialTheme.colorScheme.surface.toArgb()
+    val openDevice by rememberUpdatedState(onOpenDevice)
+    val openMonitoring by rememberUpdatedState(onOpenMonitoring)
+    val openNews by rememberUpdatedState(onOpenNews)
+    val currentToolbarColor by rememberUpdatedState(toolbarColor)
 
-    DiscoverContent(
-        state = state,
-        onOpenDevice = onOpenDevice,
-        onOpenMonitoring = onOpenMonitoring,
-        onOpenNews = onOpenNews,
-        onHeadlineClick = { post -> context.openArticle(post.url, toolbarColor) },
-        modifier = modifier,
-    )
+    LaunchedEffect(viewModel) {
+        viewModel.effects.collect { effect ->
+            when (effect) {
+                DiscoverEffect.OpenDevice -> openDevice()
+                DiscoverEffect.OpenMonitoring -> openMonitoring()
+                DiscoverEffect.OpenNews -> openNews()
+                is DiscoverEffect.OpenArticle ->
+                    context.openArticle(effect.url, currentToolbarColor)
+            }
+        }
+    }
+
+    DiscoverContent(state = state, onEvent = viewModel::onEvent, modifier = modifier)
 }
 
-/** My device → what's happening → what's new. */
 @Composable
 private fun DiscoverContent(
     state: DiscoverUiState,
-    onOpenDevice: () -> Unit,
-    onOpenMonitoring: () -> Unit,
-    onOpenNews: () -> Unit,
-    onHeadlineClick: (NewsPost) -> Unit,
+    onEvent: (DiscoverEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PvotScreen(
@@ -96,19 +104,24 @@ private fun DiscoverContent(
         contentPadding = PvotScreenDefaults.contentPadding(),
     ) {
         state.profile?.let { profile ->
-            item(key = "identity") { IdentityCard(profile.identity, onOpenDevice) }
+            item(key = "identity") {
+                IdentityCard(profile.identity, onClick = { onEvent(DiscoverEvent.DeviceClicked) })
+            }
         }
         item(key = "update") { UpdateGroup() }
-        item(key = "vitals") { VitalsGroup(state.vitals, onOpenMonitoring) }
-
-        if (state.headlines.isNotEmpty()) {
-            item(key = "news") {
-                NewsGroup(
-                    state.headlines,
-                    onHeadlineClick = onHeadlineClick,
-                    onOpenNews = onOpenNews,
-                )
-            }
+        item(key = "vitals") {
+            VitalsGroup(
+                state.vitals,
+                onOpenMonitoring = { onEvent(DiscoverEvent.MonitoringClicked) },
+            )
+        }
+        item(key = "news") {
+            NewsGroup(
+                state.headlines,
+                onHeadlineClick = { post -> onEvent(DiscoverEvent.HeadlineClicked(post.url)) },
+                onRetry = { onEvent(DiscoverEvent.RetryHeadlinesClicked) },
+                onOpenNews = { onEvent(DiscoverEvent.NewsArchiveClicked) },
+            )
         }
     }
 }
@@ -335,27 +348,49 @@ private fun CpuRow(cpu: CpuVitals, index: Int, count: Int) {
 
 @Composable
 private fun NewsGroup(
-    headlines: List<NewsPost>,
+    headlines: HeadlinesState,
     onHeadlineClick: (NewsPost) -> Unit,
+    onRetry: () -> Unit,
     onOpenNews: () -> Unit,
 ) {
     SettingsGroup(title = stringResource(R.string.discover_news)) {
-        val count = headlines.size + 1
-        headlines.forEachIndexed { index, post ->
-            ActionRow(
-                label = post.title,
-                index = index,
-                count = count,
-                description = post.tag,
-                onClick = { onHeadlineClick(post) },
-            )
-        }
-        ActionRow(
-            label = stringResource(R.string.discover_news_all),
-            index = count - 1,
-            count = count,
-            onClick = onOpenNews,
-        )
+        val rows =
+            buildList<@Composable (Int, Int) -> Unit> {
+                when (headlines) {
+                    HeadlinesState.Loading -> Unit
+                    HeadlinesState.Failed ->
+                        add { i, n ->
+                            ActionRow(
+                                label = stringResource(R.string.discover_news_failed),
+                                index = i,
+                                count = n,
+                                trailing = stringResource(CoreUiR.string.pvot_retry),
+                                onClick = onRetry,
+                            )
+                        }
+                    is HeadlinesState.Ready ->
+                        headlines.posts.forEach { post ->
+                            add { i, n ->
+                                ActionRow(
+                                    label = post.title,
+                                    index = i,
+                                    count = n,
+                                    description = post.tag,
+                                    onClick = { onHeadlineClick(post) },
+                                )
+                            }
+                        }
+                }
+                add { i, n ->
+                    ActionRow(
+                        label = stringResource(R.string.discover_news_all),
+                        index = i,
+                        count = n,
+                        onClick = onOpenNews,
+                    )
+                }
+            }
+        rows.forEachIndexed { index, row -> row(index, rows.size) }
     }
 }
 
@@ -433,10 +468,7 @@ private fun DiscoverPreview() {
                             sleep = SleepStats(9_000_000, 3_400_000),
                         ),
                 ),
-            onOpenDevice = {},
-            onOpenMonitoring = {},
-            onOpenNews = {},
-            onHeadlineClick = {},
+            onEvent = {},
         )
     }
 }

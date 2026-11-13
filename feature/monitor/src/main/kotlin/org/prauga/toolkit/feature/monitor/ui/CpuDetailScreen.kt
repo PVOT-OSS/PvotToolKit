@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,11 +33,16 @@ import org.prauga.toolkit.core.model.CpuCluster
 import org.prauga.toolkit.feature.monitor.R
 
 @Composable
-internal fun CpuDetailScreen(modifier: Modifier = Modifier, viewModel: MonitorViewModel = hiltViewModel()) {
+internal fun CpuDetailScreen(
+    modifier: Modifier = Modifier,
+    viewModel: CpuDetailViewModel = hiltViewModel(),
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    CpuDetailContent(state = state, modifier = modifier)
+}
 
-    val topology = state.profile?.cpu
-
+@Composable
+private fun CpuDetailContent(state: CpuDetailUiState, modifier: Modifier = Modifier) {
     PvotScreen(
         modifier = modifier.fillMaxSize(),
         contentPadding = PvotScreenDefaults.contentPadding(),
@@ -64,42 +70,19 @@ internal fun CpuDetailScreen(modifier: Modifier = Modifier, viewModel: MonitorVi
             }
         }
 
-        val perCore = state.history.perCoreLoad
-        itemsIndexed(perCore) { core, values ->
-            CoreChart(
-                core = core,
-                values = values,
-                currentLoad = state.vitals?.load?.perCore?.getOrNull(core),
-                clusterFor = { topology?.clusters?.firstOrNull { core in it.cores } },
-                currentKhz = state.vitals?.cpu?.perCoreKhz?.getOrNull(core),
-                revealIndex = core + 1,
-            )
+        items(items = state.cores, key = { "core-${it.index}" }) { core ->
+            CoreChart(core = core, revealIndex = core.index + 1)
         }
 
-        topology?.clusters?.forEach { cluster ->
-            item(key = "cluster-${cluster.id}") { ClusterCard(cluster) }
+        items(items = state.clusters, key = { "cluster-${it.id}" }) { cluster ->
+            ClusterCard(cluster)
         }
     }
 }
 
-private fun androidx.compose.foundation.lazy.LazyListScope.itemsIndexed(
-    values: List<List<Float>>,
-    content: @Composable (Int, List<Float>) -> Unit,
-) {
-    values.forEachIndexed { index, series -> item(key = "core-$index") { content(index, series) } }
-}
-
 @Composable
-private fun CoreChart(
-    core: Int,
-    values: List<Float>,
-    currentLoad: Float?,
-    clusterFor: () -> CpuCluster?,
-    currentKhz: Int?,
-    revealIndex: Int,
-) {
+private fun CoreChart(core: CpuCoreState, revealIndex: Int) {
     val format = rememberUnitFormatter()
-    val cluster = clusterFor()
     PvotCard(modifier = Modifier.fillMaxWidth().pvotReveal(revealIndex)) {
         Column(
             modifier = Modifier.padding(PvotSpacing.L),
@@ -110,22 +93,22 @@ private fun CoreChart(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = stringResource(R.string.monitor_core, core),
+                    text = stringResource(R.string.monitor_core, core.index),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     text =
                         buildString {
-                            append(currentLoad?.let { format.percent(it) } ?: format.unknown)
-                            currentKhz?.let { append(" · ${format.frequency(it)}") }
+                            append(core.load?.let { format.percent(it) } ?: format.unknown)
+                            core.khz?.let { append(" · ${format.frequency(it)}") }
                         },
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            Sparkline(values = values, domain = 0f..1f, height = 44.dp)
-            cluster?.let {
+            Sparkline(values = core.loadHistory, domain = 0f..1f, height = 44.dp)
+            core.cluster?.let {
                 Text(
                     text =
                         stringResource(R.string.monitor_cluster, it.id) +
@@ -177,5 +160,22 @@ private fun ClusterCard(cluster: CpuCluster) {
 @Preview
 @Composable
 private fun CpuDetailPreview() {
-    PvotAppTheme { CpuDetailScreen() }
+    val cluster =
+        CpuCluster(
+            id = 0,
+            cores = listOf(0, 1),
+            minKhz = 300_000,
+            maxKhz = 1_804_800,
+            hardwareMaxKhz = 1_804_800,
+            availableKhz = listOf(300_000, 1_017_600, 1_804_800),
+            governor = "schedutil",
+            availableGovernors = listOf("schedutil", "performance"),
+            partId = null,
+            implementer = null,
+        )
+    val cores =
+        listOf(0.2f, 0.6f).mapIndexed { core, load ->
+            CpuCoreState(core, listOf(0.1f, load / 2, load), load, 1_017_600, cluster)
+        }
+    PvotAppTheme { CpuDetailContent(state = CpuDetailUiState(cores, listOf(cluster))) }
 }
