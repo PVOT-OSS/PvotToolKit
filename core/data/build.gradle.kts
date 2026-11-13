@@ -11,7 +11,7 @@ android { namespace = "org.prauga.toolkit.core.data" }
 dependencies {
     api(project(":core:common"))
     api(project(":core:model"))
-    api(project(":core:device"))
+    implementation(project(":core:device"))
     implementation(project(":core:datastore"))
     implementation(project(":core:network"))
     implementation(libs.kotlinx.serialization.json)
