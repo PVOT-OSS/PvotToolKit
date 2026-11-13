@@ -10,11 +10,10 @@ import android.opengl.EGLDisplay
 import android.opengl.EGLSurface
 import android.opengl.GLES20
 import org.prauga.toolkit.core.model.GpuInfo
+import timber.log.Timber
 
 /** Names the GPU by asking OpenGL rather than sysfs. */
 object GpuInfoReader {
-    // Setting up EGL is a sequence of steps that can each fail, and an early
-    // return per step reads better than the nesting that avoids them.
     @Suppress("ReturnCount")
     fun read(): GpuInfo? {
         var display: EGLDisplay? = null
@@ -50,7 +49,8 @@ object GpuInfoReader {
                 renderer = GLES20.glGetString(GLES20.GL_RENDERER),
                 glVersion = GLES20.glGetString(GLES20.GL_VERSION),
             )
-        } catch (_: Exception) {
+        } catch (e: IllegalArgumentException) {
+            Timber.w(e, "EGL refused a context for the GPU query")
             null
         } finally {
             if (display != null && display != EGL14.EGL_NO_DISPLAY) {

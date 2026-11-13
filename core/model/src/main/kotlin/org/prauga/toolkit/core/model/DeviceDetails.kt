@@ -10,7 +10,7 @@ data class DeviceDetails(
     val memory: MemoryDetails?,
     val sensors: List<SensorInfo>,
     val cameras: List<CameraInfo>,
-    val codecs: CodecSummary?,
+    val codecs: CodecSummary,
 )
 
 /** Build fields beyond the ones the Discover card needs. */

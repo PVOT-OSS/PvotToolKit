@@ -4,21 +4,37 @@
 package org.prauga.toolkit.core.device
 
 import android.content.Context
+import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import org.prauga.toolkit.core.model.CameraInfo
+import timber.log.Timber
 
 /** Camera2 characteristics, which need no permission until a camera is opened. */
 class CameraInfoReader(private val context: Context) {
     fun read(): List<CameraInfo> {
         val manager = context.getSystemService(CameraManager::class.java) ?: return emptyList()
-        return runCatching { manager.cameraIdList }
-            .getOrDefault(emptyArray())
-            .mapNotNull { id -> runCatching { describe(manager, id) }.getOrNull() }
+        val ids =
+            try {
+                manager.cameraIdList
+            } catch (e: CameraAccessException) {
+                Timber.w(e, "Camera list unavailable")
+                return emptyList()
+            }
+        return ids.mapNotNull { id -> describe(manager, id) }
     }
 
-    private fun describe(manager: CameraManager, id: String): CameraInfo {
-        val characteristics = manager.getCameraCharacteristics(id)
+    private fun describe(manager: CameraManager, id: String): CameraInfo? {
+        val characteristics =
+            try {
+                manager.getCameraCharacteristics(id)
+            } catch (e: CameraAccessException) {
+                Timber.w(e, "Camera %s characteristics unavailable", id)
+                return null
+            } catch (e: IllegalArgumentException) {
+                Timber.w(e, "Camera %s vanished", id)
+                return null
+            }
         val pixelArray = characteristics.get(CameraCharacteristics.SENSOR_INFO_PIXEL_ARRAY_SIZE)
         val physical = characteristics.get(CameraCharacteristics.SENSOR_INFO_PHYSICAL_SIZE)
         val iso = characteristics.get(CameraCharacteristics.SENSOR_INFO_SENSITIVITY_RANGE)

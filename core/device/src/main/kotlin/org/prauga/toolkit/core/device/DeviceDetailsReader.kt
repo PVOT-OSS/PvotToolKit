@@ -65,7 +65,7 @@ class DeviceDetailsReader @Inject constructor(@ApplicationContext private val co
             host = Build.HOST.takeIf { it.isNotBlank() },
             buildTimeMillis = Build.TIME,
             javaVm = System.getProperty("java.vm.version"),
-            kernelFull = runCatching { File("/proc/version").readText().trim() }.getOrNull(),
+            kernelFull = File("/proc/version").readTextOrNull(),
         )
 
     private fun readMemory(): MemoryDetails? {
@@ -79,40 +79,34 @@ class DeviceDetailsReader @Inject constructor(@ApplicationContext private val co
             lowMemory = info.lowMemory,
             thresholdBytes = info.threshold,
             swapTotalBytes = meminfo["SwapTotal"],
-            pageSizeBytes = runCatching { Os.sysconf(OsConstants._SC_PAGESIZE) }.getOrNull(),
+            pageSizeBytes = Os.sysconf(OsConstants._SC_PAGESIZE).takeIf { it > 0 },
         )
     }
 
     private fun readMeminfo(): Map<String, Long> =
-        runCatching {
-                File("/proc/meminfo")
-                    .readLines()
-                    .mapNotNull { line ->
-                        val parts = line.split(':', limit = 2)
-                        if (parts.size != 2) return@mapNotNull null
-                        val kb =
-                            parts[1].trim().removeSuffix(" kB").toLongOrNull()
-                                ?: return@mapNotNull null
-                        parts[0] to kb * BYTES_PER_KILOBYTE
-                    }
-                    .toMap()
+        File("/proc/meminfo")
+            .readTextOrNull()
+            ?.lineSequence()
+            ?.mapNotNull { line ->
+                val parts = line.split(':', limit = 2)
+                if (parts.size != 2) return@mapNotNull null
+                val kb = parts[1].trim().removeSuffix(" kB").toLongOrNull() ?: return@mapNotNull null
+                parts[0] to kb * BYTES_PER_KILOBYTE
             }
-            .getOrDefault(emptyMap())
+            ?.toMap()
+            .orEmpty()
 
-    private fun readCodecs(): CodecSummary? =
-        runCatching {
-                val infos = MediaCodecList(MediaCodecList.ALL_CODECS).codecInfos
-                val supported =
-                    infos.flatMap { it.supportedTypes.toList() }.map { it.lowercase() }.toSet()
-                CodecSummary(
-                    decoders = infos.count { !it.isEncoder },
-                    encoders = infos.count { it.isEncoder },
-                    hardwareAccelerated = infos.count { it.isHardwareAccelerated },
-                    notableFormats =
-                        NOTABLE_MIME_TYPES.filter { (mime, _) -> mime in supported }
-                            .map { (_, label) -> label }
-                            .take(NOTABLE_CODEC_LIMIT),
-                )
-            }
-            .getOrNull()
+    private fun readCodecs(): CodecSummary {
+        val infos = MediaCodecList(MediaCodecList.ALL_CODECS).codecInfos
+        val supported = infos.flatMap { it.supportedTypes.toList() }.map { it.lowercase() }.toSet()
+        return CodecSummary(
+            decoders = infos.count { !it.isEncoder },
+            encoders = infos.count { it.isEncoder },
+            hardwareAccelerated = infos.count { it.isHardwareAccelerated },
+            notableFormats =
+                NOTABLE_MIME_TYPES.filter { (mime, _) -> mime in supported }
+                    .map { (_, label) -> label }
+                    .take(NOTABLE_CODEC_LIMIT),
+        )
+    }
 }

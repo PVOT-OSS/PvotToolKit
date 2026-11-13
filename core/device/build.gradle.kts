@@ -11,6 +11,7 @@ android { namespace = "org.prauga.toolkit.core.device" }
 dependencies {
     api(project(":core:model"))
     implementation(libs.androidx.core.ktx)
+    implementation(libs.timber)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
 }

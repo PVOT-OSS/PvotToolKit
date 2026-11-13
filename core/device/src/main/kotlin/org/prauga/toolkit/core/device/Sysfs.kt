@@ -4,6 +4,8 @@
 package org.prauga.toolkit.core.device
 
 import java.io.File
+import java.io.IOException
+import timber.log.Timber
 
 internal const val CPU_ROOT = "/sys/devices/system/cpu"
 
@@ -41,7 +43,11 @@ private fun File.numberedChildren(pattern: Regex): Map<Int, File> =
 internal fun File.readTextOrNull(): String? =
     try {
         takeIf { it.canRead() }?.readText()?.trim()?.takeIf { it.isNotEmpty() }
-    } catch (_: Exception) {
+    } catch (e: IOException) {
+        Timber.w(e, "Unreadable %s", path)
+        null
+    } catch (e: SecurityException) {
+        Timber.w(e, "Denied %s", path)
         null
     }
 

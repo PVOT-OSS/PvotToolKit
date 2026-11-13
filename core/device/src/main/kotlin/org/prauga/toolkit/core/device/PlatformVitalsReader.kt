@@ -16,6 +16,7 @@ import org.prauga.toolkit.core.model.NetworkVitals
 import org.prauga.toolkit.core.model.SleepStats
 import org.prauga.toolkit.core.model.StorageVitals
 import org.prauga.toolkit.core.model.ThermalStatus
+import timber.log.Timber
 
 /** The parts the framework gives up without a permission. */
 class PlatformVitalsReader(context: Context) {
@@ -59,7 +60,8 @@ class PlatformVitalsReader(context: Context) {
             val total = stat.blockCountLong * stat.blockSizeLong
             val free = stat.availableBlocksLong * stat.blockSizeLong
             if (total <= 0) null else StorageVitals(total - free, total, dataFileSystem())
-        } catch (_: Exception) {
+        } catch (e: IllegalArgumentException) {
+            Timber.w(e, "statfs failed on the data partition")
             null
         }
 
@@ -75,20 +77,20 @@ class PlatformVitalsReader(context: Context) {
 
     /** /proc/mounts is one of the few /proc files still readable. */
     private fun dataFileSystem(): String? =
-        try {
-            File("/proc/mounts").useLines { lines ->
-                lines.map { it.split(' ') }.firstOrNull { it.size > 2 && it[1] == "/data" }?.get(2)
-            }
-        } catch (_: Exception) {
-            null
-        }
+        File("/proc/mounts")
+            .readTextOrNull()
+            ?.lineSequence()
+            ?.map { it.split(' ') }
+            ?.firstOrNull { it.size > 2 && it[1] == "/data" }
+            ?.get(2)
 
     /** Whether a `su` binary is present. */
     fun suBinaryPresent(): Boolean =
         SU_PATHS.any { path ->
             try {
                 File(path).exists()
-            } catch (_: Exception) {
+            } catch (e: SecurityException) {
+                Timber.d(e, "Denied %s", path)
                 false
             }
         }
