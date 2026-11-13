@@ -8,7 +8,7 @@ import org.prauga.toolkit.core.model.DeviceIdentity
 
 private const val LOCALVERSION_TAG = "stormbreaker"
 
-object DeviceIdentityReader {
+internal object DeviceIdentityReader {
     fun read(): DeviceIdentity {
         val device: String? = Build.DEVICE
         val model: String? = Build.MODEL

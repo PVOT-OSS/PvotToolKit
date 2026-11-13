@@ -3,7 +3,6 @@
 
 package org.prauga.toolkit.core.model
 
-/** Thermal throttling severity. */
 enum class ThermalStatus {
     NONE,
     LIGHT,

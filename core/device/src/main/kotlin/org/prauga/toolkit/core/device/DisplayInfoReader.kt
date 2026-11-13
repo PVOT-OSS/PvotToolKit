@@ -12,7 +12,7 @@ import org.prauga.toolkit.core.model.DisplayInfo
 import org.prauga.toolkit.core.model.HdrType
 
 /** Panel geometry and refresh capability, all of it public API. */
-class DisplayInfoReader(private val context: Context) {
+internal class DisplayInfoReader(private val context: Context) {
     @Suppress("DEPRECATION")
     fun read(): DisplayInfo? {
         val manager = context.getSystemService(DisplayManager::class.java) ?: return null
@@ -41,6 +41,7 @@ class DisplayInfoReader(private val context: Context) {
         )
     }
 
+    @Suppress("DEPRECATION")
     private fun hdrTypes(display: Display): List<HdrType> {
         val capabilities = display.hdrCapabilities ?: return emptyList()
         return capabilities.supportedHdrTypes.map { type ->

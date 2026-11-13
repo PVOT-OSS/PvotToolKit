@@ -13,7 +13,7 @@ import org.prauga.toolkit.core.model.CameraInfo
 import timber.log.Timber
 
 /** Camera2 characteristics, which need no permission until a camera is opened. */
-class CameraInfoReader(private val context: Context) {
+internal class CameraInfoReader(private val context: Context) {
     fun read(): List<CameraInfo> {
         val manager = context.getSystemService(CameraManager::class.java) ?: return emptyList()
         val ids =

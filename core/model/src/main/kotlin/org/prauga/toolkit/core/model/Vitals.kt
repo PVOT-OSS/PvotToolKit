@@ -3,7 +3,6 @@
 
 package org.prauga.toolkit.core.model
 
-/** Live system state. */
 data class Vitals(
     val cpu: CpuVitals?,
     val load: CpuLoad?,

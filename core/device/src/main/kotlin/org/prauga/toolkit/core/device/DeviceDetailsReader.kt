@@ -52,19 +52,19 @@ class DeviceDetailsReader @Inject constructor(@ApplicationContext private val co
 
     private fun readBuild(properties: SystemProperties): BuildDetails =
         BuildDetails(
-            brand = Build.BRAND.takeIf { it.isNotBlank() },
-            product = Build.PRODUCT.takeIf { it.isNotBlank() },
-            board = Build.BOARD.takeIf { it.isNotBlank() },
-            device = Build.DEVICE.takeIf { it.isNotBlank() },
-            hardware = Build.HARDWARE.takeIf { it.isNotBlank() },
-            bootloader = Build.BOOTLOADER.takeIf { it.isNotBlank() },
+            brand = Build.BRAND.knownOrNull(),
+            product = Build.PRODUCT.knownOrNull(),
+            board = Build.BOARD.knownOrNull(),
+            device = Build.DEVICE.knownOrNull(),
+            hardware = Build.HARDWARE.knownOrNull(),
+            bootloader = Build.BOOTLOADER.knownOrNull(),
             radio =
                 properties["gsm.version.baseband"]
-                    ?: Build.getRadioVersion()?.takeIf { it.isNotBlank() },
-            incremental = Build.VERSION.INCREMENTAL.takeIf { it.isNotBlank() },
-            host = Build.HOST.takeIf { it.isNotBlank() },
+                    ?: Build.getRadioVersion().knownOrNull(),
+            incremental = Build.VERSION.INCREMENTAL.knownOrNull(),
+            host = Build.HOST.knownOrNull(),
             buildTimeMillis = Build.TIME,
-            javaVm = System.getProperty("java.vm.version"),
+            javaVm = System.getProperty("java.vm.version").knownOrNull(),
             kernelFull = File("/proc/version").readTextOrNull(),
         )
 
@@ -76,7 +76,6 @@ class DeviceDetailsReader @Inject constructor(@ApplicationContext private val co
         return MemoryDetails(
             totalBytes = info.totalMem,
             availableBytes = info.availMem,
-            lowMemory = info.lowMemory,
             thresholdBytes = info.threshold,
             swapTotalBytes = meminfo["SwapTotal"],
             pageSizeBytes = Os.sysconf(OsConstants._SC_PAGESIZE).takeIf { it > 0 },

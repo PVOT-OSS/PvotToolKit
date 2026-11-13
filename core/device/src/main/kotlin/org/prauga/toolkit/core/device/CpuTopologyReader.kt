@@ -9,8 +9,7 @@ import org.prauga.toolkit.core.model.CpuTopology
 
 private const val CPUINFO = "/proc/cpuinfo"
 
-/** Reads the cpufreq policy groups. */
-object CpuTopologyReader {
+internal object CpuTopologyReader {
     fun read(): CpuTopology? {
         val cpuRoot = File(CPU_ROOT)
         val policies = listPolicyDirs(cpuRoot)

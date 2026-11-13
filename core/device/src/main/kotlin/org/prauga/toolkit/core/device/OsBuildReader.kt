@@ -25,16 +25,16 @@ private val KNOWN_ROMS =
         "ro.modversion" to "Custom ROM",
     )
 
-class OsBuildReader(private val properties: SystemProperties) {
+internal class OsBuildReader(private val properties: SystemProperties) {
     fun read(): OsBuild =
         OsBuild(
-            androidRelease = Build.VERSION.RELEASE.orEmpty(),
+            androidRelease = Build.VERSION.RELEASE.knownOrNull(),
             sdkInt = Build.VERSION.SDK_INT,
-            securityPatch = Build.VERSION.SECURITY_PATCH.takeIf { it.isNotBlank() },
-            buildId = Build.ID.takeIf { it.isNotBlank() },
-            fingerprint = Build.FINGERPRINT.takeIf { it.isNotBlank() },
-            tags = Build.TAGS.takeIf { it.isNotBlank() },
-            type = Build.TYPE.takeIf { it.isNotBlank() },
+            securityPatch = Build.VERSION.SECURITY_PATCH.knownOrNull(),
+            buildId = Build.ID.knownOrNull(),
+            fingerprint = Build.FINGERPRINT.knownOrNull(),
+            tags = Build.TAGS.knownOrNull(),
+            type = Build.TYPE.knownOrNull(),
             rom = detectRom(),
         )
 
@@ -53,16 +53,16 @@ class OsBuildReader(private val properties: SystemProperties) {
     fun readSoc(): SocInfo =
         SocInfo(
             platform = properties["ro.board.platform"],
-            hardware = properties["ro.hardware"] ?: Build.HARDWARE.takeIf { it.isNotBlank() },
+            hardware = properties["ro.hardware"] ?: Build.HARDWARE.knownOrNull(),
             manufacturer =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    Build.SOC_MANUFACTURER.takeIf { it.isNotBlank() && it != Build.UNKNOWN }
+                    Build.SOC_MANUFACTURER.knownOrNull()
                 } else {
                     null
                 },
             model =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    Build.SOC_MODEL.takeIf { it.isNotBlank() && it != Build.UNKNOWN }
+                    Build.SOC_MODEL.knownOrNull()
                 } else {
                     null
                 },

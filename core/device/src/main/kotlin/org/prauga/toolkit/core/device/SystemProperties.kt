@@ -6,15 +6,8 @@ package org.prauga.toolkit.core.device
 import java.io.IOException
 import timber.log.Timber
 
-/** Android system properties. */
-class SystemProperties private constructor(private val values: Map<String, String>) {
-    operator fun get(key: String): String? = values[key]?.takeIf { it.isNotBlank() }
-
-    fun firstOf(vararg keys: String): Pair<String, String>? =
-        keys.firstNotNullOfOrNull { key -> get(key)?.let { key to it } }
-
-    val size: Int
-        get() = values.size
+class SystemProperties internal constructor(private val values: Map<String, String>) {
+    internal operator fun get(key: String): String? = values[key]?.takeIf { it.isNotBlank() }
 
     companion object {
         private val LINE = Regex("""^\[(.+?)]: \[(.*)]$""")
@@ -41,7 +34,5 @@ class SystemProperties private constructor(private val values: Map<String, Strin
                     }
                 }
                 .toMap()
-
-        fun of(values: Map<String, String>): SystemProperties = SystemProperties(values)
     }
 }

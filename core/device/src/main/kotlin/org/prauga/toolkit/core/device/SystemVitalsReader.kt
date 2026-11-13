@@ -15,12 +15,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import org.prauga.toolkit.core.model.BatteryHealth
 import org.prauga.toolkit.core.model.BatteryVitals
+import org.prauga.toolkit.core.model.CpuLoad
 import org.prauga.toolkit.core.model.MemoryVitals
 import org.prauga.toolkit.core.model.Vitals
 
 private const val TENTHS_PER_DEGREE = 10f
 
-/** Samples live state. */
 @Singleton
 class SystemVitalsReader @Inject constructor(@ApplicationContext context: Context) {
     private val appContext = context.applicationContext
@@ -29,7 +29,7 @@ class SystemVitalsReader @Inject constructor(@ApplicationContext context: Contex
     private val designCapacityMah: Int? by lazy { BatteryCapacity.designMah(appContext) }
 
     /** @param load supplied by the caller, which owns the two spaced samples. */
-    fun read(load: org.prauga.toolkit.core.model.CpuLoad? = null): Vitals =
+    fun read(load: CpuLoad? = null): Vitals =
         Vitals(
             cpu = cpu.read(),
             load = load,

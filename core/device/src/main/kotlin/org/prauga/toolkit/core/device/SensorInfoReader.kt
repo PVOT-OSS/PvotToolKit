@@ -9,7 +9,7 @@ import android.hardware.SensorManager
 import org.prauga.toolkit.core.model.SensorInfo
 
 /** The sensor roster, which carries the vendor part names no sysfs node will give us. */
-class SensorInfoReader(private val context: Context) {
+internal class SensorInfoReader(private val context: Context) {
     fun read(): List<SensorInfo> {
         val manager = context.getSystemService(SensorManager::class.java) ?: return emptyList()
         return manager
@@ -22,7 +22,6 @@ class SensorInfoReader(private val context: Context) {
                     power = sensor.power,
                     resolution = sensor.resolution,
                     maxRange = sensor.maximumRange,
-                    isWakeUp = sensor.isWakeUpSensor,
                 )
             }
             .sortedBy { it.type }

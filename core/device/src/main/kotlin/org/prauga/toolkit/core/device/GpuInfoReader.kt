@@ -13,7 +13,7 @@ import org.prauga.toolkit.core.model.GpuInfo
 import timber.log.Timber
 
 /** Names the GPU by asking OpenGL rather than sysfs. */
-object GpuInfoReader {
+internal object GpuInfoReader {
     @Suppress("ReturnCount")
     fun read(): GpuInfo? {
         var display: EGLDisplay? = null

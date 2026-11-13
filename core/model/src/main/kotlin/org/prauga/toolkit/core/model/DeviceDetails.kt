@@ -52,7 +52,6 @@ data class DisplayInfo(
 data class MemoryDetails(
     val totalBytes: Long,
     val availableBytes: Long,
-    val lowMemory: Boolean,
     val thresholdBytes: Long,
     val swapTotalBytes: Long?,
     val pageSizeBytes: Long?,
@@ -65,7 +64,6 @@ data class SensorInfo(
     val power: Float,
     val resolution: Float,
     val maxRange: Float,
-    val isWakeUp: Boolean,
 )
 
 data class CameraInfo(

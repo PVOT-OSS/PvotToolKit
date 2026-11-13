@@ -19,7 +19,7 @@ import org.prauga.toolkit.core.model.ThermalStatus
 import timber.log.Timber
 
 /** The parts the framework gives up without a permission. */
-class PlatformVitalsReader(context: Context) {
+internal class PlatformVitalsReader(context: Context) {
     private val appContext = context.applicationContext
 
     /** Milliseconds since boot, replacing the denied /proc/uptime. */
@@ -65,7 +65,6 @@ class PlatformVitalsReader(context: Context) {
             null
         }
 
-    /** Byte counters since boot. */
     fun network(): NetworkVitals? {
         val rx = TrafficStats.getTotalRxBytes()
         val tx = TrafficStats.getTotalTxBytes()
@@ -84,7 +83,6 @@ class PlatformVitalsReader(context: Context) {
             ?.firstOrNull { it.size > 2 && it[1] == "/data" }
             ?.get(2)
 
-    /** Whether a `su` binary is present. */
     fun suBinaryPresent(): Boolean =
         SU_PATHS.any { path ->
             try {

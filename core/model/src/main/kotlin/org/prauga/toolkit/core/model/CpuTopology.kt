@@ -8,10 +8,7 @@ data class CpuTopology(
     val clusters: List<CpuCluster>,
     val coreCount: Int,
     val features: List<String>,
-) {
-    val isHeterogeneous: Boolean
-        get() = clusters.size > 1
-}
+)
 
 /** One cpufreq policy — a set of cores that scale together. */
 data class CpuCluster(
