@@ -11,7 +11,6 @@ path = [
     ".gitignore",
     ".gitmodules",
     "app/.gitignore",
-    "app/src/main/keepRules/rules.keep",
     "core/data/src/main/assets/links.json",
 ]
 precedence = "aggregate"
