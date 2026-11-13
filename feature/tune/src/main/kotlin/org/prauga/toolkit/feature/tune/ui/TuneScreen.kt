@@ -3,7 +3,6 @@
 
 package org.prauga.toolkit.feature.tune.ui
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -17,7 +16,7 @@ internal fun TuneScreen(modifier: Modifier = Modifier) {
     SectionPlaceholder(
         title = stringResource(R.string.tune_title),
         description = stringResource(R.string.tune_description),
-        modifier = modifier.padding(),
+        modifier = modifier,
     )
 }
 

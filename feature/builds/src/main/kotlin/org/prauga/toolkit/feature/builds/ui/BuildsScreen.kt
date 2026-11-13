@@ -3,7 +3,6 @@
 
 package org.prauga.toolkit.feature.builds.ui
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -17,7 +16,7 @@ internal fun BuildsScreen(modifier: Modifier = Modifier) {
     SectionPlaceholder(
         title = stringResource(R.string.builds_title),
         description = stringResource(R.string.builds_description),
-        modifier = modifier.padding(),
+        modifier = modifier,
     )
 }
 
