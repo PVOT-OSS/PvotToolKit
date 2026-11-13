@@ -6,10 +6,11 @@ package org.prauga.toolkit.feature.news.navigation
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
+import org.prauga.toolkit.core.designsystem.navigation.FullScreenMetadata
 import org.prauga.toolkit.feature.news.ui.NewsScreen
 
 @Serializable data object NewsRoute : NavKey
 
 fun EntryProviderScope<NavKey>.newsEntry() {
-    entry<NewsRoute> { NewsScreen() }
+    entry<NewsRoute>(metadata = FullScreenMetadata) { NewsScreen() }
 }

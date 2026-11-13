@@ -33,11 +33,12 @@ import com.prauga.pvot.designsystem.motion.PvotDurations
 import com.prauga.pvot.designsystem.motion.PvotMotion
 import com.prauga.pvot.designsystem.navigation.PvotNavBar
 import com.prauga.pvot.designsystem.navigation.PvotTabItem
+import org.prauga.toolkit.core.designsystem.navigation.isFullScreen
 import org.prauga.toolkit.navigation.DeviceDestination
-import org.prauga.toolkit.navigation.Navigator
 import org.prauga.toolkit.navigation.ToolkitDestination
 import org.prauga.toolkit.navigation.ToolkitNavDisplay
-import org.prauga.toolkit.navigation.rememberNavigationState
+import org.prauga.toolkit.navigation.rememberNavigator
+import org.prauga.toolkit.navigation.toolkitEntryProvider
 
 /** How the nav bar leaves and returns around screens opened on top of a tab. */
 private fun <T> barMotion() = tween<T>(PvotDurations.Medium, easing = PvotMotion.Settle)
@@ -47,12 +48,16 @@ private const val SCROLL_THRESHOLD = 4f
 
 /** The app shell: one glass nav bar floating over the screens, which are its backdrop. */
 @Composable
-fun ToolkitApp(modifier: Modifier = Modifier) {
-    val navigationState = rememberNavigationState()
-    val navigator = remember(navigationState) { Navigator(navigationState) }
+internal fun ToolkitApp(modifier: Modifier = Modifier) {
+    val navigator = rememberNavigator()
+    val entryProvider = remember(navigator) { toolkitEntryProvider(navigator) }
+    val navigationState = navigator.state
 
     val device = navigationState.openDeviceScreen
     val current = navigationState.selectedTab
+    val fullScreen =
+        navigationState.currentStack.lastOrNull()?.let { entryProvider(it).metadata.isFullScreen() }
+            ?: false
 
     val backdrop = rememberPvotGlassBackdrop()
     var navCompact by rememberSaveable { mutableStateOf(false) }
@@ -97,7 +102,7 @@ fun ToolkitApp(modifier: Modifier = Modifier) {
         contentColor = MaterialTheme.colorScheme.onBackground,
         bottomBar = {
             AnimatedVisibility(
-                visible = !navigationState.fullScreen,
+                visible = !fullScreen,
                 enter = slideInVertically(barMotion()) { it } + fadeIn(barMotion()),
                 exit = slideOutVertically(barMotion()) { it } + fadeOut(barMotion()),
             ) {
@@ -134,8 +139,8 @@ fun ToolkitApp(modifier: Modifier = Modifier) {
                     .background(MaterialTheme.colorScheme.background)
         ) {
             ToolkitNavDisplay(
-                state = navigationState,
                 navigator = navigator,
+                entryProvider = entryProvider,
                 modifier =
                     Modifier.fillMaxSize()
                         .nestedScroll(scrollConnection)

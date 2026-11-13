@@ -13,6 +13,7 @@ dependencies {
     api(project(":core-ui"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.browser)
+    implementation(libs.androidx.navigation3.runtime)
     implementation(libs.timber)
     testImplementation(libs.junit)
 }

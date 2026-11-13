@@ -12,7 +12,7 @@ import org.prauga.toolkit.feature.deviceinfo.navigation.SensorsRoute
 import org.prauga.toolkit.feature.deviceinfo.navigation.TestsRoute
 
 /** The nav bar swaps to these while the device screens are open. */
-enum class DeviceDestination(
+internal enum class DeviceDestination(
     val route: NavKey,
     @param:DrawableRes val iconRes: Int,
     @param:StringRes val labelRes: Int,
@@ -35,5 +35,9 @@ enum class DeviceDestination(
         iconRes = R.drawable.ic_tab_tests,
         labelRes = R.string.tab_tests,
         contentDescriptionRes = R.string.tab_tests_description,
-    ),
+    );
+
+    companion object {
+        fun of(route: NavKey): DeviceDestination? = entries.firstOrNull { it.route == route }
+    }
 }

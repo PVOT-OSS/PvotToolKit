@@ -6,6 +6,7 @@ package org.prauga.toolkit.feature.monitor.navigation
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
+import org.prauga.toolkit.core.designsystem.navigation.FullScreenMetadata
 import org.prauga.toolkit.feature.monitor.ui.CpuDetailScreen
 import org.prauga.toolkit.feature.monitor.ui.MonitorScreen
 
@@ -18,5 +19,5 @@ fun EntryProviderScope<NavKey>.monitorEntry(onOpenCpuDetail: () -> Unit) {
 }
 
 fun EntryProviderScope<NavKey>.cpuDetailEntry() {
-    entry<CpuDetailRoute> { CpuDetailScreen() }
+    entry<CpuDetailRoute>(metadata = FullScreenMetadata) { CpuDetailScreen() }
 }

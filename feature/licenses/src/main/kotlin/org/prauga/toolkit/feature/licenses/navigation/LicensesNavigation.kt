@@ -6,10 +6,11 @@ package org.prauga.toolkit.feature.licenses.navigation
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
+import org.prauga.toolkit.core.designsystem.navigation.FullScreenMetadata
 import org.prauga.toolkit.feature.licenses.ui.LicensesScreen
 
 @Serializable data object LicensesRoute : NavKey
 
 fun EntryProviderScope<NavKey>.licensesEntry() {
-    entry<LicensesRoute> { LicensesScreen() }
+    entry<LicensesRoute>(metadata = FullScreenMetadata) { LicensesScreen() }
 }

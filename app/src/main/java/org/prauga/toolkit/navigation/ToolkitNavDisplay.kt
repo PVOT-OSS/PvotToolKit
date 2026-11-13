@@ -3,10 +3,20 @@
 
 package org.prauga.toolkit.navigation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import com.prauga.pvot.designsystem.theme.PvotSpacing
+import org.prauga.toolkit.core.designsystem.component.BackButton
+import org.prauga.toolkit.core.designsystem.navigation.isFullScreen
 import org.prauga.toolkit.feature.builds.navigation.buildsEntry
 import org.prauga.toolkit.feature.deviceinfo.navigation.DeviceInfoRoute
 import org.prauga.toolkit.feature.deviceinfo.navigation.deviceEntries
@@ -24,10 +34,8 @@ import org.prauga.toolkit.feature.news.navigation.NewsRoute
 import org.prauga.toolkit.feature.news.navigation.newsEntry
 import org.prauga.toolkit.feature.tune.navigation.tuneEntry
 
-/** Composes the feature entries and shows the current back stacks. */
-@Composable
-fun ToolkitNavDisplay(state: NavigationState, navigator: Navigator, modifier: Modifier = Modifier) {
-    val entryProvider = entryProvider {
+internal fun toolkitEntryProvider(navigator: Navigator): (NavKey) -> NavEntry<NavKey> =
+    entryProvider {
         discoverEntry(
             onOpenDevice = { navigator.navigate(DeviceInfoRoute) },
             onOpenMonitoring = { navigator.navigate(MonitorRoute) },
@@ -48,9 +56,31 @@ fun ToolkitNavDisplay(state: NavigationState, navigator: Navigator, modifier: Mo
         licensesEntry()
     }
 
+@Composable
+internal fun ToolkitNavDisplay(
+    navigator: Navigator,
+    entryProvider: (NavKey) -> NavEntry<NavKey>,
+    modifier: Modifier = Modifier,
+) {
     NavDisplay(
-        entries = state.toDecoratedEntries(entryProvider, onBack = navigator::goBack),
+        entries =
+            navigator.state.toDecoratedEntries { key ->
+                entryProvider(key).framed(onBack = navigator::goBack)
+            },
         modifier = modifier,
         onBack = navigator::goBack,
     )
+}
+
+/** Opaque so predictive back hides what is behind; full-screen entries get a back arrow. */
+private fun NavEntry<NavKey>.framed(onBack: () -> Unit): NavEntry<NavKey> {
+    val entry = this
+    return NavEntry(navEntry = entry) {
+        Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+            if (entry.metadata.isFullScreen()) {
+                BackButton(onClick = onBack, modifier = Modifier.padding(start = PvotSpacing.XS))
+            }
+            entry.Content()
+        }
+    }
 }
