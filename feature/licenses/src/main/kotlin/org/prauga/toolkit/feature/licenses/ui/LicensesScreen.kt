@@ -15,10 +15,10 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.components.PvotScreenDefaults
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
+import com.prauga.pvot.designsystem.theme.PvotSpacing
 import org.prauga.toolkit.core.designsystem.component.ActionRow
 import org.prauga.toolkit.core.designsystem.component.SettingsGroup
 import org.prauga.toolkit.core.designsystem.link.openArticle
@@ -36,7 +36,7 @@ internal fun LicensesScreen(modifier: Modifier = Modifier) {
         item(key = "header") {
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(6.dp),
+                verticalArrangement = Arrangement.spacedBy(PvotSpacing.S),
             ) {
                 Text(
                     text = stringResource(R.string.licenses_kicker),
