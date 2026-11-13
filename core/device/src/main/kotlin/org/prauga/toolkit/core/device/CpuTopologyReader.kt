@@ -16,7 +16,8 @@ internal object CpuTopologyReader {
         if (policies.isEmpty()) return null
         val coreIds = listCoreDirs(cpuRoot).keys
 
-        val parts = readCoreParts()
+        val cpuinfo = File(CPUINFO).readTextOrNull().orEmpty()
+        val parts = parseCoreParts(cpuinfo)
         val clusters =
             policies.map { (id, policy) ->
                 val cores =
@@ -43,22 +44,21 @@ internal object CpuTopologyReader {
                             ?.split(' ')
                             ?.filter { it.isNotBlank() }
                             .orEmpty(),
-                    partId = parts[cores.firstOrNull()]?.first,
-                    implementer = parts[cores.firstOrNull()]?.second,
+                    partId = parts[cores.firstOrNull()]?.part,
+                    implementer = parts[cores.firstOrNull()]?.implementer,
                 )
             }
 
         return CpuTopology(
             clusters = clusters,
             coreCount = coreIds.size.takeIf { it > 0 } ?: clusters.sumOf { it.cores.size },
-            features = readFeatures(),
+            features = parseFeatures(cpuinfo),
         )
     }
 
-    /** Maps core id to (part, implementer). /proc/cpuinfo lists them per processor. */
-    private fun readCoreParts(): Map<Int, Pair<String?, String?>> {
-        val text = File(CPUINFO).readTextOrNull() ?: return emptyMap()
-        val result = mutableMapOf<Int, Pair<String?, String?>>()
+    /** Maps core id to its part; /proc/cpuinfo lists them per processor. */
+    internal fun parseCoreParts(text: String): Map<Int, CorePart> {
+        val result = mutableMapOf<Int, CorePart>()
         var core: Int? = null
         var part: String? = null
         var implementer: String? = null
@@ -70,7 +70,7 @@ internal object CpuTopologyReader {
                 }
             when (key) {
                 "processor" -> {
-                    core?.let { result[it] = part to implementer }
+                    core?.let { result[it] = CorePart(part, implementer) }
                     core = value.toIntOrNull()
                     part = null
                     implementer = null
@@ -85,18 +85,19 @@ internal object CpuTopologyReader {
                 }
             }
         }
-        core?.let { result[it] = part to implementer }
+        core?.let { result[it] = CorePart(part, implementer) }
         return result
     }
 
-    private fun readFeatures(): List<String> =
-        File(CPUINFO)
-            .readTextOrNull()
-            ?.lineSequence()
-            ?.firstOrNull { it.startsWith("Features") }
+    internal fun parseFeatures(text: String): List<String> =
+        text
+            .lineSequence()
+            .firstOrNull { it.startsWith("Features") }
             ?.substringAfter(':')
             ?.trim()
             ?.split(' ')
             ?.filter { it.isNotBlank() }
             .orEmpty()
+
+    internal data class CorePart(val part: String?, val implementer: String?)
 }

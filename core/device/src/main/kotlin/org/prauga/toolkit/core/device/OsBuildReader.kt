@@ -38,7 +38,7 @@ internal class OsBuildReader(private val properties: SystemProperties) {
             rom = detectRom(),
         )
 
-    private fun detectRom(): CustomRom? =
+    internal fun detectRom(): CustomRom? =
         KNOWN_ROMS.firstNotNullOfOrNull { (key, name) ->
             properties[key]?.let { CustomRom(name, it) }
         }
