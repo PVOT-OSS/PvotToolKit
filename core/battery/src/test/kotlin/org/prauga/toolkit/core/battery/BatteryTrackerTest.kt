@@ -43,7 +43,7 @@ class BatteryTrackerTest {
         assertEquals(HOUR, session.screenOnMillis)
         assertEquals(0L, session.screenOffMillis)
         assertEquals(10f, session.screenOnDrainedPercent, 0.01f)
-        assertEquals(10f, session.activeDrainPerHour!!, 0.01f)
+        assertEquals(10f, requireNotNull(session.activeDrainPerHour) { "no active rate" }, 0.01f)
         assertNull("idle rate should not exist yet", session.idleDrainPerHour)
     }
 
@@ -54,7 +54,7 @@ class BatteryTrackerTest {
 
         val session = BatteryTracker.fold(BatteryTracker.start(first), first, second)
 
-        assertEquals(1f, session.idleDrainPerHour!!, 0.01f)
+        assertEquals(1f, requireNotNull(session.idleDrainPerHour) { "no idle rate" }, 0.01f)
         assertNull(session.activeDrainPerHour)
     }
 
@@ -170,7 +170,7 @@ class BatteryTrackerTest {
     fun `watts come from current and voltage`() {
         val first = sample(0, current = -956_000, voltage = 3766, screenOn = true)
         val session = BatteryTracker.start(first)
-        assertEquals(3.6f, session.watts!!, 0.05f)
+        assertEquals(3.6f, requireNotNull(session.watts) { "no power reading" }, 0.05f)
     }
 
     @Test
@@ -182,7 +182,7 @@ class BatteryTrackerTest {
                 first,
                 sample(HOUR, level = 40, screenOn = true),
             )
-        val remaining = session.estimatedMillisRemaining!!
+        val remaining = requireNotNull(session.estimatedMillisRemaining) { "no estimate" }
         assertTrue(
             "got ${remaining / HOUR}h",
             remaining in (3.5 * HOUR).toLong()..(4.5 * HOUR).toLong(),

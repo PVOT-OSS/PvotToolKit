@@ -14,7 +14,6 @@ import org.prauga.toolkit.core.network.ApiStatusException
 import org.prauga.toolkit.core.network.ToolkitApi
 import timber.log.Timber
 
-/** The newsroom, read from the site's static feed. */
 @Singleton
 class NewsRepository @Inject constructor(private val api: ToolkitApi) {
     suspend fun news(): DataResult<List<NewsPost>> =

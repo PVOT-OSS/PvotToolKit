@@ -3,7 +3,6 @@
 
 package org.prauga.toolkit.core.common
 
-/** Outcome of a repository read. */
 sealed interface DataResult<out T> {
     /** @param stale served from cache because the network was unreachable. */
     data class Success<T>(val data: T, val stale: Boolean = false) : DataResult<T>

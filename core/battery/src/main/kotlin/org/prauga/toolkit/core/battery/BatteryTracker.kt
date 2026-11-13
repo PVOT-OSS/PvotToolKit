@@ -5,7 +5,6 @@ package org.prauga.toolkit.core.battery
 
 private const val TENTHS_PER_PERCENT = 10
 
-/** Folds samples into a session. */
 object BatteryTracker {
     /** Attributes the interval to the screen state it was spent in. */
     fun fold(
@@ -58,9 +57,7 @@ object BatteryTracker {
             latest = sample,
         )
 
-    /**
-     * Charge counters only go down while discharging; a rise means a top-up, not negative drain.
-     */
+    /** Charge counters only go down while discharging; a rise means a top-up, not negative drain. */
     private fun drainedMicroAmpHours(previous: BatterySample, sample: BatterySample): Long {
         val before = previous.chargeMicroAmpHours ?: return 0
         val after = sample.chargeMicroAmpHours ?: return 0
