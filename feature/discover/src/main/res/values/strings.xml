@@ -20,11 +20,8 @@ SPDX-License-Identifier: Apache-2.0
     <string name="discover_memory">RAM</string>
     <string name="discover_cpu">CPU</string>
     <string name="discover_governor">Governor</string>
-    <string name="discover_percent">%1$d%%</string>
-    <string name="discover_celsius">%1$.0f°C</string>
-    <string name="discover_battery_charging">%1$d%% · charging</string>
+    <string name="discover_battery_charging">%1$s · charging</string>
     <string name="discover_memory_value">%1$s / %2$s</string>
-    <string name="discover_ghz">%1$.2f GHz</string>
     <string name="discover_cpu_value">%1$s of %2$s</string>
     <string name="discover_view_monitoring">View monitoring</string>
     <string name="discover_thermal_locked">Temperatures need a StormBreaker kernel — Android blocks thermal sensors for ordinary apps.</string>

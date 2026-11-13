@@ -26,6 +26,7 @@ import org.prauga.toolkit.core.designsystem.component.Meter
 import org.prauga.toolkit.core.designsystem.component.MetricCard
 import org.prauga.toolkit.core.designsystem.component.MetricLine
 import org.prauga.toolkit.core.designsystem.component.Sparkline
+import org.prauga.toolkit.core.designsystem.format.rememberUnitFormatter
 import org.prauga.toolkit.core.model.BatteryVitals
 import org.prauga.toolkit.core.model.CpuTopology
 import org.prauga.toolkit.core.model.GpuInfo
@@ -118,10 +119,11 @@ private fun CpuCard(
     revealIndex: Int,
     onClick: () -> Unit,
 ) {
+    val format = rememberUnitFormatter()
     MetricCard(
         title = stringResource(R.string.monitor_cpu),
         value =
-            vitals?.load?.average?.let { percent(it) }
+            vitals?.load?.average?.let { format.percent(it) }
                 ?: stringResource(R.string.monitor_collecting),
         caption = stringResource(R.string.monitor_tap_detail),
         revealIndex = revealIndex,
@@ -140,7 +142,7 @@ private fun CpuCard(
         topology.clusters.forEach { cluster ->
             MetricLine(
                 stringResource(R.string.monitor_cluster_peak, cluster.id),
-                cluster.hardwareMaxKhz?.let { frequency(it) } ?: "—",
+                cluster.hardwareMaxKhz?.let { format.frequency(it) } ?: format.unknown,
             )
         }
     }
@@ -148,38 +150,34 @@ private fun CpuCard(
 
 @Composable
 private fun MemoryCard(memory: MemoryVitals, history: MetricHistory, revealIndex: Int) {
+    val format = rememberUnitFormatter()
     MetricCard(
         title = stringResource(R.string.monitor_memory),
-        value = percent(memory.usedFraction),
-        caption = stringResource(R.string.monitor_of_total, bytes(memory.totalBytes)),
+        value = format.percent(memory.usedFraction),
+        caption = stringResource(R.string.monitor_of_total, format.bytes(memory.totalBytes)),
         revealIndex = revealIndex,
     ) {
         Sparkline(values = history.memoryUsed, domain = 0f..1f)
-        MetricLine(stringResource(R.string.monitor_used), bytes(memory.usedBytes))
+        MetricLine(stringResource(R.string.monitor_used), format.bytes(memory.usedBytes))
     }
 }
 
 @Composable
 private fun BatteryCard(battery: BatteryVitals, history: MetricHistory, revealIndex: Int) {
+    val format = rememberUnitFormatter()
     MetricCard(
         title = stringResource(R.string.monitor_battery),
-        value = stringResource(R.string.monitor_percent, battery.percent),
-        caption = battery.temperatureC?.let { stringResource(R.string.monitor_celsius, it) },
+        value = format.percent(battery.percent),
+        caption = battery.temperatureC?.let { format.temperature(it) },
         revealIndex = revealIndex,
     ) {
         Sparkline(values = history.batteryDrawMilliAmps, domain = null)
 
         battery.currentMicroAmps?.let {
-            MetricLine(
-                stringResource(R.string.monitor_draw),
-                stringResource(R.string.monitor_milliamps, kotlin.math.abs(it) / 1000),
-            )
+            MetricLine(stringResource(R.string.monitor_draw), format.current(kotlin.math.abs(it)))
         }
         battery.chargeCounterMicroAmpHours?.let {
-            MetricLine(
-                stringResource(R.string.monitor_capacity),
-                stringResource(R.string.monitor_milliamp_hours, it / 1000),
-            )
+            MetricLine(stringResource(R.string.monitor_capacity), format.charge(it))
         }
         battery.health?.let {
             MetricLine(stringResource(R.string.monitor_health), stringResource(it.labelRes()))
@@ -189,33 +187,35 @@ private fun BatteryCard(battery: BatteryVitals, history: MetricHistory, revealIn
 
 @Composable
 private fun NetworkCard(vitals: Vitals, history: MetricHistory, revealIndex: Int) {
+    val format = rememberUnitFormatter()
     val network = vitals.network ?: return
     MetricCard(
         title = stringResource(R.string.monitor_network),
         value =
             stringResource(
                 R.string.monitor_rate,
-                bytes(history.networkBytesPerSecond.lastOrNull()?.toLong() ?: 0L),
+                format.bytes(history.networkBytesPerSecond.lastOrNull()?.toLong() ?: 0L),
             ),
         revealIndex = revealIndex,
     ) {
         Sparkline(values = history.networkBytesPerSecond, domain = null)
-        MetricLine(stringResource(R.string.monitor_received), bytes(network.rxBytes))
-        MetricLine(stringResource(R.string.monitor_sent), bytes(network.txBytes))
+        MetricLine(stringResource(R.string.monitor_received), format.bytes(network.rxBytes))
+        MetricLine(stringResource(R.string.monitor_sent), format.bytes(network.txBytes))
     }
 }
 
 /** Static, so a meter rather than a line implying movement. */
 @Composable
 private fun StorageCard(storage: StorageVitals, revealIndex: Int) {
+    val format = rememberUnitFormatter()
     MetricCard(
         title = stringResource(R.string.monitor_storage),
-        value = percent(storage.usedFraction),
-        caption = stringResource(R.string.monitor_of_total, bytes(storage.totalBytes)),
+        value = format.percent(storage.usedFraction),
+        caption = stringResource(R.string.monitor_of_total, format.bytes(storage.totalBytes)),
         revealIndex = revealIndex,
     ) {
         Meter(fraction = storage.usedFraction)
-        MetricLine(stringResource(R.string.monitor_used), bytes(storage.usedBytes))
+        MetricLine(stringResource(R.string.monitor_used), format.bytes(storage.usedBytes))
         storage.fileSystem?.let { MetricLine(stringResource(R.string.monitor_filesystem), it) }
     }
 }
@@ -223,26 +223,28 @@ private fun StorageCard(storage: StorageVitals, revealIndex: Int) {
 /** A ratio, not a series. */
 @Composable
 private fun UptimeCard(sleep: SleepStats, revealIndex: Int) {
+    val format = rememberUnitFormatter()
     MetricCard(
         title = stringResource(R.string.monitor_uptime),
-        value = duration(sleep.elapsedMillis),
+        value = format.duration(sleep.elapsedMillis),
         revealIndex = revealIndex,
     ) {
         Meter(fraction = sleep.deepSleepFraction, color = MaterialTheme.colorScheme.tertiary)
         MetricLine(
             stringResource(R.string.monitor_deep_sleep),
-            "${duration(sleep.deepSleepMillis)} · ${percent(sleep.deepSleepFraction)}",
+            "${format.duration(sleep.deepSleepMillis)} · ${format.percent(sleep.deepSleepFraction)}",
         )
-        MetricLine(stringResource(R.string.monitor_awake), duration(sleep.awakeMillis))
+        MetricLine(stringResource(R.string.monitor_awake), format.duration(sleep.awakeMillis))
     }
 }
 
 /** Identification only — there is no series to draw. */
 @Composable
 private fun GpuCard(gpu: GpuInfo, revealIndex: Int) {
+    val format = rememberUnitFormatter()
     MetricCard(
         title = stringResource(R.string.monitor_gpu),
-        value = gpu.renderer ?: "—",
+        value = gpu.renderer ?: format.unknown,
         revealIndex = revealIndex,
     ) {
         gpu.vendor?.let { MetricLine(stringResource(R.string.monitor_gpu_vendor), it) }

@@ -36,10 +36,10 @@ import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import com.prauga.pvot.designsystem.theme.PvotShapes
 import com.prauga.pvot.designsystem.theme.PvotSpacing
-import java.util.Locale
 import org.prauga.toolkit.core.designsystem.component.ActionRow
 import org.prauga.toolkit.core.designsystem.component.SettingsGroup
 import org.prauga.toolkit.core.designsystem.component.ValueRow
+import org.prauga.toolkit.core.designsystem.format.rememberUnitFormatter
 import org.prauga.toolkit.core.designsystem.link.openArticle
 import org.prauga.toolkit.core.model.BatteryHealth
 import org.prauga.toolkit.core.model.BatteryVitals
@@ -57,9 +57,6 @@ import org.prauga.toolkit.core.model.SocInfo
 import org.prauga.toolkit.core.model.StorageVitals
 import org.prauga.toolkit.core.model.ThermalStatus
 import org.prauga.toolkit.core.model.Vitals
-
-private const val KHZ_PER_GHZ = 1_000_000f
-private const val BYTES_PER_GB = 1_073_741_824f
 
 @Composable
 fun DiscoverScreen(
@@ -117,6 +114,7 @@ private fun DiscoverContent(
 
 @Composable
 private fun IdentityCard(identity: DeviceIdentity, onClick: () -> Unit) {
+    val format = rememberUnitFormatter()
     PvotCard(modifier = Modifier.fillMaxWidth().pvotReveal(0), onClick = onClick) {
         Column(
             modifier = Modifier.padding(PvotSpacing.L),
@@ -149,8 +147,8 @@ private fun IdentityCard(identity: DeviceIdentity, onClick: () -> Unit) {
                 text =
                     stringResource(
                         R.string.discover_identity_meta,
-                        identity.codename ?: "—",
-                        identity.androidRelease ?: "—",
+                        identity.codename ?: format.unknown,
+                        identity.androidRelease ?: format.unknown,
                         identity.sdkInt,
                     ),
                 style = MaterialTheme.typography.labelMedium,
@@ -280,27 +278,28 @@ private fun VitalsGroup(vitals: Vitals?, onOpenMonitoring: () -> Unit) {
 
 @Composable
 private fun BatteryRow(battery: BatteryVitals, index: Int, count: Int) {
+    val format = rememberUnitFormatter()
+    val percent = format.percent(battery.percent)
     val value =
         if (battery.charging) {
-            stringResource(R.string.discover_battery_charging, battery.percent)
+            stringResource(R.string.discover_battery_charging, percent)
         } else {
-            stringResource(R.string.discover_percent, battery.percent)
+            percent
         }
-    val withTemp =
-        battery.temperatureC?.let { "$value · " + stringResource(R.string.discover_celsius, it) }
-            ?: value
+    val withTemp = battery.temperatureC?.let { "$value · " + format.temperature(it) } ?: value
     ValueRow(stringResource(R.string.discover_battery), withTemp, index, count)
 }
 
 @Composable
 private fun MemoryRow(memory: MemoryVitals, index: Int, count: Int) {
+    val format = rememberUnitFormatter()
     ValueRow(
         label = stringResource(R.string.discover_memory),
         value =
             stringResource(
                 R.string.discover_memory_value,
-                formatGigabytes(memory.usedBytes),
-                formatGigabytes(memory.totalBytes),
+                format.bytes(memory.usedBytes),
+                format.bytes(memory.totalBytes),
             ),
         index = index,
         count = count,
@@ -309,24 +308,25 @@ private fun MemoryRow(memory: MemoryVitals, index: Int, count: Int) {
 
 @Composable
 private fun CpuRow(cpu: CpuVitals, index: Int, count: Int) {
+    val format = rememberUnitFormatter()
     val current = cpu.perCoreKhz.filterNotNull().maxOrNull()
     val max = cpu.maxKhz
     val value =
         when {
             current == null -> {
-                "—"
+                format.unknown
             }
 
             max != null -> {
                 stringResource(
                     R.string.discover_cpu_value,
-                    stringResource(R.string.discover_ghz, current / KHZ_PER_GHZ),
-                    stringResource(R.string.discover_ghz, max / KHZ_PER_GHZ),
+                    format.frequency(current),
+                    format.frequency(max),
                 )
             }
 
             else -> {
-                stringResource(R.string.discover_ghz, current / KHZ_PER_GHZ)
+                format.frequency(current)
             }
         }
     ValueRow(stringResource(R.string.discover_cpu), value, index, count)
@@ -357,9 +357,6 @@ private fun NewsGroup(
         )
     }
 }
-
-private fun formatGigabytes(bytes: Long): String =
-    String.format(Locale.getDefault(), "%.1f GB", bytes / BYTES_PER_GB)
 
 @Preview
 @Composable

@@ -28,6 +28,7 @@ import com.prauga.pvot.designsystem.theme.PvotAppTheme
 import com.prauga.pvot.designsystem.theme.PvotSpacing
 import org.prauga.toolkit.core.designsystem.component.MetricLine
 import org.prauga.toolkit.core.designsystem.component.Sparkline
+import org.prauga.toolkit.core.designsystem.format.rememberUnitFormatter
 import org.prauga.toolkit.core.model.CpuCluster
 
 @Composable
@@ -102,6 +103,7 @@ private fun CoreChart(
     currentKhz: Int?,
     revealIndex: Int,
 ) {
+    val format = rememberUnitFormatter()
     val cluster = clusterFor()
     PvotCard(modifier = Modifier.fillMaxWidth().pvotReveal(revealIndex)) {
         Column(
@@ -120,8 +122,8 @@ private fun CoreChart(
                 Text(
                     text =
                         buildString {
-                            append(currentLoad?.let { percent(it) } ?: "—")
-                            currentKhz?.let { append(" · ${frequency(it)}") }
+                            append(currentLoad?.let { format.percent(it) } ?: format.unknown)
+                            currentKhz?.let { append(" · ${format.frequency(it)}") }
                         },
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -133,7 +135,7 @@ private fun CoreChart(
                     text =
                         stringResource(R.string.monitor_cluster, it.id) +
                             " · " +
-                            (it.hardwareMaxKhz?.let(::frequency) ?: "—"),
+                            (it.hardwareMaxKhz?.let(format::frequency) ?: format.unknown),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -144,6 +146,7 @@ private fun CoreChart(
 
 @Composable
 private fun ClusterCard(cluster: CpuCluster) {
+    val format = rememberUnitFormatter()
     PvotCard(modifier = Modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier.padding(PvotSpacing.L),
@@ -156,7 +159,8 @@ private fun ClusterCard(cluster: CpuCluster) {
             )
             MetricLine(
                 stringResource(R.string.monitor_freq_range),
-                "${cluster.minKhz?.let(::frequency) ?: "—"} – ${cluster.hardwareMaxKhz?.let(::frequency) ?: "—"}",
+                "${cluster.minKhz?.let(format::frequency) ?: format.unknown} – " +
+                    (cluster.hardwareMaxKhz?.let(format::frequency) ?: format.unknown),
             )
             cluster.governor?.let { MetricLine(stringResource(R.string.monitor_governor), it) }
             if (cluster.availableGovernors.isNotEmpty()) {

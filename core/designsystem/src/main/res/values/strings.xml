@@ -5,4 +5,21 @@ SPDX-License-Identifier: Apache-2.0
 
 <resources>
     <string name="back">Back</string>
+
+    <string name="format_unknown">—</string>
+    <string name="format_mhz">%1$.0f MHz</string>
+    <string name="format_ghz">%1$.2f GHz</string>
+    <string name="format_bytes">%1$.0f B</string>
+    <string name="format_kilobytes">%1$.0f KB</string>
+    <string name="format_megabytes">%1$.1f MB</string>
+    <string name="format_gigabytes">%1$.1f GB</string>
+    <string name="format_terabytes">%1$.1f TB</string>
+    <string name="format_percent">%1$d%%</string>
+    <string name="format_duration_days">%1$dd %2$dh</string>
+    <string name="format_duration_hours">%1$dh %2$dm</string>
+    <string name="format_duration_minutes">%1$dm</string>
+    <string name="format_celsius">%1$.1f°C</string>
+    <string name="format_milliamps">%1$d mA</string>
+    <string name="format_milliamp_hours">%1$d mAh</string>
+    <string name="format_volts">%1$.3f V</string>
 </resources>

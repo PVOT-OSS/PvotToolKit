@@ -14,4 +14,5 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.browser)
     implementation(libs.timber)
+    testImplementation(libs.junit)
 }

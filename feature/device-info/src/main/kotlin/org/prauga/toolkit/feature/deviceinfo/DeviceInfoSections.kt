@@ -4,8 +4,9 @@
 package org.prauga.toolkit.feature.deviceinfo
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
-import java.util.Locale
+import org.prauga.toolkit.core.designsystem.format.rememberUnitFormatter
 import org.prauga.toolkit.core.model.DeviceDetails
 import org.prauga.toolkit.core.model.DeviceProfile
 import org.prauga.toolkit.core.model.Vitals
@@ -33,6 +34,7 @@ internal fun tabSections(
 
 @Composable
 private fun systemSection(profile: DeviceProfile, details: DeviceDetails?): InfoSection {
+    val format = rememberUnitFormatter()
     val os = profile.os
     val build = details?.build
     return InfoSection(
@@ -53,7 +55,7 @@ private fun systemSection(profile: DeviceProfile, details: DeviceDetails?): Info
                 stringResource(R.string.device_info_tags) to os.tags,
                 stringResource(R.string.device_info_security_patch) to os.securityPatch,
                 stringResource(R.string.device_info_build_date) to
-                    build?.buildTimeMillis?.asBuildDate(),
+                    build?.buildTimeMillis?.let(format::dateTime),
                 stringResource(R.string.device_info_build_host) to build?.host,
                 stringResource(R.string.device_info_java_vm) to build?.javaVm,
                 stringResource(R.string.device_info_bootloader) to build?.bootloader,
@@ -71,14 +73,14 @@ private fun systemSection(profile: DeviceProfile, details: DeviceDetails?): Info
 private fun socSection(profile: DeviceProfile): InfoSection {
     val soc = profile.soc
     val cpu = profile.cpu
-    val clusterTemplate = stringResource(R.string.device_info_cluster_value)
+    val format = rememberUnitFormatter()
+    val resources = LocalResources.current
     val clusters =
         cpu?.clusters?.joinToString("\n") { cluster ->
-            String.format(
-                Locale.US,
-                clusterTemplate,
+            resources.getString(
+                R.string.device_info_cluster_value,
                 cluster.cores.size,
-                cluster.hardwareMaxKhz?.khzAsGhz() ?: cluster.maxKhz?.khzAsGhz().orEmpty(),
+                (cluster.hardwareMaxKhz ?: cluster.maxKhz)?.let(format::frequency).orEmpty(),
             )
         }
     return InfoSection(
@@ -154,35 +156,38 @@ private fun screenSection(details: DeviceDetails?): InfoSection {
 
 @Composable
 private fun memorySection(details: DeviceDetails?): InfoSection {
+    val format = rememberUnitFormatter()
     val memory = details?.memory
     return InfoSection(
         title = stringResource(R.string.device_info_section_memory),
         rows =
             buildRows(
-                stringResource(R.string.device_info_ram_total) to memory?.totalBytes?.asByteSize(),
+                stringResource(R.string.device_info_ram_total) to
+                    memory?.totalBytes?.let(format::bytes),
                 stringResource(R.string.device_info_ram_available) to
-                    memory?.availableBytes?.asByteSize(),
+                    memory?.availableBytes?.let(format::bytes),
                 stringResource(R.string.device_info_ram_threshold) to
-                    memory?.thresholdBytes?.asByteSize(),
+                    memory?.thresholdBytes?.let(format::bytes),
                 stringResource(R.string.device_info_swap) to
-                    memory?.swapTotalBytes?.takeIf { it > 0 }?.asByteSize(),
+                    memory?.swapTotalBytes?.takeIf { it > 0 }?.let(format::bytes),
                 stringResource(R.string.device_info_page_size) to
-                    memory?.pageSizeBytes?.asByteSize(),
+                    memory?.pageSizeBytes?.let(format::bytes),
             ),
     )
 }
 
 @Composable
 private fun storageSection(vitals: Vitals?): InfoSection {
+    val format = rememberUnitFormatter()
     val storage = vitals?.storage
     return InfoSection(
         title = stringResource(R.string.device_info_section_storage),
         rows =
             buildRows(
                 stringResource(R.string.device_info_storage_used) to
-                    storage?.usedBytes?.asByteSize(),
+                    storage?.usedBytes?.let(format::bytes),
                 stringResource(R.string.device_info_storage_total) to
-                    storage?.totalBytes?.asByteSize(),
+                    storage?.totalBytes?.let(format::bytes),
                 stringResource(R.string.device_info_filesystem) to storage?.fileSystem,
             ),
     )
@@ -190,34 +195,27 @@ private fun storageSection(vitals: Vitals?): InfoSection {
 
 @Composable
 private fun batterySection(vitals: Vitals?): InfoSection {
+    val format = rememberUnitFormatter()
     val battery = vitals?.battery
     return InfoSection(
         title = stringResource(R.string.device_info_section_battery),
         rows =
             buildRows(
                 stringResource(R.string.device_info_level) to
-                    battery?.let { stringResource(R.string.device_info_percent, it.percent) },
+                    battery?.let { format.percent(it.percent) },
                 stringResource(R.string.device_info_health) to
                     battery?.health?.let { stringResource(it.labelRes()) },
                 stringResource(R.string.device_info_technology) to battery?.technology,
                 stringResource(R.string.device_info_temperature) to
-                    battery?.temperatureC?.let { stringResource(R.string.device_info_celsius, it) },
+                    battery?.temperatureC?.let(format::temperature),
                 stringResource(R.string.device_info_current) to
-                    battery?.currentMicroAmps?.let {
-                        stringResource(R.string.device_info_milliamps, it / 1000)
-                    },
+                    battery?.currentMicroAmps?.let(format::current),
                 stringResource(R.string.device_info_voltage) to
-                    battery?.voltageMillivolts?.let {
-                        stringResource(R.string.device_info_volts, (it / 1000f).decimals(3))
-                    },
+                    battery?.voltageMillivolts?.let(format::voltage),
                 stringResource(R.string.device_info_design_capacity) to
-                    battery?.designCapacityMah?.let {
-                        stringResource(R.string.device_info_milliamp_hours, it)
-                    },
+                    battery?.designCapacityMah?.let(format::capacity),
                 stringResource(R.string.device_info_charge_remaining) to
-                    battery?.chargeCounterMicroAmpHours?.let {
-                        stringResource(R.string.device_info_milliamp_hours, it / 1000)
-                    },
+                    battery?.chargeCounterMicroAmpHours?.let(format::charge),
                 stringResource(R.string.device_info_cycle_count) to battery?.cycleCount?.toString(),
             ),
     )

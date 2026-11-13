@@ -165,11 +165,6 @@ SPDX-License-Identifier: Apache-2.0
     <string name="device_info_dpi_physical">%1$s × %2$s</string>
     <string name="device_info_inches">%1$s\"</string>
     <string name="device_info_pixels">%1$d × %2$d</string>
-    <string name="device_info_celsius">%1$.1f °C</string>
-    <string name="device_info_percent">%1$d%%</string>
-    <string name="device_info_milliamps">%1$d mA</string>
-    <string name="device_info_milliamp_hours">%1$d mAh</string>
-    <string name="device_info_volts">%1$s V</string>
     <string name="device_info_yes">Yes</string>
     <string name="device_info_no">No</string>
 </resources>
