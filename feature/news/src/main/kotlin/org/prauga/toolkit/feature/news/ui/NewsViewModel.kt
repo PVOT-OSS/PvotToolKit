@@ -7,55 +7,55 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.prauga.toolkit.core.common.DataResult
-import org.prauga.toolkit.core.common.LoadError
 import org.prauga.toolkit.core.data.news.NewsRepository
 import org.prauga.toolkit.core.model.NewsPost
 
-sealed interface NewsUiState {
-    data object Loading : NewsUiState
-
-    /** Loaded and empty is a real state, not a failure. */
-    data object Empty : NewsUiState
-
-    /** @param stale served from cache because the network was unreachable. */
-    data class Ready(val posts: List<NewsPost>, val stale: Boolean) : NewsUiState
-
-    data class Failed(val error: LoadError) : NewsUiState
-}
-
 @HiltViewModel
-class NewsViewModel @Inject constructor(private val repository: NewsRepository) : ViewModel() {
+internal class NewsViewModel @Inject constructor(private val repository: NewsRepository) :
+    ViewModel() {
     private val _state = MutableStateFlow<NewsUiState>(NewsUiState.Loading)
     val state: StateFlow<NewsUiState> = _state.asStateFlow()
 
+    private val _effects = Channel<NewsEffect>(Channel.BUFFERED)
+    val effects: Flow<NewsEffect> = _effects.receiveAsFlow()
+
+    private var loadJob: Job? = null
+
     init {
-        refresh()
+        load()
     }
 
-    fun refresh() {
-        viewModelScope.launch {
-            if (_state.value !is NewsUiState.Ready) {
-                _state.value = NewsUiState.Loading
-            }
-            _state.value =
-                when (val result = repository.news()) {
-                    is DataResult.Success -> {
-                        if (result.data.isEmpty()) {
-                            NewsUiState.Empty
-                        } else {
-                            NewsUiState.Ready(result.data, result.stale)
-                        }
-                    }
-
-                    is DataResult.Failure -> {
-                        NewsUiState.Failed(result.error)
-                    }
-                }
+    fun onEvent(event: NewsEvent) {
+        when (event) {
+            NewsEvent.Retry -> load()
+            is NewsEvent.ArticleClicked ->
+                viewModelScope.launch { _effects.send(NewsEffect.OpenArticle(event.url)) }
         }
     }
+
+    private fun load() {
+        if (loadJob?.isActive == true) return
+        loadJob =
+            viewModelScope.launch {
+                _state.update { current -> current as? NewsUiState.Ready ?: NewsUiState.Loading }
+                _state.value = repository.news().toUiState()
+            }
+    }
+
+    private fun DataResult<List<NewsPost>>.toUiState(): NewsUiState =
+        when (this) {
+            is DataResult.Success ->
+                if (data.isEmpty()) NewsUiState.Empty else NewsUiState.Ready(data, stale)
+            is DataResult.Failure -> NewsUiState.Failed(error)
+        }
 }

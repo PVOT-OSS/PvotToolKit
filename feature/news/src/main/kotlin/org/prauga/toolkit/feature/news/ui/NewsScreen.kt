@@ -15,7 +15,9 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
@@ -48,12 +50,20 @@ private val SkeletonCardHeight = 132.dp
 internal fun NewsScreen(modifier: Modifier = Modifier, viewModel: NewsViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val toolbarColor = MaterialTheme.colorScheme.surface.toArgb()
+    val toolbarColor by rememberUpdatedState(MaterialTheme.colorScheme.surface.toArgb())
+
+    LaunchedEffect(viewModel) {
+        viewModel.effects.collect { effect ->
+            when (effect) {
+                is NewsEffect.OpenArticle -> context.openArticle(effect.url, toolbarColor)
+            }
+        }
+    }
 
     NewsContent(
         state = state,
-        onPostClick = { post -> context.openArticle(post.url, toolbarColor) },
-        onRetry = viewModel::refresh,
+        onPostClick = { post -> viewModel.onEvent(NewsEvent.ArticleClicked(post.url)) },
+        onRetry = { viewModel.onEvent(NewsEvent.Retry) },
         modifier = modifier,
     )
 }
