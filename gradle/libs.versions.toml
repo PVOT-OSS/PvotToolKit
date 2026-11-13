@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 [versions]
-# The app's semantic version. versionCode is derived from it.
-app = "0.1.0"
+# MAJOR.MINOR.PATCH; versionCode = MAJOR * 10000 + MINOR * 100 + PATCH, so MINOR and PATCH stay below 100.
+app = "1.0.0"
 agp = "9.5.0"
 coreKtx = "1.19.0"
 junit = "4.13.2"
