@@ -10,7 +10,9 @@ import org.prauga.toolkit.core.datastore.SettingsLocalDataSource
 import org.prauga.toolkit.core.model.ThemePreference
 
 @Singleton
-class ThemeRepository @Inject constructor(private val localDataSource: SettingsLocalDataSource) {
+class ThemeRepository
+@Inject
+internal constructor(private val localDataSource: SettingsLocalDataSource) {
     val theme: Flow<ThemePreference> = localDataSource.theme
 
     suspend fun setTheme(preference: ThemePreference) = localDataSource.setTheme(preference)
