@@ -4,40 +4,61 @@
 package org.prauga.toolkit.core.data.links
 
 import android.content.res.AssetManager
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.SerializationException
+import org.prauga.toolkit.core.common.DataResult
+import org.prauga.toolkit.core.common.coroutines.Dispatcher
+import org.prauga.toolkit.core.common.coroutines.ToolkitDispatchers
 import org.prauga.toolkit.core.model.LinkSection
+import org.prauga.toolkit.core.network.ApiStatusException
 import org.prauga.toolkit.core.network.ToolkitApi
 import org.prauga.toolkit.core.network.ToolkitJson
 import org.prauga.toolkit.core.network.dto.LinksDto
+import timber.log.Timber
 
-internal const val BUNDLED_LINKS_ASSET = "links.json"
+private const val BUNDLED_LINKS_ASSET = "links.json"
 
 /** Community and project links, published by the site with a copy bundled here. */
 @Singleton
 class LinksRepository
 @Inject
-constructor(private val api: ToolkitApi, private val assets: AssetManager) {
-    suspend fun links(): List<LinkSection> = withContext(Dispatchers.IO) { remote() ?: bundled() }
+constructor(
+    private val api: ToolkitApi,
+    private val assets: AssetManager,
+    @Dispatcher(ToolkitDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+) {
+    suspend fun links(): DataResult.Success<List<LinkSection>> =
+        remote()?.let { DataResult.Success(it) } ?: DataResult.Success(bundled(), stale = true)
 
     private suspend fun remote(): List<LinkSection>? =
         try {
-            api.links().toDomain().takeIf { it.isNotEmpty() }
-        } catch (cancellation: CancellationException) {
-            throw cancellation
-        } catch (_: Exception) {
+            api.links().toDomain().ifEmpty {
+                Timber.w("Site published no links, falling back to the bundled copy")
+                null
+            }
+        } catch (failure: IOException) {
+            Timber.i(failure, "Links unreachable, falling back to the bundled copy")
+            null
+        } catch (failure: ApiStatusException) {
+            Timber.w(failure, "Links answered HTTP %d, falling back to the bundled copy", failure.status)
+            null
+        } catch (failure: SerializationException) {
+            Timber.w(failure, "Links are malformed, falling back to the bundled copy")
             null
         }
 
-    private fun bundled(): List<LinkSection> =
-        try {
-            assets.open(BUNDLED_LINKS_ASSET).bufferedReader().use { reader ->
-                ToolkitJson.decodeFromString<LinksDto>(reader.readText()).toDomain()
+    /** A broken bundled copy is a build mistake, so it throws; BundledLinksTest guards the asset. */
+    private suspend fun bundled(): List<LinkSection> {
+        val text =
+            withContext(ioDispatcher) {
+                assets.open(BUNDLED_LINKS_ASSET).bufferedReader().use { it.readText() }
             }
-        } catch (_: Exception) {
-            emptyList()
-        }
+        val sections = ToolkitJson.decodeFromString<LinksDto>(text).toDomain()
+        check(sections.isNotEmpty()) { "$BUNDLED_LINKS_ASSET has no links to show" }
+        return sections
+    }
 }

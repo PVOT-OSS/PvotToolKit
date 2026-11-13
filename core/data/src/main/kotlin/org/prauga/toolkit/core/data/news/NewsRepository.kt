@@ -6,43 +6,42 @@ package org.prauga.toolkit.core.data.news
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
 import org.prauga.toolkit.core.common.DataResult
 import org.prauga.toolkit.core.common.LoadError
 import org.prauga.toolkit.core.model.NewsPost
+import org.prauga.toolkit.core.network.ApiStatusException
 import org.prauga.toolkit.core.network.ToolkitApi
+import timber.log.Timber
 
 /** The newsroom, read from the site's static feed. */
 @Singleton
 class NewsRepository @Inject constructor(private val api: ToolkitApi) {
-    // The final catch is deliberately broad: anything Ktor or the platform
-    // raises that is not IO or a parse failure is reported as a server problem,
-    // and the cause travels with it rather than being discarded.
-    @Suppress("TooGenericExceptionCaught")
     suspend fun news(): DataResult<List<NewsPost>> =
-        withContext(Dispatchers.IO) {
-            try {
-                DataResult.Success(api.news().toDomain())
-            } catch (cancellation: CancellationException) {
-                throw cancellation
-            } catch (io: IOException) {
-                cached() ?: DataResult.Failure(LoadError.OFFLINE, io)
-            } catch (malformed: SerializationException) {
-                DataResult.Failure(LoadError.MALFORMED, malformed)
-            } catch (other: Exception) {
-                DataResult.Failure(LoadError.SERVER, other)
-            }
+        try {
+            DataResult.Success(api.news().toDomain())
+        } catch (failure: IOException) {
+            Timber.i(failure, "News feed unreachable, falling back to the cached copy")
+            cached() ?: DataResult.Failure(LoadError.OFFLINE)
+        } catch (failure: ApiStatusException) {
+            Timber.w(failure, "News feed answered HTTP %d", failure.status)
+            DataResult.Failure(LoadError.SERVER)
+        } catch (failure: SerializationException) {
+            Timber.w(failure, "News feed is malformed")
+            DataResult.Failure(LoadError.MALFORMED)
         }
 
     private suspend fun cached(): DataResult.Success<List<NewsPost>>? =
         try {
             DataResult.Success(api.news(cacheOnly = true).toDomain(), stale = true)
-        } catch (cancellation: CancellationException) {
-            throw cancellation
-        } catch (_: Exception) {
+        } catch (failure: ApiStatusException) {
+            Timber.i("No cached news feed (HTTP %d)", failure.status)
+            null
+        } catch (failure: IOException) {
+            Timber.w(failure, "Cached news feed unreadable")
+            null
+        } catch (failure: SerializationException) {
+            Timber.w(failure, "Cached news feed is malformed")
             null
         }
 }

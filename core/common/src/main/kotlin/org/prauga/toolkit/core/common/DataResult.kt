@@ -8,8 +8,7 @@ sealed interface DataResult<out T> {
     /** @param stale served from cache because the network was unreachable. */
     data class Success<T>(val data: T, val stale: Boolean = false) : DataResult<T>
 
-    /** @param cause the original failure. */
-    data class Failure(val error: LoadError, val cause: Throwable? = null) : DataResult<Nothing>
+    data class Failure(val error: LoadError) : DataResult<Nothing>
 }
 
 /** Why a read failed, as a type; turning it into words is the UI's job. */

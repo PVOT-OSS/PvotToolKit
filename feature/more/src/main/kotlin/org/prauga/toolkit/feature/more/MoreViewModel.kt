@@ -37,7 +37,7 @@ constructor(
 
     init {
         viewModelScope.launch {
-            val sections = linksRepository.links()
+            val sections = linksRepository.links().data
             _state.update { it.copy(sections = sections) }
         }
         viewModelScope.launch {
