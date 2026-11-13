@@ -7,34 +7,29 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.prauga.toolkit.core.data.device.DeviceRepository
-import org.prauga.toolkit.core.model.SensorInfo
 
-data class SensorsUiState(
-    val deviceName: String? = null,
-    val sensors: List<SensorInfo> = emptyList(),
-)
-
-/** Owns the sensor roster. Deliberately does not touch vitals: it shows none. */
+/** Deliberately does not touch vitals: the screen shows none. */
 @HiltViewModel
-class SensorsViewModel @Inject constructor(private val deviceRepository: DeviceRepository) :
+internal class SensorsViewModel @Inject constructor(deviceRepository: DeviceRepository) :
     ViewModel() {
-    private val _state = MutableStateFlow(SensorsUiState())
+    private val _state = MutableStateFlow<SensorsUiState>(SensorsUiState.Loading)
     val state: StateFlow<SensorsUiState> = _state.asStateFlow()
 
     init {
         viewModelScope.launch {
-            val profile = deviceRepository.profile()
-            _state.update { it.copy(deviceName = profile.identity.displayName) }
-        }
-        viewModelScope.launch {
-            val details = deviceRepository.details()
-            _state.update { it.copy(sensors = details.sensors) }
+            val profile = async { deviceRepository.profile() }
+            val details = async { deviceRepository.details() }
+            _state.value =
+                SensorsUiState.Ready(
+                    deviceName = profile.await().identity.displayName,
+                    sensors = details.await().sensors,
+                )
         }
     }
 }

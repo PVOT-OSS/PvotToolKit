@@ -4,6 +4,7 @@
 package org.prauga.toolkit.feature.deviceinfo.sensors
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,18 +14,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.prauga.pvot.coreui.PvotLoadingContent
 import com.prauga.pvot.designsystem.components.PvotCard
 import com.prauga.pvot.designsystem.components.PvotScreen
 import com.prauga.pvot.designsystem.components.PvotScreenDefaults
 import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotSpacing
 import org.prauga.toolkit.core.designsystem.component.ValueBlock
+import org.prauga.toolkit.core.model.SensorInfo
 import org.prauga.toolkit.feature.deviceinfo.R
 import org.prauga.toolkit.feature.deviceinfo.ui.GroupTitle
 
@@ -41,14 +45,28 @@ internal fun SensorsScreen(
 
 @Composable
 private fun SensorsContent(state: SensorsUiState, modifier: Modifier = Modifier) {
-    val sensors = state.sensors
+    when (state) {
+        SensorsUiState.Loading ->
+            Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                PvotLoadingContent()
+            }
+        is SensorsUiState.Ready ->
+            SensorList(sensors = state.sensors, deviceName = state.deviceName, modifier = modifier)
+    }
+}
 
+@Composable
+private fun SensorList(
+    sensors: List<SensorInfo>,
+    deviceName: String?,
+    modifier: Modifier = Modifier,
+) {
     PvotScreen(
         modifier = modifier.fillMaxSize(),
         contentPadding = PvotScreenDefaults.contentPadding(),
         verticalArrangement = Arrangement.spacedBy(SensorRowGap),
     ) {
-        item(key = "header") { SensorHeader(count = sensors.size, deviceName = state.deviceName) }
+        item(key = "header") { SensorHeader(count = sensors.size, deviceName = deviceName) }
         if (sensors.isNotEmpty()) {
             item(key = "title") { GroupTitle(stringResource(R.string.sensors_available)) }
             itemsIndexed(items = sensors, key = { index, sensor -> "$index#${sensor.name}" }) {
