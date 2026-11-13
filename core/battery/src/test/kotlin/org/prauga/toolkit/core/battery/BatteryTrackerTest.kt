@@ -5,7 +5,6 @@ package org.prauga.toolkit.core.battery
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
 import org.junit.Test
 
 private const val HOUR = 3_600_000L
@@ -164,28 +163,5 @@ class BatteryTrackerTest {
                 sample(10_000, level = 99, screenOn = true),
             )
         assertNull(session.activeDrainPerHour)
-    }
-
-    @Test
-    fun `watts come from current and voltage`() {
-        val first = sample(0, current = -956_000, voltage = 3766, screenOn = true)
-        val session = BatteryTracker.start(first)
-        assertEquals(3.6f, requireNotNull(session.watts) { "no power reading" }, 0.05f)
-    }
-
-    @Test
-    fun `time remaining follows the rate of the current screen state`() {
-        val first = sample(0, level = 50, screenOn = true)
-        val session =
-            BatteryTracker.fold(
-                BatteryTracker.start(first),
-                first,
-                sample(HOUR, level = 40, screenOn = true),
-            )
-        val remaining = requireNotNull(session.estimatedMillisRemaining) { "no estimate" }
-        assertTrue(
-            "got ${remaining / HOUR}h",
-            remaining in (3.5 * HOUR).toLong()..(4.5 * HOUR).toLong(),
-        )
     }
 }

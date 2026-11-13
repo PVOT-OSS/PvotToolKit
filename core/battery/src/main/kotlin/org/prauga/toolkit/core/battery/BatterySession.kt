@@ -6,8 +6,6 @@ package org.prauga.toolkit.core.battery
 import kotlinx.serialization.Serializable
 
 private const val TENTHS_PER_PERCENT = 10f
-private const val MICRO_PER_UNIT = 1_000_000f
-private const val MILLI_PER_UNIT = 1000f
 private const val MILLIS_PER_HOUR = 3_600_000L
 
 @Serializable
@@ -45,25 +43,6 @@ data class BatterySession(
     val screenOffDeepSleepFraction: Float
         get() =
             if (screenOffMillis > 0) screenOffDeepSleepMillis.toFloat() / screenOffMillis else 0f
-
-    val watts: Float?
-        get() {
-            val amps =
-                latest?.currentMicroAmps?.let { kotlin.math.abs(it) / MICRO_PER_UNIT }
-                    ?: return null
-            val volts = latest?.voltageMilliVolts?.let { it / MILLI_PER_UNIT } ?: return null
-            return amps * volts
-        }
-
-    val estimatedMillisRemaining: Long?
-        get() {
-            val sample = latest ?: return null
-            if (sample.charging) return null
-            val rate =
-                (if (sample.screenOn) activeDrainPerHour else idleDrainPerHour) ?: return null
-            if (rate <= 0f) return null
-            return ((sample.levelPercent / rate) * MILLIS_PER_HOUR).toLong()
-        }
 
     private companion object {
         const val MIN_WINDOW_MILLIS = 120_000L
