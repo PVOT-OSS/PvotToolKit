@@ -7,11 +7,11 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.navigation3.runtime.NavKey
 import org.prauga.toolkit.R
-import org.prauga.toolkit.feature.builds.BuildsRoute
+import org.prauga.toolkit.feature.builds.navigation.BuildsRoute
 import org.prauga.toolkit.feature.discover.navigation.DiscoverRoute
 import org.prauga.toolkit.feature.monitor.navigation.MonitorRoute
 import org.prauga.toolkit.feature.more.MoreRoute
-import org.prauga.toolkit.feature.tune.TuneRoute
+import org.prauga.toolkit.feature.tune.navigation.TuneRoute
 
 /** Top-level destinations, in nav bar order. */
 enum class ToolkitDestination(

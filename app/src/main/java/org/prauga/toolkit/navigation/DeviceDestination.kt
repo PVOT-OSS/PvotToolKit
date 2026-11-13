@@ -7,9 +7,9 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.navigation3.runtime.NavKey
 import org.prauga.toolkit.R
-import org.prauga.toolkit.feature.deviceinfo.DeviceInfoRoute
-import org.prauga.toolkit.feature.deviceinfo.SensorsRoute
-import org.prauga.toolkit.feature.deviceinfo.TestsRoute
+import org.prauga.toolkit.feature.deviceinfo.navigation.DeviceInfoRoute
+import org.prauga.toolkit.feature.deviceinfo.navigation.SensorsRoute
+import org.prauga.toolkit.feature.deviceinfo.navigation.TestsRoute
 
 /** The nav bar swaps to these while the device screens are open. */
 enum class DeviceDestination(

@@ -7,22 +7,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
-import org.prauga.toolkit.feature.builds.buildsEntry
-import org.prauga.toolkit.feature.deviceinfo.DeviceInfoRoute
-import org.prauga.toolkit.feature.deviceinfo.deviceEntries
-import org.prauga.toolkit.feature.devices.DevicesRoute
-import org.prauga.toolkit.feature.devices.devicesEntry
+import org.prauga.toolkit.feature.builds.navigation.buildsEntry
+import org.prauga.toolkit.feature.deviceinfo.navigation.DeviceInfoRoute
+import org.prauga.toolkit.feature.deviceinfo.navigation.deviceEntries
+import org.prauga.toolkit.feature.devices.navigation.DevicesRoute
+import org.prauga.toolkit.feature.devices.navigation.devicesEntry
 import org.prauga.toolkit.feature.discover.navigation.discoverEntry
-import org.prauga.toolkit.feature.licenses.LicensesRoute
-import org.prauga.toolkit.feature.licenses.licensesEntry
+import org.prauga.toolkit.feature.licenses.navigation.LicensesRoute
+import org.prauga.toolkit.feature.licenses.navigation.licensesEntry
 import org.prauga.toolkit.feature.monitor.navigation.CpuDetailRoute
 import org.prauga.toolkit.feature.monitor.navigation.MonitorRoute
 import org.prauga.toolkit.feature.monitor.navigation.cpuDetailEntry
 import org.prauga.toolkit.feature.monitor.navigation.monitorEntry
 import org.prauga.toolkit.feature.more.moreEntry
-import org.prauga.toolkit.feature.news.NewsRoute
-import org.prauga.toolkit.feature.news.newsEntry
-import org.prauga.toolkit.feature.tune.tuneEntry
+import org.prauga.toolkit.feature.news.navigation.NewsRoute
+import org.prauga.toolkit.feature.news.navigation.newsEntry
+import org.prauga.toolkit.feature.tune.navigation.tuneEntry
 
 /** Composes the feature entries and shows the current back stacks. */
 @Composable

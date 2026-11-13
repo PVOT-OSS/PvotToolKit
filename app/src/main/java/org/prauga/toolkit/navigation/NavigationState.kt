@@ -25,10 +25,10 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import com.prauga.pvot.designsystem.theme.PvotSpacing
 import org.prauga.toolkit.core.designsystem.component.BackButton
-import org.prauga.toolkit.feature.devices.DevicesRoute
-import org.prauga.toolkit.feature.licenses.LicensesRoute
+import org.prauga.toolkit.feature.devices.navigation.DevicesRoute
+import org.prauga.toolkit.feature.licenses.navigation.LicensesRoute
 import org.prauga.toolkit.feature.monitor.navigation.CpuDetailRoute
-import org.prauga.toolkit.feature.news.NewsRoute
+import org.prauga.toolkit.feature.news.navigation.NewsRoute
 
 /** Screens opened on top of a tab: no nav bar, and a back arrow instead. */
 private val FullScreenRoutes: Set<NavKey> =
