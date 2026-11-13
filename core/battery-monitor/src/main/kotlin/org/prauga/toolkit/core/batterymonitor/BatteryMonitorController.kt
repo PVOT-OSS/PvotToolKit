@@ -11,20 +11,21 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import org.prauga.toolkit.core.datastore.BatterySessionLocalDataSource
 import timber.log.Timber
 
 /** The one place that turns the monitor on or off; the stored preference is the source of truth. */
 @Singleton
 class BatteryMonitorController
 @Inject
-constructor(
+internal constructor(
     @ApplicationContext private val context: Context,
-    private val store: BatterySessionStore,
+    private val store: BatterySessionLocalDataSource,
 ) {
     val enabled: Flow<Boolean> = store.enabled
 
     suspend fun setEnabled(enabled: Boolean) {
-        store.setEnabled(enabled)
+        if (!store.setEnabled(enabled)) return
         if (enabled) start() else stop()
     }
 

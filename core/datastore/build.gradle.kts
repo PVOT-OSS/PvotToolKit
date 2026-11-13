@@ -9,6 +9,9 @@ plugins {
 android { namespace = "org.prauga.toolkit.core.datastore" }
 
 dependencies {
-    implementation(project(":core:model"))
+    api(project(":core:battery"))
+    api(project(":core:model"))
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.timber)
 }

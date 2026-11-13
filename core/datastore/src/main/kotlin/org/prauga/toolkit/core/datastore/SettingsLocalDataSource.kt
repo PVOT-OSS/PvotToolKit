@@ -18,20 +18,24 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import org.prauga.toolkit.core.model.ThemePreference
+import timber.log.Timber
 
 private val Context.settingsDataStore: DataStore<Preferences> by
     preferencesDataStore(name = "settings")
 
 private val ThemeKey = stringPreferencesKey("theme")
 
-/** Persisted user settings. */
 @Singleton
-class SettingsStore @Inject constructor(@ApplicationContext context: Context) {
-    private val dataStore = context.applicationContext.settingsDataStore
+class SettingsLocalDataSource @Inject constructor(@ApplicationContext context: Context) {
+    private val dataStore = context.settingsDataStore
 
     val theme: Flow<ThemePreference> =
         dataStore.data
-            .catch { cause -> if (cause is IOException) emit(emptyPreferences()) else throw cause }
+            .catch { cause ->
+                if (cause !is IOException) throw cause
+                Timber.e(cause, "Settings unreadable")
+                emit(emptyPreferences())
+            }
             .map { preferences ->
                 preferences[ThemeKey]?.let { stored ->
                     ThemePreference.entries.firstOrNull { it.name == stored }
@@ -39,6 +43,10 @@ class SettingsStore @Inject constructor(@ApplicationContext context: Context) {
             }
 
     suspend fun setTheme(preference: ThemePreference) {
-        dataStore.edit { it[ThemeKey] = preference.name }
+        try {
+            dataStore.edit { it[ThemeKey] = preference.name }
+        } catch (failure: IOException) {
+            Timber.e(failure, "Could not store the theme")
+        }
     }
 }

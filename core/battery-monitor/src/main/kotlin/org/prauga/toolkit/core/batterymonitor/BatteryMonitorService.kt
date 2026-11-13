@@ -25,7 +25,8 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import org.prauga.toolkit.core.battery.BatteryTracker
+import org.prauga.toolkit.core.battery.BatterySession
+import org.prauga.toolkit.core.datastore.BatterySessionLocalDataSource
 
 private const val NOTIFICATION_ID = 1001
 
@@ -35,7 +36,7 @@ private const val SAMPLE_INTERVAL_MILLIS = 60_000L
 @AndroidEntryPoint
 class BatteryMonitorService : Service() {
 
-    @Inject lateinit var store: BatterySessionStore
+    @Inject internal lateinit var store: BatterySessionLocalDataSource
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private lateinit var sampler: BatterySampler
     private lateinit var notification: BatteryNotification
@@ -81,10 +82,8 @@ class BatteryMonitorService : Service() {
 
     private suspend fun sampleOnce() {
         val sample = sampler.sample() ?: return
-        val previous = store.previousSample()
-        val session = BatteryTracker.fold(store.session(), previous, sample)
-        store.save(session, sample)
-        updateNotification()
+        val session = store.record(sample) ?: return
+        updateNotification(session)
     }
 
     private fun startInForeground() {
@@ -102,9 +101,8 @@ class BatteryMonitorService : Service() {
     }
 
     /** A denied POST_NOTIFICATIONS silences the readout but not the service. */
-    private suspend fun updateNotification() {
+    private fun updateNotification(session: BatterySession) {
         if (!canPostNotifications()) return
-        val session = store.session()
         val built = notification.build(session, applicationInfo.icon)
         try {
             NotificationManagerCompat.from(this).notify(NOTIFICATION_ID, built)
