@@ -68,7 +68,6 @@ internal fun NewsScreen(modifier: Modifier = Modifier, viewModel: NewsViewModel 
     )
 }
 
-/** Stateless body, so every state is previewable and testable on its own. */
 @Composable
 private fun NewsContent(
     state: NewsUiState,
@@ -136,7 +135,6 @@ private fun LazyListScope.newsItems(posts: List<NewsPost>, onPostClick: (NewsPos
     }
 }
 
-/** Card-shaped placeholders where the posts will land. */
 @Composable
 private fun NewsSkeleton(modifier: Modifier = Modifier) {
     PvotScreen(
@@ -157,8 +155,8 @@ private fun NewsSkeleton(modifier: Modifier = Modifier) {
 @Composable
 private fun Header() {
     Column(
-        modifier = Modifier.fillMaxWidth().pvotReveal(0).padding(bottom = 4.dp),
-        verticalArrangement = Arrangement.spacedBy(6.dp),
+        modifier = Modifier.fillMaxWidth().pvotReveal(0).padding(bottom = PvotSpacing.XS),
+        verticalArrangement = Arrangement.spacedBy(PvotSpacing.S),
     ) {
         Text(
             text = stringResource(R.string.news_kicker),
@@ -178,7 +176,6 @@ private fun Header() {
     }
 }
 
-/** Says plainly that the list is a saved copy. */
 @Composable
 private fun OfflineNotice() {
     PvotCard(modifier = Modifier.fillMaxWidth()) {
@@ -216,11 +213,7 @@ private fun LoadFailure(error: LoadError, onRetry: () -> Unit) {
 
 @Composable
 private fun CenteredContent(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
-    Box(
-        modifier = modifier.fillMaxSize().padding(),
-        contentAlignment = Alignment.Center,
-        content = { content() },
-    )
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) { content() }
 }
 
 private val PreviewPosts =
