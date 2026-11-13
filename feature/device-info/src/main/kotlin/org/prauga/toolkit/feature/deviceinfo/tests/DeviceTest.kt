@@ -6,7 +6,6 @@ package org.prauga.toolkit.feature.deviceinfo.tests
 import androidx.annotation.StringRes
 import org.prauga.toolkit.feature.deviceinfo.R
 
-/** A hardware check the user runs by hand. None of them are wired up yet. */
 internal enum class DeviceTest(@param:StringRes val labelRes: Int) {
     DISPLAY(R.string.test_display),
     TOUCH(R.string.test_touch),

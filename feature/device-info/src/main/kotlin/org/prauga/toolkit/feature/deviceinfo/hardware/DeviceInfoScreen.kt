@@ -43,6 +43,7 @@ import org.prauga.toolkit.feature.deviceinfo.ui.GroupTitle
 /** Longer than this and the value gets its own line rather than starving the label. */
 private const val INLINE_VALUE_LIMIT = 28
 
+// Matches SettingsGroup's row gap so the rows read as one group.
 private val RowGap = 3.dp
 
 @Composable
@@ -135,8 +136,8 @@ private fun TabStrip(
     LazyRow(
         state = stripState,
         modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(PvotSpacing.L),
+        horizontalArrangement = Arrangement.spacedBy(PvotSpacing.S),
     ) {
         items(DeviceInfoTab.entries) { entry ->
             TabChip(
@@ -158,7 +159,7 @@ private fun HeaderCard(deviceName: String?, codename: String?, modifier: Modifie
     PvotCard(modifier = modifier.fillMaxWidth().pvotReveal(0)) {
         Column(
             modifier = Modifier.padding(PvotSpacing.L),
-            verticalArrangement = Arrangement.spacedBy(6.dp),
+            verticalArrangement = Arrangement.spacedBy(PvotSpacing.S),
         ) {
             Text(
                 text = stringResource(R.string.device_info_kicker),

@@ -7,12 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.prauga.pvot.coreui.PvotSectionHeader
 import com.prauga.pvot.designsystem.theme.PvotSpacing
-
-private val TitleGap = 7.dp
-private val GroupGap = 17.dp
 
 /** The group heading, matching SettingsGroup's but emitted as its own list item. */
 @Composable
@@ -21,6 +17,6 @@ internal fun GroupTitle(title: String) {
         title = title,
         modifier =
             Modifier.fillMaxWidth()
-                .padding(start = PvotSpacing.XS, top = GroupGap, bottom = TitleGap),
+                .padding(start = PvotSpacing.XS, top = PvotSpacing.L, bottom = PvotSpacing.S),
     )
 }

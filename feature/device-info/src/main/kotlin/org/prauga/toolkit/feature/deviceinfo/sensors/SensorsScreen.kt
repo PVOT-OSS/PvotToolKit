@@ -32,6 +32,7 @@ import org.prauga.toolkit.core.model.SensorInfo
 import org.prauga.toolkit.feature.deviceinfo.R
 import org.prauga.toolkit.feature.deviceinfo.ui.GroupTitle
 
+// Matches SettingsGroup's row gap so the rows read as one group.
 private val SensorRowGap = 3.dp
 
 @Composable
@@ -89,7 +90,7 @@ private fun SensorHeader(count: Int, deviceName: String?) {
     PvotCard(modifier = Modifier.fillMaxWidth().pvotReveal(0)) {
         Column(
             modifier = Modifier.padding(PvotSpacing.L),
-            verticalArrangement = Arrangement.spacedBy(6.dp),
+            verticalArrangement = Arrangement.spacedBy(PvotSpacing.S),
         ) {
             Text(
                 text = stringResource(R.string.sensors_kicker),

@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -26,8 +26,7 @@ import com.prauga.pvot.designsystem.motion.pvotReveal
 import com.prauga.pvot.designsystem.theme.PvotSpacing
 import org.prauga.toolkit.feature.deviceinfo.R
 
-private val CardHeight = 92.dp
-private val CardGap = 10.dp
+private val CardMinHeight = 92.dp
 
 @Composable
 internal fun TestsScreen(modifier: Modifier = Modifier) {
@@ -35,8 +34,8 @@ internal fun TestsScreen(modifier: Modifier = Modifier) {
         columns = GridCells.Fixed(2),
         modifier = modifier.fillMaxSize(),
         contentPadding = PvotScreenDefaults.contentPadding(),
-        horizontalArrangement = Arrangement.spacedBy(CardGap),
-        verticalArrangement = Arrangement.spacedBy(CardGap),
+        horizontalArrangement = Arrangement.spacedBy(PvotSpacing.M),
+        verticalArrangement = Arrangement.spacedBy(PvotSpacing.M),
     ) {
         item(span = { GridItemSpan(maxLineSpan) }) { TestsHeader() }
         items(items = DeviceTest.entries, key = { it.name }) { test ->
@@ -48,8 +47,8 @@ internal fun TestsScreen(modifier: Modifier = Modifier) {
 @Composable
 private fun TestsHeader() {
     Column(
-        modifier = Modifier.fillMaxWidth().pvotReveal(0).padding(bottom = 4.dp),
-        verticalArrangement = Arrangement.spacedBy(6.dp),
+        modifier = Modifier.fillMaxWidth().pvotReveal(0).padding(bottom = PvotSpacing.XS),
+        verticalArrangement = Arrangement.spacedBy(PvotSpacing.S),
     ) {
         Text(
             text = stringResource(R.string.tests_kicker),
@@ -71,10 +70,10 @@ private fun TestsHeader() {
 
 @Composable
 private fun TestCard(label: String) {
-    PvotCard(modifier = Modifier.fillMaxWidth().height(CardHeight)) {
+    PvotCard(modifier = Modifier.fillMaxWidth().heightIn(min = CardMinHeight)) {
         Column(
             modifier = Modifier.padding(PvotSpacing.L),
-            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
+            verticalArrangement = Arrangement.spacedBy(PvotSpacing.S, Alignment.CenterVertically),
         ) {
             Text(
                 text = label,
