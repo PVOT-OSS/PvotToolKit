@@ -7,23 +7,25 @@ import android.os.Build
 import org.prauga.toolkit.core.model.DeviceIdentity
 
 private const val LOCALVERSION_TAG = "stormbreaker"
-private const val UNKNOWN = "unknown"
 
 object DeviceIdentityReader {
     fun read(): DeviceIdentity {
+        val device: String? = Build.DEVICE
+        val model: String? = Build.MODEL
+        val manufacturer: String? = Build.MANUFACTURER
+        val release: String? = Build.VERSION.RELEASE
         val kernel = kernelRelease()
         return DeviceIdentity(
-            codename = Build.DEVICE.orEmpty().ifBlank { UNKNOWN },
-            model = Build.MODEL.orEmpty().ifBlank { UNKNOWN },
-            manufacturer = Build.MANUFACTURER.orEmpty().ifBlank { UNKNOWN },
-            androidRelease = Build.VERSION.RELEASE.orEmpty().ifBlank { UNKNOWN },
+            codename = device.knownOrNull(),
+            model = model.knownOrNull(),
+            manufacturer = manufacturer.knownOrNull(),
+            androidRelease = release.knownOrNull(),
             sdkInt = Build.VERSION.SDK_INT,
             kernelRelease = kernel,
-            isStormBreakerKernel = kernel.contains(LOCALVERSION_TAG, ignoreCase = true),
+            isStormBreakerKernel = kernel?.contains(LOCALVERSION_TAG, ignoreCase = true) == true,
         )
     }
 
     /** `os.version` is uname's release field. */
-    private fun kernelRelease(): String =
-        System.getProperty("os.version")?.takeIf { it.isNotBlank() } ?: UNKNOWN
+    private fun kernelRelease(): String? = System.getProperty("os.version").knownOrNull()
 }

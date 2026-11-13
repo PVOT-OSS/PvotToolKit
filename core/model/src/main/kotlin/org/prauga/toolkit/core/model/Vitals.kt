@@ -34,7 +34,7 @@ data class BatteryVitals(
     val charging: Boolean,
     val currentMicroAmps: Int?,
     val chargeCounterMicroAmpHours: Int?,
-    val health: String?,
+    val health: BatteryHealth?,
     val technology: String?,
     val voltageMillivolts: Int?,
     val cycleCount: Int?,

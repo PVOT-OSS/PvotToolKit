@@ -7,6 +7,8 @@ import android.content.Context
 import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
+import org.prauga.toolkit.core.model.CameraFacing
+import org.prauga.toolkit.core.model.CameraHardwareLevel
 import org.prauga.toolkit.core.model.CameraInfo
 import timber.log.Timber
 
@@ -41,7 +43,7 @@ class CameraInfoReader(private val context: Context) {
 
         return CameraInfo(
             id = id,
-            facing = facingName(characteristics.get(CameraCharacteristics.LENS_FACING)),
+            facing = facing(characteristics.get(CameraCharacteristics.LENS_FACING)),
             widthPx = pixelArray?.width ?: 0,
             heightPx = pixelArray?.height ?: 0,
             apertures =
@@ -60,27 +62,31 @@ class CameraInfoReader(private val context: Context) {
             isoMax = iso?.upper,
             hasFlash = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true,
             hardwareLevel =
-                levelName(characteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)),
+                hardwareLevel(
+                    characteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)
+                ),
             maxDigitalZoom =
                 characteristics.get(CameraCharacteristics.SCALER_AVAILABLE_MAX_DIGITAL_ZOOM),
         )
     }
 
-    private fun facingName(facing: Int?): String =
+    private fun facing(facing: Int?): CameraFacing? =
         when (facing) {
-            CameraCharacteristics.LENS_FACING_FRONT -> "Front"
-            CameraCharacteristics.LENS_FACING_BACK -> "Back"
-            CameraCharacteristics.LENS_FACING_EXTERNAL -> "External"
-            else -> "Unknown"
+            CameraCharacteristics.LENS_FACING_FRONT -> CameraFacing.FRONT
+            CameraCharacteristics.LENS_FACING_BACK -> CameraFacing.BACK
+            CameraCharacteristics.LENS_FACING_EXTERNAL -> CameraFacing.EXTERNAL
+            else -> null
         }
 
-    private fun levelName(level: Int?): String? =
+    private fun hardwareLevel(level: Int?): CameraHardwareLevel? =
         when (level) {
-            CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_LEGACY -> "Legacy"
-            CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_LIMITED -> "Limited"
-            CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_FULL -> "Full"
-            CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_3 -> "Level 3"
-            CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_EXTERNAL -> "External"
+            CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_LEGACY -> CameraHardwareLevel.LEGACY
+            CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_LIMITED ->
+                CameraHardwareLevel.LIMITED
+            CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_FULL -> CameraHardwareLevel.FULL
+            CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_3 -> CameraHardwareLevel.LEVEL_3
+            CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_EXTERNAL ->
+                CameraHardwareLevel.EXTERNAL
             else -> null
         }
 }

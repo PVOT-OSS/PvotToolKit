@@ -41,6 +41,7 @@ import org.prauga.toolkit.core.designsystem.component.ActionRow
 import org.prauga.toolkit.core.designsystem.component.SettingsGroup
 import org.prauga.toolkit.core.designsystem.component.ValueRow
 import org.prauga.toolkit.core.designsystem.link.openArticle
+import org.prauga.toolkit.core.model.BatteryHealth
 import org.prauga.toolkit.core.model.BatteryVitals
 import org.prauga.toolkit.core.model.BootState
 import org.prauga.toolkit.core.model.CpuVitals
@@ -137,17 +138,19 @@ private fun IdentityCard(identity: DeviceIdentity, onClick: () -> Unit) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            Text(
-                text = identity.displayName,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
+            identity.displayName?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+            }
             Text(
                 text =
                     stringResource(
                         R.string.discover_identity_meta,
-                        identity.codename,
-                        identity.androidRelease,
+                        identity.codename ?: "—",
+                        identity.androidRelease ?: "—",
                         identity.sdkInt,
                     ),
                 style = MaterialTheme.typography.labelMedium,
@@ -159,11 +162,13 @@ private fun IdentityCard(identity: DeviceIdentity, onClick: () -> Unit) {
                 color = MaterialTheme.colorScheme.outlineVariant,
             )
 
-            Text(
-                text = identity.kernelVersion,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
+            identity.kernelVersion?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+            }
             if (identity.kernelBuild.isNotEmpty()) {
                 Text(
                     text = identity.kernelBuild,
@@ -415,7 +420,7 @@ private fun DiscoverPreview() {
                                     false,
                                     -420_000,
                                     3_100_000,
-                                    "Good",
+                                    BatteryHealth.GOOD,
                                     "Li-ion",
                                     4438,
                                     3,

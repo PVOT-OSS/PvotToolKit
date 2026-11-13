@@ -30,6 +30,12 @@ SPDX-License-Identifier: Apache-2.0
     <string name="monitor_draw">Draw</string>
     <string name="monitor_capacity">Capacity</string>
     <string name="monitor_health">Health</string>
+    <string name="monitor_health_good">Good</string>
+    <string name="monitor_health_overheat">Overheating</string>
+    <string name="monitor_health_dead">Dead</string>
+    <string name="monitor_health_over_voltage">Over voltage</string>
+    <string name="monitor_health_cold">Cold</string>
+    <string name="monitor_health_failure">Failing</string>
 
     <string name="monitor_uptime">Uptime</string>
     <string name="monitor_awake">Awake</string>

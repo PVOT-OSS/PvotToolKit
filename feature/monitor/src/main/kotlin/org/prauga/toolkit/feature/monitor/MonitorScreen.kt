@@ -181,7 +181,9 @@ private fun BatteryCard(battery: BatteryVitals, history: MetricHistory, revealIn
                 stringResource(R.string.monitor_milliamp_hours, it / 1000),
             )
         }
-        battery.health?.let { MetricLine(stringResource(R.string.monitor_health), it) }
+        battery.health?.let {
+            MetricLine(stringResource(R.string.monitor_health), stringResource(it.labelRes()))
+        }
     }
 }
 

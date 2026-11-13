@@ -9,6 +9,7 @@ import android.util.DisplayMetrics
 import android.view.Display
 import kotlin.math.hypot
 import org.prauga.toolkit.core.model.DisplayInfo
+import org.prauga.toolkit.core.model.HdrType
 
 /** Panel geometry and refresh capability, all of it public API. */
 class DisplayInfoReader(private val context: Context) {
@@ -40,15 +41,15 @@ class DisplayInfoReader(private val context: Context) {
         )
     }
 
-    private fun hdrTypes(display: Display): List<String> {
+    private fun hdrTypes(display: Display): List<HdrType> {
         val capabilities = display.hdrCapabilities ?: return emptyList()
         return capabilities.supportedHdrTypes.map { type ->
             when (type) {
-                Display.HdrCapabilities.HDR_TYPE_DOLBY_VISION -> "Dolby Vision"
-                Display.HdrCapabilities.HDR_TYPE_HDR10 -> "HDR10"
-                Display.HdrCapabilities.HDR_TYPE_HDR10_PLUS -> "HDR10+"
-                Display.HdrCapabilities.HDR_TYPE_HLG -> "HLG"
-                else -> "Type $type"
+                Display.HdrCapabilities.HDR_TYPE_DOLBY_VISION -> HdrType.DolbyVision
+                Display.HdrCapabilities.HDR_TYPE_HDR10 -> HdrType.Hdr10
+                Display.HdrCapabilities.HDR_TYPE_HDR10_PLUS -> HdrType.Hdr10Plus
+                Display.HdrCapabilities.HDR_TYPE_HLG -> HdrType.Hlg
+                else -> HdrType.Other(type)
             }
         }
     }

@@ -37,7 +37,7 @@ data class DisplayInfo(
     val yDpi: Float,
     val refreshHz: Float,
     val supportedRefreshHz: List<Float>,
-    val hdrTypes: List<String>,
+    val hdrTypes: List<HdrType>,
     val diagonalInches: Float?,
 ) {
     val aspectRatio: String
@@ -70,7 +70,7 @@ data class SensorInfo(
 
 data class CameraInfo(
     val id: String,
-    val facing: String,
+    val facing: CameraFacing?,
     val widthPx: Int,
     val heightPx: Int,
     val apertures: List<Float>,
@@ -80,7 +80,7 @@ data class CameraInfo(
     val isoMin: Int?,
     val isoMax: Int?,
     val hasFlash: Boolean,
-    val hardwareLevel: String?,
+    val hardwareLevel: CameraHardwareLevel?,
     val maxDigitalZoom: Float?,
 ) {
     val megapixels: Float

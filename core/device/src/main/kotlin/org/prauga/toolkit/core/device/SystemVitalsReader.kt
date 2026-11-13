@@ -13,6 +13,7 @@ import androidx.core.content.getSystemService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
+import org.prauga.toolkit.core.model.BatteryHealth
 import org.prauga.toolkit.core.model.BatteryVitals
 import org.prauga.toolkit.core.model.MemoryVitals
 import org.prauga.toolkit.core.model.Vitals
@@ -73,7 +74,7 @@ class SystemVitalsReader @Inject constructor(@ApplicationContext context: Contex
                     status == BatteryManager.BATTERY_STATUS_FULL,
             currentMicroAmps = readCurrentMicroAmps(),
             chargeCounterMicroAmpHours = platform.chargeCounterMicroAmpHours(),
-            health = intent.getIntExtra(BatteryManager.EXTRA_HEALTH, -1).toHealthName(),
+            health = intent.getIntExtra(BatteryManager.EXTRA_HEALTH, -1).toBatteryHealth(),
             technology = intent.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY),
             voltageMillivolts =
                 intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1).takeIf { it > 0 },
@@ -98,14 +99,14 @@ class SystemVitalsReader @Inject constructor(@ApplicationContext context: Contex
         }
     }
 
-    private fun Int.toHealthName(): String? =
+    private fun Int.toBatteryHealth(): BatteryHealth? =
         when (this) {
-            BatteryManager.BATTERY_HEALTH_GOOD -> "Good"
-            BatteryManager.BATTERY_HEALTH_OVERHEAT -> "Overheating"
-            BatteryManager.BATTERY_HEALTH_DEAD -> "Dead"
-            BatteryManager.BATTERY_HEALTH_OVER_VOLTAGE -> "Over voltage"
-            BatteryManager.BATTERY_HEALTH_COLD -> "Cold"
-            BatteryManager.BATTERY_HEALTH_UNSPECIFIED_FAILURE -> "Failing"
+            BatteryManager.BATTERY_HEALTH_GOOD -> BatteryHealth.GOOD
+            BatteryManager.BATTERY_HEALTH_OVERHEAT -> BatteryHealth.OVERHEAT
+            BatteryManager.BATTERY_HEALTH_DEAD -> BatteryHealth.DEAD
+            BatteryManager.BATTERY_HEALTH_OVER_VOLTAGE -> BatteryHealth.OVER_VOLTAGE
+            BatteryManager.BATTERY_HEALTH_COLD -> BatteryHealth.COLD
+            BatteryManager.BATTERY_HEALTH_UNSPECIFIED_FAILURE -> BatteryHealth.FAILURE
             else -> null
         }
 }

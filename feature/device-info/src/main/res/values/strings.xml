@@ -92,6 +92,11 @@ SPDX-License-Identifier: Apache-2.0
     <string name="device_info_refresh">Refresh rate</string>
     <string name="device_info_refresh_modes">Supported modes</string>
     <string name="device_info_hdr">HDR</string>
+    <string name="device_info_hdr_dolby_vision" translatable="false">Dolby Vision</string>
+    <string name="device_info_hdr_hdr10" translatable="false">HDR10</string>
+    <string name="device_info_hdr_hdr10_plus" translatable="false">HDR10+</string>
+    <string name="device_info_hdr_hlg" translatable="false">HLG</string>
+    <string name="device_info_hdr_other">Type %1$d</string>
 
     <string name="device_info_ram_total">Total RAM</string>
     <string name="device_info_ram_available">Available</string>
@@ -111,6 +116,12 @@ SPDX-License-Identifier: Apache-2.0
     <string name="device_info_voltage">Voltage</string>
     <string name="device_info_design_capacity">Design capacity</string>
     <string name="device_info_cycle_count">Cycle count</string>
+    <string name="device_info_health_good">Good</string>
+    <string name="device_info_health_overheat">Overheating</string>
+    <string name="device_info_health_dead">Dead</string>
+    <string name="device_info_health_over_voltage">Over voltage</string>
+    <string name="device_info_health_cold">Cold</string>
+    <string name="device_info_health_failure">Failing</string>
 
     <string name="device_info_decoders">Decoders</string>
     <string name="device_info_encoders">Encoders</string>
@@ -135,6 +146,15 @@ SPDX-License-Identifier: Apache-2.0
     <string name="device_info_cam_zoom">Max digital zoom</string>
     <string name="device_info_cam_flash">Flash</string>
     <string name="device_info_cam_level">Hardware level</string>
+    <string name="device_info_cam_front">Front</string>
+    <string name="device_info_cam_back">Back</string>
+    <string name="device_info_cam_external">External</string>
+    <string name="device_info_cam_unknown">Unknown</string>
+    <string name="device_info_cam_level_legacy">Legacy</string>
+    <string name="device_info_cam_level_limited">Limited</string>
+    <string name="device_info_cam_level_full">Full</string>
+    <string name="device_info_cam_level_3">Level 3</string>
+    <string name="device_info_cam_level_external">External</string>
 
     <string name="device_info_megapixels">%1$s MP (%2$d×%3$d)</string>
     <string name="device_info_microns">%1$s µm</string>

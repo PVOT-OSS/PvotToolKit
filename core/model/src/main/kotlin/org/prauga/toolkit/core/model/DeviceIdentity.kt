@@ -5,22 +5,22 @@ package org.prauga.toolkit.core.model
 
 /** What the app can tell about the device without root or a permission. */
 data class DeviceIdentity(
-    val codename: String,
-    val model: String,
-    val manufacturer: String,
-    val androidRelease: String,
+    val codename: String?,
+    val model: String?,
+    val manufacturer: String?,
+    val androidRelease: String?,
     val sdkInt: Int,
-    val kernelRelease: String,
+    val kernelRelease: String?,
     val isStormBreakerKernel: Boolean,
 ) {
-    val displayName: String
-        get() = "$manufacturer $model"
+    val displayName: String?
+        get() = listOfNotNull(manufacturer, model).joinToString(" ").ifEmpty { null }
 
     /** The `x.y.z` head of [kernelRelease]. */
-    val kernelVersion: String
-        get() = kernelRelease.substringBefore('-')
+    val kernelVersion: String?
+        get() = kernelRelease?.substringBefore('-')
 
     /** Everything after the version in [kernelRelease], empty when there is none. */
     val kernelBuild: String
-        get() = kernelRelease.substringAfter('-', "")
+        get() = kernelRelease?.substringAfter('-', "").orEmpty()
 }

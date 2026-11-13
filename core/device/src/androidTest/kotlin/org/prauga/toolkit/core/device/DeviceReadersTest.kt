@@ -6,6 +6,7 @@ package org.prauga.toolkit.core.device
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -70,7 +71,7 @@ class DeviceReadersTest {
         Log.i(TAG, "=== GPU ===")
         Log.i(TAG, "gpu=${profile.gpu}")
 
-        assertTrue(profile.identity.codename.isNotBlank())
+        assertNotNull(profile.identity.codename)
         assertTrue(profile.os.sdkInt > 0)
         profile.cpu?.clusters?.forEach { cluster ->
             cluster.hardwareMaxKhz?.let {

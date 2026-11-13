@@ -146,7 +146,8 @@ private fun screenSection(details: DeviceDetails?): InfoSection {
                     },
                 stringResource(R.string.device_info_refresh_modes) to
                     display?.supportedRefreshHz?.joinDistinct(places = 0, suffix = " Hz"),
-                stringResource(R.string.device_info_hdr) to display?.hdrTypes?.joinToString(", "),
+                stringResource(R.string.device_info_hdr) to
+                    display?.hdrTypes?.map { it.label() }?.joinToString(", "),
             ),
     )
 }
@@ -196,7 +197,8 @@ private fun batterySection(vitals: Vitals?): InfoSection {
             buildRows(
                 stringResource(R.string.device_info_level) to
                     battery?.let { stringResource(R.string.device_info_percent, it.percent) },
-                stringResource(R.string.device_info_health) to battery?.health,
+                stringResource(R.string.device_info_health) to
+                    battery?.health?.let { stringResource(it.labelRes()) },
                 stringResource(R.string.device_info_technology) to battery?.technology,
                 stringResource(R.string.device_info_temperature) to
                     battery?.temperatureC?.let { stringResource(R.string.device_info_celsius, it) },
@@ -225,7 +227,12 @@ private fun batterySection(vitals: Vitals?): InfoSection {
 private fun cameraSections(details: DeviceDetails?): List<InfoSection> =
     details?.cameras.orEmpty().map { camera ->
         InfoSection(
-            title = stringResource(R.string.device_info_section_camera, camera.id, camera.facing),
+            title =
+                stringResource(
+                    R.string.device_info_section_camera,
+                    camera.id,
+                    stringResource(camera.facing.labelRes()),
+                ),
             rows =
                 buildRows(
                     stringResource(R.string.device_info_cam_resolution) to
@@ -265,7 +272,8 @@ private fun cameraSections(details: DeviceDetails?): List<InfoSection> =
                         camera.maxDigitalZoom?.let {
                             stringResource(R.string.device_info_zoom, it.decimals(1))
                         },
-                    stringResource(R.string.device_info_cam_level) to camera.hardwareLevel,
+                    stringResource(R.string.device_info_cam_level) to
+                        camera.hardwareLevel?.let { stringResource(it.labelRes()) },
                     stringResource(R.string.device_info_cam_flash) to
                         stringResource(
                             if (camera.hasFlash) R.string.device_info_yes
